@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<title>ここもオンライン｜スマホ実機テスト</title>
+<style>
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;font-family:system-ui,-apple-system,"Hiragino Sans","Yu Gothic",sans-serif;background:#eef6e9;color:#26382f}body{padding:14px}.card{max-width:760px;margin:auto;background:#fffdf7;border:3px solid #9fba9a;border-radius:14px;padding:16px;box-shadow:0 8px 24px #38503f18}h1{font-size:24px;margin:0 0 8px;color:#3f6847}.note{font-size:13px;line-height:1.65;color:#5d6e62}.status{margin:12px 0;padding:10px;border-radius:9px;background:#fff1c9;border:2px solid #e1c36a;font-weight:800}.status.ok{background:#e5f5df;border-color:#95c38d;color:#315c35}.avatars{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:10px 0}.av{border:2px solid #b9c9b5;background:#fff;padding:8px 3px;border-radius:9px;min-height:62px;font-weight:700}.av.sel{border-color:#d1a42b;background:#fff2bd}.face{font-size:28px;display:block}.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.field{flex:1;min-width:160px;padding:11px;border:2px solid #a8b9a4;border-radius:8px;font-size:16px}.btn{padding:11px 15px;border:2px solid #568658;border-radius:8px;background:#9ad28e;color:#17311d;font-weight:900;font-size:15px}.world{margin-top:12px;border:3px solid #8da188;border-radius:10px;overflow:hidden;background:#dcebd5}.head{padding:8px 10px;background:#fff9eb;border-bottom:2px solid #aebca7;font-size:12px;font-weight:800}.wrap{position:relative;touch-action:none;user-select:none;-webkit-user-select:none}canvas{display:block;width:100%;height:auto;aspect-ratio:16/10;background:#dbe9ce;touch-action:none}.joy{position:absolute;width:90px;height:90px;border-radius:50%;border:3px solid #496c5044;background:#ffffff66;transform:translate(-50%,-50%);display:none;pointer-events:none}.knob{position:absolute;width:36px;height:36px;border-radius:50%;left:50%;top:50%;transform:translate(-50%,-50%);background:#7ebc7888;border:3px solid #47764e88}.help{padding:10px;background:#fffdf5;border-top:2px solid #aebca7;font-size:12px;line-height:1.5}.log{margin-top:10px;font-family:ui-monospace,monospace;font-size:11px;background:#f4f7f2;border:1px solid #cbd6c7;padding:8px;min-height:44px;white-space:pre-wrap}.hidden{display:none}
+@media(max-width:520px){body{padding:7px}.card{padding:11px}.avatars{grid-template-columns:repeat(3,1fr)}h1{font-size:21px}}
+</style>
+</head>
+<body>
+<div class="card">
+<h1>ここもオンライン｜スマホ実機テスト</h1>
+<p class="note">ChatGPT内プレビューではなく、Safari / ChromeでJavaScript・タップ・移動が動くか確認するためのページです。</p>
+<div id="status" class="status">JavaScript：まだ動いていません</div>
+<div id="select">
+<div class="avatars">
+<button class="av sel" data-a="boy"><span class="face">🧑</span>男の子</button>
+<button class="av" data-a="girl"><span class="face">👩</span>女の子</button>
+<button class="av" data-a="alien"><span class="face">👽</span>宇宙人</button>
+<button class="av" data-a="macho"><span class="face">💪</span>マッチョ</button>
+<button class="av" data-a="king"><span class="face">🤴</span>王様</button>
+<button class="av" data-a="queen"><span class="face">👸</span>女王</button>
+</div>
+<div class="row"><input id="name" class="field" maxlength="12" placeholder="呼ばれたい名前"><button id="enter" class="btn">入ってみる</button></div>
+<div id="tapCount" class="log">タップ回数：0</div>
+</div>
+<div id="world" class="world hidden">
+<div class="head"><span id="who">🧑 ななし</span>　｜　画面をタッチして指を進みたい方向へずらす</div>
+<div id="wrap" class="wrap"><canvas id="cv" width="640" height="400"></canvas><div id="joy" class="joy"><div id="knob" class="knob"></div></div></div>
+<div class="help">指を置いた場所がジョイスティックの中心になります。指をずらすと移動、離すと停止します。PCでは方向キー / WASDでも動きます。</div>
+</div>
+<div id="log" class="log">読み込み待ち…</div>
+</div>
+<script>
+(()=>{'use strict';
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+const status=$('#status'),log=$('#log');let taps=0,avatar='boy',nick='ななし';
+const icon={boy:'🧑',girl:'👩',alien:'👽',macho:'💪',king:'🤴',queen:'👸'};
+function say(s){log.textContent=s+'\n'+log.textContent.slice(0,500)}
+status.textContent='JavaScript：動作OK';status.classList.add('ok');say('JavaScriptを実行できました');
+$$('.av').forEach(b=>b.addEventListener('click',()=>{taps++;avatar=b.dataset.a;$$('.av').forEach(x=>x.classList.remove('sel'));b.classList.add('sel');$('#tapCount').textContent='タップ回数：'+taps+' ／ 選択：'+b.textContent.trim();say('アバター選択：'+avatar)}));
+$('#enter').addEventListener('click',()=>{taps++;nick=$('#name').value.trim()||'ななし';$('#select').classList.add('hidden');$('#world').classList.remove('hidden');$('#who').textContent=icon[avatar]+' '+nick;$('#tapCount').textContent='タップ回数：'+taps;say('入室ボタン：動作OK');start()});
+let started=false;
+function start(){if(started)return;started=true;const c=$('#cv'),ctx=c.getContext('2d'),wrap=$('#wrap'),joyEl=$('#joy'),knob=$('#knob');let p={x:310,y:290},keys={},joy={on:false,id:null,cx:0,cy:0,dx:0,dy:0},last=performance.now();
+function draw(){ctx.fillStyle='#e8e3d8';ctx.fillRect(0,0,640,400);for(let y=0;y<400;y+=32)for(let x=0;x<640;x+=32){ctx.fillStyle=((x+y)/32)%2?'#d8e8cf':'#e4f0dc';ctx.fillRect(x,y,32,32);ctx.strokeStyle='#c4d6bd';ctx.strokeRect(x+.5,y+.5,31,31)}ctx.fillStyle='#769c6e';ctx.fillRect(0,0,640,24);ctx.fillRect(0,376,640,24);ctx.fillRect(0,0,24,400);ctx.fillRect(616,0,24,400);ctx.fillStyle='#fff';ctx.font='bold 15px sans-serif';ctx.fillText('スマホ移動テスト広場',36,55);ctx.fillStyle='#506c55';ctx.fillRect(230,125,180,100);ctx.fillStyle='#86b77a';ctx.fillRect(238,133,164,84);ctx.fillStyle='#5c91aa';ctx.beginPath();ctx.arc(320,175,34,0,Math.PI*2);ctx.fill();ctx.fillStyle='#26382f';ctx.beginPath();ctx.arc(p.x,p.y,14,0,Math.PI*2);ctx.fill();ctx.fillStyle='#f3d6a2';ctx.beginPath();ctx.arc(p.x,p.y-4,11,0,Math.PI*2);ctx.fill();ctx.font='20px sans-serif';ctx.textAlign='center';ctx.fillText(icon[avatar],p.x,p.y+7);}
+function pos(e){const r=wrap.getBoundingClientRect();return{x:e.clientX-r.left,y:e.clientY-r.top}}
+wrap.addEventListener('pointerdown',e=>{const q=pos(e);joy.on=true;joy.id=e.pointerId;joy.cx=q.x;joy.cy=q.y;joy.dx=joy.dy=0;wrap.setPointerCapture?.(e.pointerId);joyEl.style.left=q.x+'px';joyEl.style.top=q.y+'px';joyEl.style.display='block';say('pointerdown：OK');e.preventDefault()},{passive:false});
+wrap.addEventListener('pointermove',e=>{if(!joy.on||e.pointerId!==joy.id)return;const q=pos(e),dx=q.x-joy.cx,dy=q.y-joy.cy,m=42,l=Math.hypot(dx,dy)||1,s=Math.min(1,m/l);joy.dx=dx*s/m;joy.dy=dy*s/m;knob.style.transform=`translate(calc(-50% + ${dx*s}px),calc(-50% + ${dy*s}px))`;e.preventDefault()},{passive:false});
+function end(e){if(!joy.on||(e&&e.pointerId!==joy.id))return;joy.on=false;joy.dx=joy.dy=0;joyEl.style.display='none';knob.style.transform='translate(-50%,-50%)';say('pointerup：停止OK')}
+wrap.addEventListener('pointerup',end);wrap.addEventListener('pointercancel',end);wrap.addEventListener('lostpointercapture',end);
+addEventListener('keydown',e=>{keys[e.key.toLowerCase()]=true});addEventListener('keyup',e=>{keys[e.key.toLowerCase()]=false});
+function frame(t){const dt=Math.min(.04,(t-last)/1000);last=t;let dx=joy.dx,dy=joy.dy;if(keys.arrowleft||keys.a)dx--;if(keys.arrowright||keys.d)dx++;if(keys.arrowup||keys.w)dy--;if(keys.arrowdown||keys.s)dy++;if(dx||dy){const l=Math.hypot(dx,dy)||1;p.x=Math.max(40,Math.min(600,p.x+dx/l*150*dt));p.y=Math.max(60,Math.min(350,p.y+dy/l*150*dt))}draw();requestAnimationFrame(frame)}requestAnimationFrame(frame)}
+})();
+</script>
+</body></html>
