@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
-<title>ここもオンライン v0.38</title>
+<title>ここもオンライン v0.39</title>
 <style>
 html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#eef6e9}
 #app{width:100%;height:100%;border:0;display:block;background:#eef6e9}
@@ -11,8 +11,8 @@ html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#eef6e9}
 </style>
 </head>
 <body>
-<div id="loading">ここもオンライン v0.38 を読み込んでいます…</div>
-<iframe id="app" src="./index(20260818-013719).html?v=38" allow="microphone" title="ここもオンライン v0.38"></iframe>
+<div id="loading">ここもオンライン v0.39 を読み込んでいます…</div>
+<iframe id="app" src="./index(20260818-013719).html?v=39" allow="microphone" title="ここもオンライン v0.39"></iframe>
 <script>
 const frame=document.getElementById('app');
 const loading=document.getElementById('loading');
@@ -21,7 +21,7 @@ frame.addEventListener('load',()=>{
   if(!d)return;
   const style=d.createElement('style');
   style.textContent=`
-/* v0.38 mobile controller restoration */
+/* v0.39 mobile + game modal fixes */
 .mobile-controls{display:none;align-items:center;justify-content:space-between;flex-direction:row;gap:28px;padding:10px 16px 12px;background:linear-gradient(180deg,#f8f3e7,#eee7d7);border-top:3px solid #aebca7;min-height:118px;position:relative;z-index:9}
 .joy-pad{order:1;width:104px;height:104px;flex:0 0 104px;border-radius:50%;border:3px solid #78907b;background:radial-gradient(circle at 35% 30%,#f5f8f1,#cbd8c8);position:relative;touch-action:none;user-select:none;-webkit-user-select:none;box-shadow:inset 0 0 0 5px rgba(255,255,255,.32),0 4px 0 #9aa999}
 .joy-pad::before,.joy-pad::after{content:"";position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);background:rgba(67,91,72,.13);pointer-events:none}
@@ -32,15 +32,39 @@ frame.addEventListener('load',()=>{
 .mobile-interact small{font-size:9px}
 @media(max-width:820px){.mobile-controls{display:flex!important}.mobile-interact{display:flex!important}.game-shell{position:sticky;top:6px;z-index:6}.hint{max-height:84px;overflow:auto}.joystick{display:none!important}}
 @media(max-width:560px){.mobile-controls{min-height:104px;padding:7px 12px 9px;gap:20px}.joy-pad{width:92px;height:92px;flex-basis:92px}.joy-pad::before{width:62px;height:20px}.joy-pad::after{width:20px;height:62px}.joy-pad-stick{width:36px;height:36px}.mobile-interact{width:64px;height:64px;flex-basis:64px}}
+
+/* v0.39 Connect Four mobile fit */
+@media(max-width:820px){
+  #connectModal{overflow-y:auto!important;overscroll-behavior:contain;align-items:flex-start!important;padding:8px!important}
+  #connectModal>.modal{width:min(430px,100%)!important;max-height:calc(100dvh - 16px);overflow-y:auto;-webkit-overflow-scrolling:touch;margin:auto;padding:10px 10px 6px}
+  #connectModal h2{margin:0 0 4px;font-size:20px}
+  #connectModal .muted{margin:2px 0 6px;font-size:10px;line-height:1.35}
+  #connectModal .game-board-wrap{gap:6px}
+  #connectModal .connect-status{min-height:18px;font-size:12px}
+  #connectModal .connect-support-bar{gap:5px;margin:4px 0;min-height:34px}
+  #connectModal .connect-support-status{height:34px;padding:3px 5px;font-size:10px}
+  #connectModal .connect-support-status .support-hint{font-size:8px}
+  #connectModal .connect-board{grid-template-columns:repeat(7,34px)!important;grid-template-rows:repeat(6,34px)!important;gap:3px!important;padding:6px!important;border-width:4px!important;margin:5px auto!important;max-width:100%;box-shadow:0 3px 0 #ccd6e4!important}
+  #connectModal .connect-cell{width:34px!important;height:34px!important;border-width:2px!important}
+  #connectModal .connect-help{font-size:9px;line-height:1.35;margin:0}
+  #connectModal .game-actions{position:sticky;bottom:-1px;z-index:5;background:#fffdf6;padding:7px 0 3px;margin-top:1px;border-top:1px solid #d6dfd1}
+  #connectModal .game-actions button{padding:8px 10px;font-size:12px;min-height:38px}
+}
+@media(max-width:370px){
+  #connectModal>.modal{padding:7px 7px 4px}
+  #connectModal .connect-board{grid-template-columns:repeat(7,30px)!important;grid-template-rows:repeat(6,30px)!important;gap:2px!important;padding:5px!important}
+  #connectModal .connect-cell{width:30px!important;height:30px!important}
+  #connectModal .connect-support-status .support-hint{display:none}
+}
 `;
   d.head.appendChild(style);
   const patch=d.createElement('script');
   patch.textContent=`
 (()=>{
-  document.title='ここもオンライン v0.38';
-  const brand=document.querySelector('.brand small');if(brand)brand.textContent='2Dドット空間 JRPG games v0.38';
+  document.title='ここもオンライン v0.39';
+  const brand=document.querySelector('.brand small');if(brand)brand.textContent='2Dドット空間 JRPG games v0.39';
   const hint=document.getElementById('hint');if(hint)hint.textContent='↑↓←→ で歩けます。スマホは左のジョイスティックで移動、右のAボタンで選べます。';
-  const state=document.getElementById('jsState');if(state){state.textContent='● 操作準備OK v0.38（ドア判定・スマホ操作修正版）';state.classList.add('ready');}
+  const state=document.getElementById('jsState');if(state){state.textContent='● 操作準備OK v0.39（スマホ四目ならべ画面修正版）';state.classList.add('ready');}
 
   const KD={
     plaza:[
