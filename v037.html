@@ -7,9 +7,9 @@
 (async()=>{
  try{
   if(!('DecompressionStream' in window)) throw new Error('このブラウザでは読み込み機能が使えません。Safari / Chrome を最新版に更新してください。');
-  const ps=Array.from({length:24},(_,i)=>`p${String(i).padStart(2,'0')}.txt`);
+  const ps=Array.from({length:20},(_,i)=>`p${String(i).padStart(2,'0')}.txt`);
   const base='https://raw.githubusercontent.com/kokomoibasyo-dev/kokomo-online/main/v037/';
-  const chunks=await Promise.all(ps.map(p=>fetch(base+p+'?v=37',{cache:'no-store'}).then(r=>{if(!r.ok)throw new Error(p+': '+r.status);return r.text()})));
+  const chunks=await Promise.all(ps.map(p=>fetch(base+p+'?v=37.1',{cache:'no-store'}).then(r=>{if(!r.ok)throw new Error(p+': '+r.status);return r.text()})));
   const b64=chunks.join('').trim();
   const bin=Uint8Array.from(atob(b64),c=>c.charCodeAt(0));
   const ds=new DecompressionStream('gzip');
