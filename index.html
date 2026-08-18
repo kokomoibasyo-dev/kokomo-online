@@ -2,13 +2,80 @@
 <html lang="ja">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>ここもオンライン v0.37</title>
-<meta http-equiv="refresh" content="0; url=./index(20260818-013719).html?v=37-final">
-<style>html,body{margin:0;min-height:100%;background:#eef6e9;color:#25382f;font-family:system-ui,-apple-system,sans-serif}body{display:grid;place-items:center}.box{text-align:center;padding:24px;line-height:1.8}a{color:#315a36;font-weight:700}</style>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<title>ここもオンライン v0.38</title>
+<style>
+html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#eef6e9}
+#app{width:100%;height:100%;border:0;display:block;background:#eef6e9}
+#loading{position:fixed;inset:0;display:grid;place-items:center;font:700 14px system-ui,-apple-system,sans-serif;color:#36503f;background:#eef6e9;z-index:2}
+</style>
 </head>
 <body>
-<div class="box">ここもオンライン v0.37 を開いています…<br><a href="./index(20260818-013719).html?v=37-final">自動で開かない場合はこちら</a></div>
-<script>location.replace('./index(20260818-013719).html?v=37-final');</script>
+<div id="loading">ここもオンライン v0.38 を読み込んでいます…</div>
+<iframe id="app" src="./index(20260818-013719).html?v=38" allow="microphone" title="ここもオンライン v0.38"></iframe>
+<script>
+const frame=document.getElementById('app');
+const loading=document.getElementById('loading');
+frame.addEventListener('load',()=>{
+  const d=frame.contentDocument;
+  if(!d)return;
+  const style=d.createElement('style');
+  style.textContent=`
+/* v0.38 mobile controller restoration */
+.mobile-controls{display:none;align-items:center;justify-content:space-between;flex-direction:row;gap:28px;padding:10px 16px 12px;background:linear-gradient(180deg,#f8f3e7,#eee7d7);border-top:3px solid #aebca7;min-height:118px;position:relative;z-index:9}
+.joy-pad{order:1;width:104px;height:104px;flex:0 0 104px;border-radius:50%;border:3px solid #78907b;background:radial-gradient(circle at 35% 30%,#f5f8f1,#cbd8c8);position:relative;touch-action:none;user-select:none;-webkit-user-select:none;box-shadow:inset 0 0 0 5px rgba(255,255,255,.32),0 4px 0 #9aa999}
+.joy-pad::before,.joy-pad::after{content:"";position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);background:rgba(67,91,72,.13);pointer-events:none}
+.joy-pad::before{width:70px;height:22px;border-radius:8px}.joy-pad::after{width:22px;height:70px;border-radius:8px}
+.joy-pad-stick{position:absolute;left:50%;top:50%;width:40px;height:40px;border-radius:50%;border:3px solid #48664f;background:#78a17b;box-shadow:inset 0 0 0 5px rgba(255,255,255,.18),0 3px 0 #426048;transform:translate(-50%,-50%);z-index:2;pointer-events:none}
+.joy-pad.active{border-color:#5f8466;background:radial-gradient(circle at 35% 30%,#f8fbf5,#bfd2bd)}
+.mobile-interact{order:2;width:74px;height:74px;flex:0 0 74px;border-radius:50%;border:4px solid #b58b24;background:#f3c856;color:#4e3a0f;font-weight:900;line-height:1.05;align-items:center;justify-content:center;text-align:center;box-shadow:inset 0 0 0 4px rgba(255,255,255,.23),0 5px 0 #8d6f24;touch-action:manipulation}
+.mobile-interact small{font-size:9px}
+@media(max-width:820px){.mobile-controls{display:flex!important}.mobile-interact{display:flex!important}.game-shell{position:sticky;top:6px;z-index:6}.hint{max-height:84px;overflow:auto}.joystick{display:none!important}}
+@media(max-width:560px){.mobile-controls{min-height:104px;padding:7px 12px 9px;gap:20px}.joy-pad{width:92px;height:92px;flex-basis:92px}.joy-pad::before{width:62px;height:20px}.joy-pad::after{width:20px;height:62px}.joy-pad-stick{width:36px;height:36px}.mobile-interact{width:64px;height:64px;flex-basis:64px}}
+`;
+  d.head.appendChild(style);
+  const patch=d.createElement('script');
+  patch.textContent=`
+(()=>{
+  document.title='ここもオンライン v0.38';
+  const brand=document.querySelector('.brand small');if(brand)brand.textContent='2Dドット空間 JRPG games v0.38';
+  const hint=document.getElementById('hint');if(hint)hint.textContent='↑↓←→ で歩けます。スマホは左のジョイスティックで移動、右のAボタンで選べます。';
+  const state=document.getElementById('jsState');if(state){state.textContent='● 操作準備OK v0.38（ドア判定・スマホ操作修正版）';state.classList.add('ready');}
+
+  const KD={
+    plaza:[
+      {side:'top',from:280,to:360,target:'study',label:'学習室',spawn:{x:320,y:348,dir:'up'}},
+      {side:'bottom',from:280,to:360,target:'quiet',label:'静かな部屋',spawn:{x:320,y:52,dir:'down'}},
+      {side:'left',from:160,to:240,target:'lounge',label:'ラウンジ',spawn:{x:588,y:200,dir:'left'}},
+      {side:'right',from:160,to:240,target:'game',label:'ゲーム部屋',spawn:{x:52,y:200,dir:'right'}}
+    ],
+    study:[{side:'bottom',from:280,to:360,target:'plaza',label:'広場へ',spawn:{x:320,y:52,dir:'down'}}],
+    quiet:[{side:'top',from:280,to:360,target:'plaza',label:'広場へ',spawn:{x:320,y:348,dir:'up'}}],
+    lounge:[{side:'right',from:160,to:240,target:'plaza',label:'広場へ',spawn:{x:52,y:200,dir:'right'}}],
+    game:[{side:'left',from:160,to:240,target:'plaza',label:'広場へ',spawn:{x:588,y:200,dir:'left'}}]
+  };
+  const wallT=24;
+  function doors(key=current){return KD[key]||[]}
+  function boundary(side){
+    const ds=doors().filter(x=>x.side===side).sort((a,b)=>a.from-b.from);
+    const len=(side==='top'||side==='bottom')?W:H,out=[];let cur=0;
+    for(const x of ds){const a=clamp(x.from,0,len),b=clamp(x.to,0,len);if(a>cur){if(side==='top')out.push({x:cur,y:0,w:a-cur,h:wallT});if(side==='bottom')out.push({x:cur,y:H-wallT,w:a-cur,h:wallT});if(side==='left')out.push({x:0,y:cur,w:wallT,h:a-cur});if(side==='right')out.push({x:W-wallT,y:cur,w:wallT,h:a-cur});}cur=Math.max(cur,b)}
+    if(cur<len){if(side==='top')out.push({x:cur,y:0,w:len-cur,h:wallT});if(side==='bottom')out.push({x:cur,y:H-wallT,w:len-cur,h:wallT});if(side==='left')out.push({x:0,y:cur,w:wallT,h:len-cur});if(side==='right')out.push({x:W-wallT,y:cur,w:wallT,h:len-cur});}
+    return out;
+  }
+  roomWalls=()=>[...boundary('top'),...boundary('bottom'),...boundary('left'),...boundary('right')];
+  function drawDoors(){for(const x of doors()){if(x.side==='top')drawDoor(x.from,0,x.to-x.from,wallT,x.label);else if(x.side==='bottom')drawDoor(x.from,H-wallT,x.to-x.from,wallT,x.label);else if(x.side==='left')drawDoor(0,x.from,wallT,x.to-x.from,x.label);else drawDoor(W-wallT,x.from,wallT,x.to-x.from,x.label)}}
+  drawScene=()=>{if(current==='plaza')drawTileFloor('#e7e2d6','#f1ede3');if(current==='study')drawTileFloor('#e5cfaa','#efdcbc');if(current==='lounge')drawTileFloor('#e7d1ba','#f1dfcc');if(current==='quiet')drawTileFloor('#d9e9ee','#e6f1f3');if(current==='game')drawTileFloor('#d8d1e7','#e5dfef');drawFineFloorOverlay();drawWalls();drawFineWallOverlay();drawRoomDecor();drawAmbientMicroDecor();drawDoors();furniture().forEach(o=>{drawFurniture(o);drawFurnitureMicroDetail(o)});drawAvatar()};
+  const wallBox=(x,y)=>({x:x-player.w/2+3,y:y-player.h+3,w:player.w-6,h:player.h-3});
+  collide=(nx,ny)=>{const b=wallBox(nx,ny);for(const x of roomWalls())if(rectHit(b,x))return true;const ob={x:nx,y:ny,w:player.w,h:player.h};for(const o of solidObjects())if(rectHit(ob,o))return true;return false};
+  function fits(x){const m=player.w/2+3,c=(x.side==='top'||x.side==='bottom')?player.x:player.y;return c>=x.from+m&&c<=x.to-m}
+  function crossed(x){if(x.side==='top')return player.y<=8;if(x.side==='bottom')return player.y>=H-8;if(x.side==='left')return player.x<=8;if(x.side==='right')return player.x>=W-8;return false}
+  checkDoors=()=>{for(const x of doors())if(fits(x)&&crossed(x))return enterRoom(x.target,x.spawn)};
+  enterRoom=(key,pos)=>{if(current==='lounge'&&key!=='lounge')standUp(true);if(current==='study'&&key!=='study')standFromStudyDesk(true);current=key;player.x=pos.x;player.y=pos.y;if(pos.dir)player.dir=pos.dir;player.step=0;document.getElementById('roomLabel').textContent=rooms[key].name;document.getElementById('roomInfo').textContent=rooms[key].info;updateLoungePanel();toast(rooms[key].name+' に入りました')};
+})();`;
+  d.body.appendChild(patch);
+  loading.style.display='none';
+});
+</script>
 </body>
 </html>
