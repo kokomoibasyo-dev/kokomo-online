@@ -1,0 +1,2 @@
+Trigger GitHub Pages deployment after switching Pages source to GitHub Actions.
+Time: 2026-08-18T09:53+09:00
