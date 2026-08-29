@@ -24,6 +24,19 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v6
+      - name: Build high resolution portraits
+        run: |
+          python3 -m pip install --quiet pillow
+          python3 - <<'PY'
+          from PIL import Image, ImageFilter
+          src='haebaru-ijin/haebaru-portraits.jpg'
+          out='haebaru-ijin-v2/haebaru-portraits-hq.jpg'
+          im=Image.open(src).convert('RGB')
+          up=im.resize((im.width*4, im.height*4), Image.Resampling.LANCZOS)
+          up=up.filter(ImageFilter.UnsharpMask(radius=1.1, percent=115, threshold=3))
+          up.save(out, 'JPEG', quality=92, optimize=True, progressive=True, subsampling=0)
+          print('HQ portraits:', up.size)
+          PY
       - name: Configure Pages
         uses: actions/configure-pages@v6
       - name: Upload site artifact
