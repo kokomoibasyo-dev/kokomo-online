@@ -24,19 +24,22 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v6
-      - name: Build high resolution portraits from original source
+      - name: Recover and build high resolution portraits
         run: |
           python3 -m pip install --quiet pillow
           python3 - <<'PY'
-          from PIL import Image, ImageFilter
+          from PIL import Image, ImageFilter, ImageFile
+          ImageFile.LOAD_TRUNCATED_IMAGES=True
           src='haebaru-ijin/haebaru-portraits.jpg'
           out='haebaru-ijin-v2/haebaru-portraits-hq.jpg'
-          im=Image.open(src).convert('RGB')
-          print('Original portraits:', im.size)
+          im=Image.open(src)
+          im.load()
+          im=im.convert('RGB')
+          print('Recovered original portraits:', im.size)
           scale=4
           up=im.resize((im.width*scale, im.height*scale), Image.Resampling.LANCZOS)
-          up=up.filter(ImageFilter.UnsharpMask(radius=1.4, percent=135, threshold=2))
-          up.save(out,'JPEG',quality=96,optimize=True,progressive=False,subsampling=0)
+          up=up.filter(ImageFilter.UnsharpMask(radius=1.3, percent=125, threshold=2))
+          up.save(out,'JPEG',quality=97,optimize=True,progressive=False,subsampling=0)
           check=Image.open(out)
           check.verify()
           print('HQ portraits verified:', up.size)
