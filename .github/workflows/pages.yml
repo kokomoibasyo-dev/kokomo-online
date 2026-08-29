@@ -28,15 +28,18 @@ jobs:
         run: |
           python3 -m pip install --quiet pillow
           python3 - <<'PY'
-          from PIL import Image, ImageFilter, ImageFile
-          ImageFile.LOAD_TRUNCATED_IMAGES = True
-          src='haebaru-ijin/haebaru-portraits.jpg'
-          out='haebaru-ijin-v2/haebaru-portraits-hq.jpg'
-          im=Image.open(src).convert('RGB')
-          up=im.resize((im.width*4, im.height*4), Image.Resampling.LANCZOS)
-          up=up.filter(ImageFilter.UnsharpMask(radius=1.1, percent=115, threshold=3))
-          up.save(out, 'JPEG', quality=92, optimize=True, progressive=True, subsampling=0)
-          print('HQ portraits:', up.size)
+          from PIL import Image, ImageFilter
+          import base64, io, pathlib
+          src = pathlib.Path('haebaru-ijin-v2/portraits-valid.jpg.b64').read_text().strip()
+          raw = base64.b64decode(src)
+          im = Image.open(io.BytesIO(raw)).convert('RGB')
+          up = im.resize((im.width*6, im.height*6), Image.Resampling.LANCZOS)
+          up = up.filter(ImageFilter.UnsharpMask(radius=1.0, percent=105, threshold=2))
+          out = 'haebaru-ijin-v2/haebaru-portraits-hq.jpg'
+          up.save(out, 'JPEG', quality=94, optimize=True, progressive=True, subsampling=0)
+          check = Image.open(out)
+          check.verify()
+          print('HQ portraits verified:', up.size)
           PY
       - name: Configure Pages
         uses: actions/configure-pages@v6
