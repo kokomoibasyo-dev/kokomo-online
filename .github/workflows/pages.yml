@@ -24,29 +24,33 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v6
-      - name: Build six direct portrait files
+      - name: Build six direct portrait files from verified source
         run: |
-          python3 -m pip install --quiet pillow opencv-python-headless numpy
+          python3 -m pip install --quiet pillow
           python3 - <<'PY'
-          from PIL import Image, ImageFile
-          import numpy as np, cv2, os
-          ImageFile.LOAD_TRUNCATED_IMAGES=True
-          src='haebaru-ijin/haebaru-portraits.jpg'
-          im=Image.open(src); im.load(); im=im.convert('RGB')
-          W,H=im.size; tw,th=W//3,H//2
+          from PIL import Image
+          import base64, os
+          src_b64='haebaru-ijin-v2/portraits-valid.jpg.b64'
+          restored='haebaru-ijin-v2/portraits-source.jpg'
+          with open(src_b64,'r',encoding='utf-8') as f:
+              raw=''.join(f.read().split())
+          with open(restored,'wb') as f:
+              f.write(base64.b64decode(raw))
+          im=Image.open(restored).convert('RGB')
+          W,H=im.size
+          print('verified portrait source:', im.size)
+          tw,th=W//3,H//2
           names=['tobi','yumi','yama','ippa','kame','tetsu']
           os.makedirs('haebaru-ijin-v2/portraits',exist_ok=True)
           for i,name in enumerate(names):
-            row,col=divmod(i,3)
-            tile=np.array(im.crop((col*tw,row*th,(col+1)*tw,(row+1)*th)))[:,:,::-1]
-            tile=cv2.resize(tile,(1280,880),interpolation=cv2.INTER_LANCZOS4)
-            # conservative enhancement: retain the original drawing, avoid artificial overprocessing
-            blur=cv2.GaussianBlur(tile,(0,0),1.0)
-            tile=cv2.addWeighted(tile,1.45,blur,-0.45,0)
-            out=f'haebaru-ijin-v2/portraits/{name}.jpg'
-            cv2.imwrite(out,tile,[cv2.IMWRITE_JPEG_QUALITY,98])
-            check=Image.open(out); check.verify()
-            print(name, out, os.path.getsize(out))
+              row,col=divmod(i,3)
+              tile=im.crop((col*tw,row*th,(col+1)*tw,(row+1)*th))
+              # 2x display source; no broken-image recovery and no aggressive filtering
+              tile=tile.resize((960,600),Image.Resampling.LANCZOS)
+              out=f'haebaru-ijin-v2/portraits/{name}.jpg'
+              tile.save(out,'JPEG',quality=96,subsampling=0,optimize=True)
+              check=Image.open(out); check.verify()
+              print(name, os.path.getsize(out))
           PY
       - name: Configure Pages
         uses: actions/configure-pages@v6
