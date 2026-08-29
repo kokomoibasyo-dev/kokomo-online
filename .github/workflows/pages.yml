@@ -20,24 +20,24 @@ jobs:
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - name: Checkout
         uses: actions/checkout@v6
-      - name: Build high resolution portraits
+      - name: Build high resolution portraits from original source
         run: |
           python3 -m pip install --quiet pillow
           python3 - <<'PY'
           from PIL import Image, ImageFilter
-          import base64, io, pathlib
-          src = pathlib.Path('haebaru-ijin-v2/portraits-valid.jpg.b64').read_text().strip()
-          raw = base64.b64decode(src)
-          im = Image.open(io.BytesIO(raw)).convert('RGB')
-          up = im.resize((im.width*6, im.height*6), Image.Resampling.LANCZOS)
-          up = up.filter(ImageFilter.UnsharpMask(radius=1.0, percent=105, threshold=2))
-          out = 'haebaru-ijin-v2/haebaru-portraits-hq.jpg'
-          up.save(out, 'JPEG', quality=94, optimize=True, progressive=True, subsampling=0)
-          check = Image.open(out)
+          src='haebaru-ijin/haebaru-portraits.jpg'
+          out='haebaru-ijin-v2/haebaru-portraits-hq.jpg'
+          im=Image.open(src).convert('RGB')
+          print('Original portraits:', im.size)
+          scale=4
+          up=im.resize((im.width*scale, im.height*scale), Image.Resampling.LANCZOS)
+          up=up.filter(ImageFilter.UnsharpMask(radius=1.4, percent=135, threshold=2))
+          up.save(out,'JPEG',quality=96,optimize=True,progressive=False,subsampling=0)
+          check=Image.open(out)
           check.verify()
           print('HQ portraits verified:', up.size)
           PY
