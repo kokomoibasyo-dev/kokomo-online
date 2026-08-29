@@ -24,6 +24,50 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v6
+
+      - name: Build portrait images with EDSR super-resolution
+        run: |
+          python3 -m pip install --quiet pillow opencv-contrib-python-headless
+          curl -L --fail --retry 3 \
+            -o /tmp/EDSR_x4.pb \
+            https://github.com/Saafke/EDSR_Tensorflow/raw/master/models/EDSR_x4.pb
+          python3 - <<'PY'
+          from PIL import Image, ImageFile
+          import cv2, os, numpy as np
+
+          ImageFile.LOAD_TRUNCATED_IMAGES = True
+          src = 'haebaru-ijin/haebaru-portraits.jpg'
+          out_dir = 'haebaru-ijin-v2/portraits'
+          os.makedirs(out_dir, exist_ok=True)
+
+          # Recover the original JPEG safely even if its ending is imperfect.
+          pil = Image.open(src).convert('RGB')
+          arr = cv2.cvtColor(np.array(pil), cv2.COLOR_RGB2BGR)
+          h, w = arr.shape[:2]
+          if w % 3 != 0 or h % 2 != 0:
+              raise RuntimeError(f'Unexpected portrait sprite size: {w}x{h}')
+
+          tw, th = w // 3, h // 2
+          names = ['tobi','yumi','yama','ippa','kame','tetsu']
+
+          sr = cv2.dnn_superres.DnnSuperResImpl_create()
+          sr.readModel('/tmp/EDSR_x4.pb')
+          sr.setModel('edsr', 4)
+
+          for i, name in enumerate(names):
+              row, col = divmod(i, 3)
+              tile = arr[row*th:(row+1)*th, col*tw:(col+1)*tw]
+              up = sr.upsample(tile)
+              # Conservative local sharpening after neural SR.
+              blur = cv2.GaussianBlur(up, (0,0), 0.75)
+              up = cv2.addWeighted(up, 1.18, blur, -0.18, 0)
+              path = os.path.join(out_dir, f'{name}.jpg')
+              cv2.imwrite(path, up, [cv2.IMWRITE_JPEG_QUALITY, 96])
+              check = Image.open(path)
+              check.verify()
+              print(name, check.size, os.path.getsize(path))
+          PY
+
       - name: Configure Pages
         uses: actions/configure-pages@v6
       - name: Upload site artifact
