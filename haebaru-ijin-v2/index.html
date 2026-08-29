@@ -3,36 +3,45 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>南風原偉人フローチャート｜試験版</title>
+<title>南風原偉人フローチャート｜画像確認版</title>
 <style>
 :root{--card:#fffdf8;--ink:#1e2b28;--muted:#66706c;--accent:#16725f;--line:#d8d4c9}
 *{box-sizing:border-box}
 body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",Meiryo,sans-serif;background:linear-gradient(#fbf8ef,#eef2ec);color:var(--ink);min-height:100vh}
-.wrap{max-width:760px;margin:auto;padding:24px 18px 48px}
-.hero{padding:18px 0 10px}.top{font-size:12px;letter-spacing:.18em;font-weight:800;color:var(--accent)}
-h1{font-size:clamp(34px,8vw,58px);line-height:1.05;margin:10px 0 16px;letter-spacing:-.03em}
-.intro{color:var(--muted);line-height:1.9;font-size:16px}.badge{display:inline-block;margin-top:16px;padding:9px 13px;border:1px solid var(--line);border-radius:999px;background:#ffffffaa;color:#4f5a56;font-size:13px}
-.card{margin-top:22px;background:var(--card);border:1px solid #d7d7cf;border-radius:24px;padding:24px;box-shadow:0 18px 48px rgba(35,48,43,.09)}
-.hidden{display:none!important}.primary{width:100%;border:0;border-radius:17px;background:var(--accent);color:white;font-weight:800;font-size:18px;padding:17px;cursor:pointer}.start p{color:var(--muted);line-height:1.8}
-.qmeta{display:flex;justify-content:space-between;color:var(--muted);font-size:13px}.qslot{height:176px;display:flex;align-items:center;justify-content:center;text-align:center;padding:8px 4px}.question{font-size:clamp(22px,5.2vw,30px);font-weight:800;line-height:1.5;margin:0}.answers{display:grid;grid-template-columns:1fr 1fr;gap:12px}.answer{border:1px solid var(--line);border-radius:18px;background:white;padding:18px 10px;font-size:18px;font-weight:850}
-.result-kicker{text-align:center;color:var(--accent);font-size:13px;font-weight:800;letter-spacing:.06em}.type{text-align:center;font-size:clamp(30px,7vw,45px);line-height:1.18;margin:8px 0}.person{text-align:center;color:#59625e;font-size:18px;font-weight:800;margin-bottom:18px}.portrait{width:min(100%,520px);margin:0 auto 22px;border-radius:24px;overflow:hidden;border:7px solid white;box-shadow:0 12px 32px rgba(25,55,46,.14);background:#eee;aspect-ratio:8/5}.portrait img{display:block;width:100%;height:100%;object-fit:cover}.lead{font-size:21px;line-height:1.7;font-weight:800;text-align:center;margin:0 0 18px}.traits{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin-bottom:22px}.trait{border:1px solid #ccd6d0;border-radius:999px;padding:7px 11px;background:#fff;font-weight:700;font-size:13px}.note{background:#fff6e5;border-radius:16px;padding:16px;color:#6c5938;line-height:1.75;font-size:14px;margin:18px 0}.error{padding:14px;border-radius:14px;background:#fdeaea;color:#8a2f2f;line-height:1.7}
-@media(max-width:560px){.wrap{padding:18px 14px 38px}.card{padding:20px;border-radius:20px}.qslot{height:176px}.portrait{width:100%}}
+.wrap{max-width:760px;margin:auto;padding:24px 18px 48px}.hero{padding:18px 0 10px}.top{font-size:12px;letter-spacing:.18em;font-weight:800;color:var(--accent)}
+h1{font-size:clamp(34px,8vw,58px);line-height:1.05;margin:10px 0 16px;letter-spacing:-.03em}.intro{color:var(--muted);line-height:1.9;font-size:16px}.badge{display:inline-block;margin-top:16px;padding:9px 13px;border:1px solid var(--line);border-radius:999px;background:#ffffffaa;color:#4f5a56;font-size:13px}
+.card{margin-top:22px;background:var(--card);border:1px solid #d7d7cf;border-radius:24px;padding:24px;box-shadow:0 18px 48px rgba(35,48,43,.09)}.hidden{display:none!important}.primary{width:100%;border:0;border-radius:17px;background:var(--accent);color:#fff;font-weight:800;font-size:18px;padding:17px;cursor:pointer}.start p{color:var(--muted);line-height:1.8}
+.qmeta{display:flex;justify-content:space-between;color:var(--muted);font-size:13px}.question-slot{height:190px;display:flex;align-items:center;justify-content:center;text-align:center;padding:8px 4px}.question{font-size:clamp(22px,5.2vw,30px);font-weight:800;line-height:1.5;margin:0}.answers{display:grid;grid-template-columns:1fr 1fr;gap:12px}.answer{border:1px solid var(--line);border-radius:18px;background:#fff;padding:18px 10px;font-size:18px;font-weight:850;cursor:pointer}
+.result-kicker{text-align:center;color:var(--accent);font-size:13px;font-weight:800;letter-spacing:.06em}.type{text-align:center;font-size:clamp(30px,7vw,45px);line-height:1.18;margin:8px 0}.person{text-align:center;color:#59625e;font-size:18px;font-weight:800;margin-bottom:18px}.portrait{width:min(100%,520px);margin:0 auto 22px;border-radius:24px;overflow:hidden;border:7px solid #fff;box-shadow:0 12px 32px rgba(25,55,46,.14);background:#eee;aspect-ratio:8/5}.portrait img{display:block;width:100%;height:100%;object-fit:cover;object-position:center}.lead{font-size:21px;line-height:1.7;font-weight:800;text-align:center;margin:0 0 18px}.traits{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin-bottom:22px}.trait{border:1px solid #ccd6d0;border-radius:999px;padding:7px 11px;background:#fff;font-weight:700;font-size:13px}.note{background:#fff6e5;border-radius:16px;padding:16px;color:#6c5938;line-height:1.75;font-size:14px;margin:18px 0}.error{background:#fdeaea;color:#8a2f2f}.secondary{width:100%;margin-top:10px;border:1px solid var(--line);border-radius:17px;background:#fff;color:var(--ink);font-weight:800;font-size:16px;padding:15px;cursor:pointer}.footer{font-size:12px;color:#7a827e;text-align:center;padding:26px 12px 0}
+@media(max-width:560px){.wrap{padding:18px 14px 38px}.card{padding:20px;border-radius:20px}.question-slot{height:190px}.portrait{width:100%}}
 </style>
 </head>
 <body>
 <main class="wrap">
-<header class="hero"><div class="top">HAEBARU × SELF DISCOVERY</div><h1>南風原偉人<br>フローチャート</h1><p class="intro">【高画質画像確認用の試験版】今は1問だけ回答すると、飛び安里タイプの結果を表示します。画像表示が確認できたら残り5人を同じ方式にして、本番の20問診断へ戻します。</p><div class="badge">試験版：1問 ｜ 高画質画像確認</div></header>
-<section id="start" class="card start"><h2>画像表示テスト</h2><p>質問文の長さに関係なく、YES / NO ボタンの位置は固定しています。</p><button id="startBtn" class="primary" type="button">診断をはじめる</button></section>
-<section id="quiz" class="card hidden"><div class="qmeta"><span>1 / 1</span><span>YES / NO</span></div><div class="qslot"><p class="question">新しいことに出会ったとき、十分に準備が整うまで待つより、まず小さく試してみたいと思う。</p></div><div class="answers"><button class="answer" type="button">YES</button><button class="answer" type="button">NO</button></div></section>
-<section id="result" class="card hidden"><div class="result-kicker">画像表示テスト結果</div><h2 class="type">まず、やってみるタイプ</h2><div class="person">— 飛び安里タイプ —</div><div class="portrait"><img id="portraitImg" alt="飛び安里タイプのイラスト"></div><p class="lead">「できるかわからない」なら、試して確かめたい。</p><div class="traits"><span class="trait">挑戦</span><span class="trait">試行錯誤</span><span class="trait">発明</span></div><div id="loadState" class="note">高画質画像を読み込み中です。</div><button id="retryBtn" class="primary" type="button">もう一度試す</button></section>
+<header class="hero"><div class="top">HAEBARU × SELF DISCOVERY</div><h1>南風原偉人<br>フローチャート</h1><p class="intro">【画像・操作確認用の試験版】いまは1問だけ回答すると結果が表示されます。6人の画像を確認できたら、本番の50問ストック→20問ランダム出題へ戻します。</p><div class="badge">試験版：1問 ｜ AI超解像画像確認 ｜ 6タイプ</div></header>
+<section id="start" class="card start"><h2>画像表示テスト</h2><p>質問文の長さが2行でも3行でも、YES / NO ボタンの位置は動きません。「診断をはじめる」→1問回答→結果表示です。</p><button id="startBtn" class="primary" type="button">診断をはじめる</button></section>
+<section id="quiz" class="card hidden"><div class="qmeta"><span>1 / 1</span><span>YES / NO</span></div><div class="question-slot"><p class="question">新しいことに出会ったとき、十分に準備が整うまで待つより、まず小さく試してみたいと思う。</p></div><div class="answers"><button class="answer" type="button">YES</button><button class="answer" type="button">NO</button></div></section>
+<section id="result" class="card hidden"><div class="result-kicker">画像表示テスト結果</div><h2 id="typeName" class="type"></h2><div id="personName" class="person"></div><div class="portrait"><img id="portraitImg" alt="南風原ゆかりの人物イラスト"></div><p id="lead" class="lead"></p><div id="traits" class="traits"></div><div id="loadState" class="note">画像は元イラストをAI超解像（EDSR ×4）したものを直接表示しています。</div><button id="retryBtn" class="primary" type="button">次の人物も試す</button><button id="backStartBtn" class="secondary" type="button">最初に戻る</button></section>
+<div class="footer">画像確認後、本番の20問診断へ復元します。</div>
 </main>
 <script>
+const BUILD='202608292110';
+const profiles=[
+{k:'tobi',type:'まず、やってみるタイプ',person:'— 飛び安里タイプ —',lead:'「できるかわからない」なら、試して確かめたい。',traits:['挑戦','試行錯誤','発明']},
+{k:'yumi',type:'仕組みから変えるタイプ',person:'— 新垣 弓太郎タイプ —',lead:'「おかしい」と感じたら、環境に合わせるだけでは終わらない。',traits:['変革','信念','社会への働きかけ']},
+{k:'yama',type:'学んで力にするタイプ',person:'— 金城 山戸タイプ —',lead:'新しい場所でも、学び続けて「できること」を増やしていく。',traits:['学習','専門性','貢献']},
+{k:'ippa',type:'人に返す豪快タイプ',person:'— 儀保 蒲太（イッパチ）タイプ —',lead:'自分が得たものは、自分だけのものにしておかない。',traits:['人情','分かち合い','大胆さ']},
+{k:'kame',type:'知らない場所へ踏み出すタイプ',person:'— 金城 亀タイプ —',lead:'環境が変わることより、新しい可能性に心が動く。',traits:['開拓','移動','仕事をつくる']},
+{k:'tetsu',type:'世界をつくって伝えるタイプ',person:'— 金城 哲夫タイプ —',lead:'頭に浮かんだ世界は、作品や企画にして誰かに届けたい。',traits:['創造','物語','企画']}
+];
+let index=0;
 const $=id=>document.getElementById(id);
 function show(id){['start','quiz','result'].forEach(x=>$(x).classList.add('hidden'));$(id).classList.remove('hidden');window.scrollTo({top:0,behavior:'smooth'});}
-async function loadPortrait(){const state=$('loadState');try{const r=await fetch('./embedded/tobi.webp.b64?v=202608292020',{cache:'no-store'});if(!r.ok)throw new Error('HTTP '+r.status);const b64=(await r.text()).trim();if(b64.length<10000)throw new Error('画像データが短すぎます');const img=$('portraitImg');await new Promise((resolve,reject)=>{img.onload=resolve;img.onerror=reject;img.src='data:image/webp;base64,'+b64;});state.textContent='高画質WebPを直接読み込みました。';}catch(e){state.className='error';state.textContent='画像読み込みに失敗しました：'+e.message;}}
+function renderResult(){const p=profiles[index];$('typeName').textContent=p.type;$('personName').textContent=p.person;$('lead').textContent=p.lead;$('traits').innerHTML=p.traits.map(t=>'<span class="trait">'+t+'</span>').join('');const img=$('portraitImg');const state=$('loadState');state.className='note';state.textContent='画像は元イラストをAI超解像（EDSR ×4）したものを直接表示しています。';img.onload=()=>{state.textContent='画像読み込みOK：'+p.person.replace(/[—]/g,'').trim();};img.onerror=()=>{state.className='note error';state.textContent='画像の読み込みに失敗しました。';};img.src='./portraits/'+p.k+'.jpg?build='+BUILD;show('result');}
 $('startBtn').addEventListener('click',()=>show('quiz'));
-document.querySelectorAll('.answer').forEach(b=>b.addEventListener('click',async()=>{show('result');await loadPortrait();}));
-$('retryBtn').addEventListener('click',()=>show('quiz'));
+document.querySelectorAll('.answer').forEach(b=>b.addEventListener('click',renderResult));
+$('retryBtn').addEventListener('click',()=>{index=(index+1)%profiles.length;show('quiz');});
+$('backStartBtn').addEventListener('click',()=>{index=0;show('start');});
 </script>
 </body>
 </html>
