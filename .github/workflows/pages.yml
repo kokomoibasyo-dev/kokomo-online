@@ -24,36 +24,29 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v6
-      - name: Enhance portrait tiles for web display
+      - name: Build six direct portrait files
         run: |
           python3 -m pip install --quiet pillow opencv-python-headless numpy
           python3 - <<'PY'
           from PIL import Image, ImageFile
-          import numpy as np, cv2
+          import numpy as np, cv2, os
           ImageFile.LOAD_TRUNCATED_IMAGES=True
           src='haebaru-ijin/haebaru-portraits.jpg'
-          out='haebaru-ijin-v2/haebaru-portraits-hq.jpg'
           im=Image.open(src); im.load(); im=im.convert('RGB')
-          W,H=im.size
-          tw,th=W//3,H//2
-          canvas=np.zeros((th*4*2,tw*4*3,3),dtype=np.uint8)
-          for row in range(2):
-            for col in range(3):
-              tile=np.array(im.crop((col*tw,row*th,(col+1)*tw,(row+1)*th)))[:,:,::-1]
-              tile=cv2.resize(tile,(tw*4,th*4),interpolation=cv2.INTER_LANCZOS4)
-              tile=cv2.bilateralFilter(tile,7,28,28)
-              lab=cv2.cvtColor(tile,cv2.COLOR_BGR2LAB)
-              l,a,b=cv2.split(lab)
-              l=cv2.createCLAHE(clipLimit=1.7,tileGridSize=(8,8)).apply(l)
-              tile=cv2.cvtColor(cv2.merge((l,a,b)),cv2.COLOR_LAB2BGR)
-              blur=cv2.GaussianBlur(tile,(0,0),1.15)
-              tile=cv2.addWeighted(tile,1.75,blur,-0.75,0)
-              tile=cv2.detailEnhance(tile,sigma_s=8,sigma_r=0.12)
-              tile=cv2.addWeighted(tile,0.82,cv2.GaussianBlur(tile,(0,0),0.55),0.18,0)
-              canvas[row*th*4:(row+1)*th*4,col*tw*4:(col+1)*tw*4]=tile
-          cv2.imwrite(out,canvas,[cv2.IMWRITE_JPEG_QUALITY,98])
-          check=Image.open(out); check.verify()
-          print('Enhanced portraits verified:', (canvas.shape[1],canvas.shape[0]))
+          W,H=im.size; tw,th=W//3,H//2
+          names=['tobi','yumi','yama','ippa','kame','tetsu']
+          os.makedirs('haebaru-ijin-v2/portraits',exist_ok=True)
+          for i,name in enumerate(names):
+            row,col=divmod(i,3)
+            tile=np.array(im.crop((col*tw,row*th,(col+1)*tw,(row+1)*th)))[:,:,::-1]
+            tile=cv2.resize(tile,(1280,880),interpolation=cv2.INTER_LANCZOS4)
+            # conservative enhancement: retain the original drawing, avoid artificial overprocessing
+            blur=cv2.GaussianBlur(tile,(0,0),1.0)
+            tile=cv2.addWeighted(tile,1.45,blur,-0.45,0)
+            out=f'haebaru-ijin-v2/portraits/{name}.jpg'
+            cv2.imwrite(out,tile,[cv2.IMWRITE_JPEG_QUALITY,98])
+            check=Image.open(out); check.verify()
+            print(name, out, os.path.getsize(out))
           PY
       - name: Configure Pages
         uses: actions/configure-pages@v6
