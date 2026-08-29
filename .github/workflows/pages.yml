@@ -24,33 +24,35 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v6
-      - name: Build six direct portrait files from verified source
+      - name: Build six super-resolution portrait files
         run: |
-          python3 -m pip install --quiet pillow
+          python3 -m pip install --quiet pillow opencv-contrib-python-headless numpy
+          curl -L --fail --retry 3 -o /tmp/EDSR_x4.pb https://github.com/Saafke/EDSR_Tensorflow/raw/master/models/EDSR_x4.pb
           python3 - <<'PY'
-          from PIL import Image
-          import base64, os
-          src_b64='haebaru-ijin-v2/portraits-valid.jpg.b64'
-          restored='haebaru-ijin-v2/portraits-source.jpg'
-          with open(src_b64,'r',encoding='utf-8') as f:
-              raw=''.join(f.read().split())
-          with open(restored,'wb') as f:
-              f.write(base64.b64decode(raw))
-          im=Image.open(restored).convert('RGB')
+          from PIL import Image, ImageFile
+          import cv2, numpy as np, os
+          ImageFile.LOAD_TRUNCATED_IMAGES=True
+          src='haebaru-ijin/haebaru-portraits.jpg'
+          im=Image.open(src); im.load(); im=im.convert('RGB')
           W,H=im.size
-          print('verified portrait source:', im.size)
+          print('source:', im.size)
           tw,th=W//3,H//2
           names=['tobi','yumi','yama','ippa','kame','tetsu']
           os.makedirs('haebaru-ijin-v2/portraits',exist_ok=True)
+          sr=cv2.dnn_superres.DnnSuperResImpl_create()
+          sr.readModel('/tmp/EDSR_x4.pb')
+          sr.setModel('edsr',4)
           for i,name in enumerate(names):
               row,col=divmod(i,3)
-              tile=im.crop((col*tw,row*th,(col+1)*tw,(row+1)*th))
-              # 2x display source; no broken-image recovery and no aggressive filtering
-              tile=tile.resize((960,600),Image.Resampling.LANCZOS)
+              tile=np.array(im.crop((col*tw,row*th,(col+1)*tw,(row+1)*th)))[:,:,::-1]
+              up=sr.upsample(tile)
+              # keep the illustration clean without over-sharpening
+              blur=cv2.GaussianBlur(up,(0,0),0.8)
+              up=cv2.addWeighted(up,1.18,blur,-0.18,0)
               out=f'haebaru-ijin-v2/portraits/{name}.jpg'
-              tile.save(out,'JPEG',quality=96,subsampling=0,optimize=True)
-              check=Image.open(out); check.verify()
-              print(name, os.path.getsize(out))
+              cv2.imwrite(out,up,[cv2.IMWRITE_JPEG_QUALITY,96])
+              chk=Image.open(out); chk.verify()
+              print(name, up.shape[1], up.shape[0], os.path.getsize(out))
           PY
       - name: Configure Pages
         uses: actions/configure-pages@v6
