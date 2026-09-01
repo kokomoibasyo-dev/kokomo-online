@@ -1,0 +1,8 @@
+.focusline{margin-top:8px;padding-top:8px;border-top:1px dashed #dbe6df;font-size:11px;color:#52635c}
+.priority{display:inline-flex;padding:4px 7px;border-radius:99px;background:#e7f0ff;color:#315b86;font-size:11px;margin:3px 4px 0 0}
+.neglect{background:#fff0ed!important;border:1px solid #f2c8bf!important;color:#8a4136}
+.changeRow{padding:6px 0;border-bottom:1px solid #ecefe9}.changeRow:last-child{border-bottom:0}
+.upkeep{margin-top:7px;padding:5px 7px;border-radius:8px;background:#fff5d6;color:#795c16;font-size:11px;font-weight:800}
+.ongoing{border-color:#75b58b!important;background:#f4fff7!important}.ongoingBadge{margin-top:8px;display:inline-block;padding:4px 7px;border-radius:99px;background:#dff4e6;color:#27643a;font-size:11px;font-weight:800}
+.commitments{margin-bottom:10px;padding:10px;border:1px solid #b9d9c3;background:#f3fff6;border-radius:12px}.commitmentRow{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:6px 0;border-bottom:1px solid #dcebe1;font-size:12px}.commitmentRow:last-child{border-bottom:0}.stopProgram{border:1px solid #b7b7b7;background:#fff;border-radius:8px;padding:5px 8px;font-size:11px;white-space:nowrap}
+.danger{background:#fff0ed!important;border:1px solid #e9b7ad!important;color:#8c352b}.commitmentNotice{background:#fff8db!important;border:1px solid #ebd486!important}.surpriseHint{margin-top:6px;color:#7b684a}.policy.ongoing .cost{opacity:.45}
