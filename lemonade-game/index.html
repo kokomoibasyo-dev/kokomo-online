@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>レモネードゲーム</title>
+<style>
+:root{font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif;color:#27251f;background:#fff9df}*{box-sizing:border-box}body{margin:0;background:linear-gradient(#fff8c9,#fffdf3);min-height:100vh}.wrap{max-width:850px;margin:auto;padding:14px}.hero,.card{background:#fff;border:1px solid #eadf9c;border-radius:20px;box-shadow:0 8px 24px #6b5b0014}.hero{padding:20px;background:linear-gradient(135deg,#fff5a7,#ffd94d)}h1{margin:0;font-size:clamp(30px,8vw,50px)}.lead{margin:8px 0 0;line-height:1.6}.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:16px}.stat{background:#ffffffb8;border-radius:14px;padding:10px}.k{font-size:11px;color:#6d6755}.v{font-size:20px;font-weight:800}.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}.card{padding:16px}.weather{font-size:38px}.weather strong{font-size:22px}.event{margin-top:10px;padding:10px;background:#fff8d8;border-radius:12px}.row{display:grid;grid-template-columns:1fr 105px;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid #eee8cc}.row:last-child{border:0}.row label{font-weight:700}.small{font-size:11px;color:#77705c;margin-top:2px}input{width:100%;padding:10px;border:1px solid #d9cf9d;border-radius:10px;font-size:16px;text-align:right;background:#fff}.inv{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}.inv div{padding:10px;text-align:center;background:#fffbea;border-radius:12px}.cost{display:flex;justify-content:space-between;padding:12px;margin-top:10px;background:#f7f4e7;border-radius:12px}.btn{width:100%;border:0;border-radius:13px;padding:14px;margin-top:12px;background:#292720;color:#fff;font-weight:800;font-size:16px}.btn:disabled{opacity:.4}.subbtn{background:#fff;color:#292720;border:1px solid #ccc}.result{display:none;margin-top:12px}.result.show{display:block}.metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}.metric{padding:10px;background:#fffbea;border-radius:12px}.good{color:#16814a}.bad{color:#bc3540}.log{margin-top:12px;overflow:auto}table{width:100%;border-collapse:collapse;font-size:12px}th,td{padding:8px;border-bottom:1px solid #eee8cc;text-align:right;white-space:nowrap}th:first-child,td:first-child{text-align:left}.ending{display:none;text-align:center}.ending.show{display:block}.score{font-size:48px;font-weight:900}@media(max-width:680px){.grid{grid-template-columns:1fr}.stats,.metrics{grid-template-columns:repeat(2,1fr)}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<section class="hero">
+<h1>🍋 レモネードゲーム</h1>
+<p class="lead">天気を読み、材料を仕入れ、値段を決めて7日間お店を経営しよう。目標は元手3,000円を増やすこと！</p>
+<div class="stats">
+<div class="stat"><div class="k">日数</div><div class="v"><span id="day">1</span>/7</div></div>
+<div class="stat"><div class="k">所持金</div><div class="v">¥<span id="cash">3000</span></div></div>
+<div class="stat"><div class="k">累計売上</div><div class="v">¥<span id="totalSales">0</span></div></div>
+<div class="stat"><div class="k">利益</div><div class="v" id="totalProfit">¥0</div></div>
+</div></section>
+<div id="game">
+<div class="grid">
+<section class="card"><h2>今日の予報</h2><div class="weather"><span id="wIcon">☀️</span> <strong><span id="temp">30</span>℃・<span id="wName">晴れ</span></strong></div><div id="wNote" class="small">暑い日はよく売れます。</div><div id="event" class="event">今日は特別な出来事はなさそう。</div><h2>在庫</h2><div class="inv"><div>🍋<br><b id="iL">0</b></div><div>🥄<br><b id="iS">0</b></div><div>🧊<br><b id="iI">0</b></div></div><p class="small">1杯につきレモン・砂糖・氷を1つずつ使用。氷はその日の終わりに溶けます。</p></section>
+<section class="card"><h2>今日の経営</h2>
+<div class="row"><div><label>販売価格</label><div class="small">高すぎると買う人が減る</div></div><input id="price" type="number" min="50" max="500" step="10" value="150"></div>
+<div class="row"><div><label>レモン仕入れ</label><div class="small">1個 35円</div></div><input id="buyL" type="number" min="0" max="100" value="15"></div>
+<div class="row"><div><label>砂糖仕入れ</label><div class="small">1杯分 15円</div></div><input id="buyS" type="number" min="0" max="100" value="15"></div>
+<div class="row"><div><label>氷仕入れ</label><div class="small">1個 10円</div></div><input id="buyI" type="number" min="0" max="100" value="20"></div>
+<div class="row"><div><label>宣伝費</label><div class="small">0〜500円</div></div><input id="ads" type="number" min="0" max="500" step="50" value="100"></div>
+<div class="cost"><span>今日の支出</span><b>¥<span id="cost">0</span></b></div><button id="open" class="btn">お店を開く</button></section>
+</div>
+<section id="result" class="card result"><h2 id="resultTitle">今日の結果</h2><div class="metrics"><div class="metric"><div class="k">来店</div><div class="v"><span id="visitors">0</span>人</div></div><div class="metric"><div class="k">販売</div><div class="v"><span id="sold">0</span>杯</div></div><div class="metric"><div class="k">売上</div><div class="v">¥<span id="sales">0</span></div></div><div class="metric"><div class="k">今日の利益</div><div class="v" id="profit">¥0</div></div></div><p id="comment"></p><button id="next" class="btn subbtn">次の日へ</button></section>
+<section class="card log"><h2>経営記録</h2><table><thead><tr><th>日</th><th>天気</th><th>価格</th><th>販売</th><th>売上</th><th>利益</th></tr></thead><tbody id="log"><tr><td colspan="6">まだ記録はありません</td></tr></tbody></table></section>
+</div>
+<section id="ending" class="card ending"><p>7日間終了！</p><h2>最終所持金</h2><div class="score">¥<span id="finalCash">0</span></div><h2 id="rank"></h2><p id="summary"></p><button id="restart" class="btn">もう一度遊ぶ</button></section>
+</div>
+<script>
+(function(){
+'use strict';
+var $=function(id){return document.getElementById(id)};
+var weather=[
+{name:'猛暑',icon:'🥵',min:33,max:36,m:1.55,note:'かなり暑い！よく売れそう。'},
+{name:'晴れ',icon:'☀️',min:28,max:33,m:1.25,note:'暑くてレモネード日和。'},
+{name:'くもり',icon:'☁️',min:24,max:29,m:.9,note:'売れ行きは普通。価格が大事。'},
+{name:'小雨',icon:'🌦️',min:21,max:26,m:.68,note:'人通りが少なめ。仕入れすぎ注意。'},
+{name:'雨',icon:'🌧️',min:19,max:24,m:.48,note:'今日はお客さんが少なそう。'}];
+var events=[{t:'近くでスポーツ大会！人通りが増えそう。',m:1.35},{t:'近所でお祭り。家族連れが増えています。',m:1.28},{t:'ライバル店が出店。お客さんが分散しそう。',m:.78},{t:'SNSで話題に。客足が伸びそう。',m:1.18},{t:'今日は特別な出来事はなさそう。',m:1},{t:'今日は特別な出来事はなさそう。',m:1}];
+var s;
+function ri(a,b){return Math.floor(Math.random()*(b-a+1))+a}
+function pickW(){var r=Math.random(),i=r<.18?0:r<.54?1:r<.77?2:r<.91?3:4,w=weather[i];return{name:w.name,icon:w.icon,temp:ri(w.min,w.max),m:w.m,note:w.note}}
+function pickE(){return events[Math.floor(Math.random()*events.length)]}
+function num(id,min,max){var v=parseInt($(id).value,10);if(isNaN(v))v=0;return Math.max(min,Math.min(max,v))}
+function input(){return{price:num('price',50,500),l:num('buyL',0,100),su:num('buyS',0,100),ice:num('buyI',0,100),ads:num('ads',0,500)}}
+function expense(x){return x.l*35+x.su*15+x.ice*10+x.ads}
+function fmt(n){return Math.round(n).toLocaleString('ja-JP')}
+function updateCost(){var c=expense(input());$('cost').textContent=fmt(c);$('open').disabled=s.open||c>s.cash;$('open').textContent=c>s.cash?'所持金が足りません':'お店を開く'}
+function render(){
+$('day').textContent=s.day;$('cash').textContent=fmt(s.cash);$('totalSales').textContent=fmt(s.sales);$('totalProfit').textContent=(s.profit>=0?'¥':'-¥')+fmt(Math.abs(s.profit));$('totalProfit').className='v '+(s.profit>=0?'good':'bad');
+$('wIcon').textContent=s.w.icon;$('temp').textContent=s.w.temp;$('wName').textContent=s.w.name;$('wNote').textContent=s.w.note;$('event').textContent=s.e.t;$('iL').textContent=s.inv.l;$('iS').textContent=s.inv.su;$('iI').textContent=s.inv.ice;
+if(s.logs.length){$('log').innerHTML=s.logs.map(function(x){return '<tr><td>'+x.d+'日目</td><td>'+x.icon+x.w+'</td><td>¥'+fmt(x.price)+'</td><td>'+x.sold+'杯</td><td>¥'+fmt(x.sales)+'</td><td class="'+(x.p>=0?'good':'bad')+'">'+(x.p>=0?'+':'-')+'¥'+fmt(Math.abs(x.p))+'</td></tr>'}).join('')}
+updateCost()}
+function reset(){s={day:1,cash:3000,start:3000,sales:0,profit:0,inv:{l:0,su:0,ice:0},logs:[],open:false,w:pickW(),e:pickE()};$('game').style.display='block';$('ending').classList.remove('show');$('result').classList.remove('show');$('price').value=150;$('buyL').value=15;$('buyS').value=15;$('buyI').value=20;$('ads').value=100;render()}
+function openShop(){
+if(s.open)return;var x=input(),c=expense(x);if(c>s.cash){updateCost();return}s.open=true;s.cash-=c;s.inv.l+=x.l;s.inv.su+=x.su;s.inv.ice+=x.ice;
+var visitors=Math.max(3,Math.round(28*s.w.m*s.e.m*(1+Math.sqrt(x.ads/100)*.13)*(1+Math.max(0,s.w.temp-25)*.018)*(.82+Math.random()*.36)));
+var pf=Math.max(.12,1.12-Math.max(0,x.price-150)/280-Math.max(0,150-x.price)/900),demand=Math.max(0,Math.round(visitors*Math.max(.18,Math.min(.97,.88*pf)))),stock=Math.min(s.inv.l,s.inv.su,s.inv.ice),sold=Math.min(demand,stock),sales=sold*x.price,p=sales-c;
+s.inv.l-=sold;s.inv.su-=sold;s.inv.ice-=sold;s.cash+=sales;s.sales+=sales;s.profit=s.cash-s.start;s.logs.push({d:s.day,w:s.w.name,icon:s.w.icon,price:x.price,sold:sold,sales:sales,p:p});
+$('visitors').textContent=visitors;$('sold').textContent=sold;$('sales').textContent=fmt(sales);$('profit').textContent=(p>=0?'+¥':'-¥')+fmt(Math.abs(p));$('profit').className='v '+(p>=0?'good':'bad');$('resultTitle').textContent=s.day+'日目の結果';
+var msg=demand>stock?'材料不足で販売チャンスを逃しました。':p>700?'大成功！価格・仕入れ・天気の読みが噛み合いました。':p>0?'黒字です。次はさらに利益を伸ばせるかな？':'今日は赤字。仕入れ量や宣伝費を見直してみよう。';$('comment').textContent=msg;$('next').textContent=s.day===7?'最終結果を見る':'次の日へ';$('result').classList.add('show');render();$('result').scrollIntoView({behavior:'smooth'})}
+function next(){if(!s.open)return;s.inv.ice=0;if(s.day>=7){finish();return}s.day++;s.open=false;s.w=pickW();s.e=pickE();$('result').classList.remove('show');$('buyI').value=20;render();window.scrollTo({top:0,behavior:'smooth'})}
+function finish(){$('game').style.display='none';$('ending').classList.add('show');$('finalCash').textContent=fmt(s.cash);var r=s.cash>=7500?'🏆 レモネード王！':s.cash>=5500?'🌟 すご腕店長':s.cash>=3800?'👍 黒字経営達成':s.cash>=2500?'🧪 もう一工夫':'📉 再チャレンジ';$('rank').textContent=r;var cups=s.logs.reduce(function(a,b){return a+b.sold},0);$('summary').textContent='累計売上 ¥'+fmt(s.sales)+'／販売 '+cups+'杯／最終利益 '+(s.profit>=0?'+':'-')+'¥'+fmt(Math.abs(s.profit));window.scrollTo({top:0,behavior:'smooth'})}
+['price','buyL','buyS','buyI','ads'].forEach(function(id){$(id).addEventListener('input',updateCost)});$('open').addEventListener('click',openShop);$('next').addEventListener('click',next);$('restart').addEventListener('click',reset);reset();
+})();
+</script>
+</body>
+</html>
