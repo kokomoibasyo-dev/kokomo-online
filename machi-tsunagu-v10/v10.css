@@ -1,0 +1,29 @@
+/* v10: deliberate trade-offs */
+.dilemmaCard{border:2px solid #e2d29b;background:linear-gradient(135deg,#fffdf4,#fff8dc)}
+.dilemmaHead{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
+.dilemmaHead h2{margin:0 0 4px}.dilemmaBadge{background:#24312d;color:#fff;border-radius:999px;padding:6px 10px;font-size:11px;font-weight:900;white-space:nowrap}
+.dilemmaLead{margin:10px 0 12px;padding:10px 12px;border-radius:12px;background:rgba(255,255,255,.72);line-height:1.65}
+.dilemmaChoices{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.dilemmaChoice{border:1px solid #d8d8cc;background:#fff;border-radius:16px;padding:13px;text-align:left;cursor:pointer;transition:.18s;min-height:188px}
+.dilemmaChoice:hover{transform:translateY(-1px)}.dilemmaChoice.on{border:2px solid #27805e;box-shadow:0 8px 22px rgba(39,128,94,.13);background:#f4fbf7}
+.dilemmaChoice h3{margin:0 0 7px;font-size:16px}.dilemmaChoice .choiceDesc{font-size:12px;line-height:1.55;color:#46554e}
+.tradeGain,.tradeLose{margin-top:8px;padding:7px 9px;border-radius:10px;font-size:11px;line-height:1.5}
+.tradeGain{background:#edf8f1;color:#256647}.tradeLose{background:#fff0e7;color:#8c4a2d}
+.dilemmaCost{margin-top:8px;font-size:11px;font-weight:900}
+.dilemmaChosen{margin-top:11px;padding:10px 12px;border-radius:12px;background:#eef7f2;line-height:1.6}
+.policyLocked #policyGrid{opacity:.28;pointer-events:none;filter:grayscale(.3)}
+.policyLockNote{display:none;margin:0 0 10px;padding:10px 12px;border-radius:11px;background:#fff1c9;font-weight:800;font-size:12px}
+.policyLocked .policyLockNote{display:block}
+.saturationTag{display:inline-block;margin-top:5px;padding:3px 6px;border-radius:99px;background:#fff0e7;color:#8c4a2d;font-size:9px;font-weight:900}
+.v10AdvisorIntro{padding:10px 12px;border-radius:12px;background:#fff5dc;line-height:1.6}
+.routeGrid{display:grid;gap:9px;margin-top:10px}.routeCard{border:1px solid #dfe7e2;border-radius:14px;padding:12px;background:#fff}
+.routeCard h3{margin:0 0 5px;font-size:15px}.routeTrade{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:8px}
+.routePlus,.routeMinus{padding:7px 8px;border-radius:9px;font-size:11px;line-height:1.45}.routePlus{background:#edf8f1}.routeMinus{background:#fff0e7}
+.v10ResultNote{margin-top:10px;padding:10px 12px;border-radius:12px;background:#fff5dc;line-height:1.6;font-size:12px}
+.scoreParts{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin-top:8px}.scorePart{background:#fff;border:1px solid #e1e7e3;border-radius:10px;padding:8px;text-align:center}.scorePart b{display:block;font-size:18px}
+@media(max-width:800px){
+  .dilemmaChoices{grid-template-columns:1fr}.dilemmaChoice{min-height:0}
+  .routeTrade{grid-template-columns:1fr}.scoreParts{grid-template-columns:repeat(2,1fr)}
+  .advisorFab{bottom:calc(185px + env(safe-area-inset-bottom))!important}
+  body:has(.runDock.show) .advisorFab{bottom:calc(255px + env(safe-area-inset-bottom))!important}
+}
