@@ -1,0 +1,114 @@
+:root{
+  --bg1:#eef8f1;--bg2:#fff8e8;--ink:#25332d;--muted:#6f776f;--line:#d9e4da;--card:#ffffff;
+  --green:#2f7455;--green2:#4ea171;--soft:#f3f7f2;--warn:#a1602d;--bad:#b2444f;--good:#167448;
+  --blue:#eaf3ff;--yellow:#fff4c7;--shadow:0 12px 30px rgba(35,73,51,.08);
+  font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;background:linear-gradient(180deg,var(--bg1),#fffdf8 30%,var(--bg2));color:var(--ink)}
+body{min-height:100vh}
+.wrap{max-width:1100px;margin:0 auto;padding:14px 14px 80px}
+.hero,.card{background:var(--card);border:1px solid var(--line);border-radius:22px;box-shadow:var(--shadow)}
+.hero{padding:22px;background:linear-gradient(135deg,#e9faee,#fff0bd)}
+.hero h1{font-size:clamp(34px,8vw,58px);margin:6px 0}
+.eyebrow{font-size:12px;font-weight:900;letter-spacing:.06em;color:#45614f}
+.lead{line-height:1.75;margin:0}
+.card{padding:18px;margin-top:12px}
+.hidden{display:none!important}
+h2{font-size:23px;margin:0 0 12px} h3{margin:0 0 8px;font-size:18px}
+.small{font-size:12px;color:var(--muted);line-height:1.6}
+.grid2{display:grid;grid-template-columns:1.1fr .9fr;gap:12px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.btn{appearance:none;border:0;border-radius:14px;padding:14px 16px;background:#22342b;color:#fff;font-weight:900;font-size:15px;cursor:pointer}
+.btn.secondary{background:#fff;color:#22342b;border:1px solid #cdd8cf}
+.btn.full{width:100%}
+.btn.ghost{background:#f1f5f2;color:#294134;border:1px solid #d7e3da}
+.topbar{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}
+.pill{display:inline-flex;align-items:center;padding:7px 10px;border-radius:999px;background:#edf6ef;font-size:12px;font-weight:800;margin:2px}
+.setupBlock{margin-top:18px}
+.choiceGrid,.cityGrid,.metricGrid,.policyGrid,.facts,.historyGrid,.dilemmaGrid,.voiceGrid,.reportGrid,.townDataGrid,.concernGrid{display:grid;gap:10px}
+.cityGrid{grid-template-columns:repeat(2,1fr)}
+.cityCard,.choice,.policy,.fact,.metric,.dilemmaOption,.reportCard,.concernCard{border:2px solid #e0e7df;border-radius:18px;background:#fff;padding:13px;transition:.16s;position:relative}
+.cityCard,.choice,.policy,.dilemmaOption{cursor:pointer}
+.cityCard:hover,.choice:hover,.policy:hover,.dilemmaOption:hover{transform:translateY(-1px)}
+.cityCard.active,.choice.active,.policy.selected,.dilemmaOption.active{border-color:#3d8c61;background:#f0fbf3;box-shadow:0 0 0 3px rgba(61,140,97,.12)}
+.cityCard h3,.choice b,.dilemmaOption b{display:block}
+.cityHead{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.cityBadge{font-size:11px;font-weight:900;color:#45614f;background:#eef6ef;border-radius:999px;padding:4px 8px;display:inline-block}
+.cityMeta{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}.cityMeta span{font-size:11px;border-radius:999px;background:#f5f6f2;padding:5px 8px}
+.fact{background:#fafcf9}.facts{grid-template-columns:repeat(4,1fr)} .fact b{display:block;font-size:20px;margin:3px 0}
+.fact .src{font-size:10px;color:#79817a}.notice,.event,.speech,.sourceBox{padding:12px;border-radius:14px;border:1px solid #dae4db;line-height:1.65}
+.notice,.sourceBox{background:#f5f8f6}.event{background:var(--blue);border-color:#d0e2f6}.speech{background:#fff8d7;border-color:#eedc93}
+.choiceGrid{grid-template-columns:repeat(3,1fr)}
+.factsMini{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.factMini{background:#f8faf7;border:1px solid #e1e8e1;border-radius:12px;padding:10px}
+.factMini b{display:block;font-size:17px;margin-top:4px}
+.yearHero{text-align:center;padding:12px}.yearHero .big{font-size:30px;font-weight:950}.budget{font-size:24px;font-weight:950}.milestone{padding:12px;border-radius:14px;background:#fff3bc;text-align:center;font-weight:900;margin-top:12px}
+.metricHeader{display:flex;justify-content:space-between;gap:10px;align-items:flex-start;margin-bottom:10px}.legend{display:flex;gap:10px;font-size:11px;color:var(--muted)}
+.metricGrid{grid-template-columns:repeat(3,1fr)}
+.metric{padding:12px;background:#fafbf8}.metric .head{display:flex;justify-content:space-between;gap:6px;font-size:12px;font-weight:800}.metric .value{font-size:26px;font-weight:950}
+.barWrap{position:relative;margin-top:8px}.bar{height:10px;background:#e6ebe5;border-radius:99px;overflow:hidden}.bar span{display:block;height:100%;background:#59b37c}.metric.fatigue .bar span{background:#d98b7f}.metric .currentLine{position:absolute;top:-3px;width:2px;height:16px;background:#222;border-radius:2px}
+.goalStatus,.targetNote{font-size:11px;margin-top:7px;color:var(--muted)} .good{color:var(--good);font-weight:900}.warning{color:var(--warn);font-weight:900}.bad{color:var(--bad);font-weight:900}
+.policyGrid{grid-template-columns:repeat(2,1fr)}
+.policy{padding:14px}.policy .cost{position:absolute;right:10px;top:10px;background:#27372f;color:#fff;padding:5px 8px;border-radius:999px;font-size:11px;font-weight:900}.policy .upkeep{position:absolute;right:10px;top:36px;background:#eef5ef;color:#274032;padding:4px 8px;border-radius:999px;font-size:10px;font-weight:800}
+.policy .tags,.fitReasons,.compareList{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px}
+.tag{font-size:10px;padding:4px 7px;border-radius:999px;background:#eef1ee}.tag.plus{background:#e9f8ef;color:#17663f}.tag.minus{background:#fff1ee;color:#9e433e}
+.fitBox{margin-top:10px;padding:10px;border-radius:12px;background:#fff8dc;font-size:11px;line-height:1.55;border:1px solid #efdf9f}
+.fitRank{display:flex;justify-content:space-between;gap:8px;align-items:center;margin-bottom:6px}.rankBadge{font-size:12px;font-weight:900;border-radius:999px;padding:4px 8px;background:#ecf7ef;color:#17663f}
+.policy.activePolicy{opacity:.58;cursor:default}.policy.slotFull{opacity:.63}
+.voiceGrid{grid-template-columns:repeat(2,1fr)} .voice{padding:10px;border-radius:12px;background:#f7f5ed;line-height:1.55;font-size:13px}
+.changes{display:grid;gap:7px}.change{padding:8px 10px;border-radius:10px;background:#f5f6f3;font-size:12px}.change .up{color:var(--good);font-weight:900}.change .down{color:var(--bad);font-weight:900}
+.reportGrid{grid-template-columns:1fr 1fr;text-align:left}.reportCard{background:#faf8ef}.reportCard ul{padding-left:20px;line-height:1.7;margin:0}
+.historyWrap{overflow:auto}.historyWrap table{width:100%;border-collapse:collapse;font-size:11px}.historyWrap th,.historyWrap td{border-bottom:1px solid #e4e8e2;padding:7px;text-align:right;white-space:nowrap}.historyWrap th:first-child,.historyWrap td:first-child,.historyWrap th:nth-child(2),.historyWrap td:nth-child(2){text-align:left}
+.executionGrid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.executionItem{border:1px solid #dce6dc;border-radius:14px;padding:12px;background:#fff}.executionItem.weak{background:#fff6ef}.executionItem.success{background:#f5fbf6}.executionItem.great{background:#eef9f0}
+.executionItem b{display:block}.executionItem small{display:block;color:var(--muted);line-height:1.5}.luckNotes{margin-top:10px;padding:10px;border-radius:12px;background:#f5f8f6;border:1px solid #d9e4dc;font-size:12px;line-height:1.7}
+.townHead{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}.townKicker{font-size:12px;font-weight:900;color:#4c6654;letter-spacing:.04em}.fictionBadge{padding:7px 10px;border-radius:999px;background:#f6f1d8;font-size:11px;font-weight:900}.townDataGrid{grid-template-columns:repeat(3,1fr)} .townStat{background:#f8faf7;border:1px solid #e1e8e1;border-radius:14px;padding:11px}.townStat span{font-size:11px;color:var(--muted)}.townStat b{display:block;font-size:20px;margin:4px 0}.townDisclaimer{font-size:11px;color:#777d78;margin-top:10px;line-height:1.65}
+.concernGrid{grid-template-columns:repeat(3,1fr)} .concernCard strong{display:block}.concernPct{font-size:22px;font-weight:950;margin-top:4px}
+.dilemmaCard .smallLabel{font-size:11px;font-weight:900;color:#4f6654;text-transform:uppercase;letter-spacing:.06em}.dilemmaGrid{grid-template-columns:repeat(3,1fr)}
+.dilemmaOption em{display:block;font-style:normal;font-size:12px;color:#516255;margin-top:7px}.dilemmaOption .trade{font-size:11px;margin-top:8px;color:#7a5959}
+.ending{text-align:center}.achievement{font-size:56px;font-weight:950}.score{font-size:24px;font-weight:900;margin:8px}.finalTown{margin-top:12px;padding:14px;border-radius:16px;background:#f8faf7;border:1px solid #dbe5dc;text-align:left}.finalTownMini{margin:10px 0;font-size:14px;line-height:1.6}
+.runDock{position:fixed;left:50%;transform:translateX(-50%);bottom:-160px;z-index:40;width:min(96vw,680px);background:rgba(255,255,255,.98);backdrop-filter:blur(10px);border:1px solid #d9e2da;border-radius:20px;box-shadow:0 18px 40px rgba(31,48,38,.16);padding:14px 16px;display:flex;align-items:center;justify-content:space-between;gap:10px;transition:.25s}
+.runDock.show{bottom:18px}
+.fabStack{position:fixed;right:18px;bottom:24px;display:flex;flex-direction:column;gap:10px;z-index:55;transition:.2s}.fabStack.raised{bottom:116px}
+.fab{display:flex;align-items:center;gap:8px;border:none;border-radius:999px;background:#26342c;color:#fff;padding:12px 14px;box-shadow:0 10px 24px rgba(35,53,42,.22);font-weight:900;cursor:pointer}
+.fab.mayor{background:#406fa7}.fab img{width:34px;height:34px;border-radius:999px;border:2px solid rgba(255,255,255,.65);object-fit:cover;background:#f6e1be;image-rendering:auto}
+.overlay{position:fixed;inset:0;background:rgba(26,35,30,.42);display:flex;align-items:flex-end;justify-content:center;z-index:70;padding:16px}.sheet{width:min(96vw,860px);max-height:88vh;overflow:auto;background:#fff;border-radius:24px;box-shadow:0 20px 50px rgba(20,30,24,.24);padding:18px}
+.sheetHead{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}.sheetClose{border:none;background:#eef5ef;width:38px;height:38px;border-radius:999px;font-size:22px;cursor:pointer}
+.mayorPanel{display:grid;grid-template-columns:220px 1fr;gap:18px;align-items:start}.mayorPortrait{width:100%;max-width:320px;border-radius:18px;border:1px solid #dce4db;background:#f6e2bf;image-rendering:auto;display:block}.mayorSpeech{background:#fff8d7;border:1px solid #eedc93;border-radius:18px;padding:14px;line-height:1.7}.mayorLists{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}.mayorList{background:#f7faf7;border:1px solid #dde7de;border-radius:14px;padding:12px}.mayorList ul{margin:0;padding-left:18px;line-height:1.7}
+.advisorBlock{background:#f8faf7;border:1px solid #dbe6dc;border-radius:16px;padding:12px;margin-top:10px}.advisorBlock h3{font-size:17px;margin-bottom:8px}.routeList{display:grid;gap:8px}.route{border:1px solid #dce6dd;border-radius:14px;padding:10px;background:#fff}.route b{display:block}.route small{display:block;line-height:1.6;color:var(--muted)}
+.disclaimer{font-size:11px;color:#777d78;line-height:1.6;margin-top:14px;text-align:center}
+@media (max-width:880px){.grid2,.reportGrid,.mayorPanel,.mayorLists{grid-template-columns:1fr}.metricGrid,.townDataGrid{grid-template-columns:repeat(2,1fr)}.facts{grid-template-columns:repeat(2,1fr)}.choiceGrid,.dilemmaGrid,.policyGrid,.cityGrid,.concernGrid,.voiceGrid{grid-template-columns:1fr}.executionGrid{grid-template-columns:1fr}.wrap{padding:10px 10px 80px}.hero,.card{padding:15px}.runDock{flex-direction:column;align-items:stretch}.fabStack{right:12px}.fab{padding:11px 13px}}
+
+.compactMetricsBar{position:sticky;top:8px;z-index:32;margin-top:12px;padding:10px 12px;background:rgba(255,255,255,.96);backdrop-filter:blur(10px);border:1px solid #d9e2da;border-radius:18px;box-shadow:0 10px 24px rgba(31,48,38,.10)}
+.compactMetricsHead{font-size:12px;font-weight:900;color:#46614f;margin-bottom:8px}
+.compactMetricsInner{display:flex;gap:8px;overflow-x:auto;padding-bottom:2px}
+.compactMetric{flex:0 0 84px;min-width:84px;background:#f8faf7;border:1px solid #e1e8e1;border-radius:12px;padding:8px}
+.compactMetricTop{display:flex;justify-content:space-between;align-items:center;gap:4px}
+.compactIcon{font-size:18px;line-height:1}
+.compactDelta{font-size:11px;font-weight:900}
+.compactDelta.up{color:var(--good)}
+.compactDelta.down{color:var(--bad)}
+.compactBarWrap{position:relative;margin-top:7px}
+.compactBar{height:8px;background:#e6ebe5;border-radius:999px;overflow:hidden}
+.compactBar span{display:block;height:100%;background:#59b37c}
+.compactMetric.fatigue .compactBar span{background:#d98b7f}
+.compactCurrent{position:absolute;top:-3px;width:2px;height:14px;background:#1f2723;border-radius:2px}
+.compactTarget{position:absolute;top:-2px;width:2px;height:12px;background:#bfa94a;border-radius:2px;opacity:.85}
+.contChoiceRow{display:flex;gap:8px;margin-top:10px}
+.contChoice{appearance:none;border:2px solid #d1dbd2;border-radius:14px;padding:10px 12px;background:#fff;color:#22342b;font-weight:900;font-size:15px;cursor:pointer}
+.contChoice.keep{background:#f5faf6}
+.contChoice.stop{background:#fff}
+.contChoice.activeChoice{border-color:#d94f4f;box-shadow:0 0 0 3px rgba(217,79,79,.14)}
+.contChoice.stop.activeChoice{background:#fff2f2}
+.contChoice.keep.activeChoice{background:#eef8f0}
+@media (max-width:880px){.compactMetricsBar{top:6px;padding:9px 10px}.compactMetric{flex-basis:78px;min-width:78px}.contChoice{padding:10px 11px;font-size:14px}}
+
+.trendBox .speech{background:#fbf8e7;border-color:#eadb99}
+.concernTop{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:4px}
+.trendDelta{font-size:11px;font-weight:900;border-radius:999px;padding:4px 8px;background:#eef1ee;color:#4d5b52;border:1px solid #dde4de;white-space:nowrap}
+.trendDelta.up{background:#eef9f0;color:#1f7a43;border-color:#bfe2c7}
+.trendDelta.down{background:#fff1f1;color:#b24949;border-color:#f0c2c2}
+.concernCard{position:relative}
+.mayorPortrait{object-fit:cover}
+.cityHead img{image-rendering:auto}
