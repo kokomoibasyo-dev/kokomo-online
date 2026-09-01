@@ -96,7 +96,7 @@ $('nextYear').onclick=function(e){
   const max=s.maxYears||chosenYears;
   if(s.year<5){
     oldNext?.call(this,e);
-    setTimeout(()=>{syncUI();if(state()?.year>=max)patchFinal();},0);
+    setTimeout(()=>{syncUI();if(!$('ending')?.classList.contains('hidden'))patchFinal();},0);
     return;
   }
   if(s.year>=max){
@@ -119,7 +119,5 @@ $('nextYear').onclick=function(e){
 };
 
 window.addEventListener('machi:statechange',()=>setTimeout(syncUI,0));
-const observer=new MutationObserver(()=>{syncUI();if(!$('ending')?.classList.contains('hidden'))patchFinal();});
-observer.observe(document.body,{subtree:true,childList:true,attributes:true,attributeFilter:['class']});
 setTimeout(syncUI,100);
 })();
