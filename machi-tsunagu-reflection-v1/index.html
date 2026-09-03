@@ -1,0 +1,231 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>まちをつなぐ。｜判断と振り返り共有版</title>
+<link rel="stylesheet" href="../machi-tsunagu-5cities-v13/style.css">
+</head>
+<body>
+<div class="wrap">
+  <section class="hero">
+    <div class="eyebrow">地域データ風モデル × 5自治体比較プレイ × 首長の声</div>
+    <h1>まちをつなぐ。</h1>
+    <p class="lead">南風原町・与那原町・八重瀬町・南城市・西原町を選んで遊べる比較版です。自治体ごとの強みと課題、毎年変わる住民関心、政策の継続・撤退・偶然の成否を見ながら、どんな町の姿をつくるか試してみてください。</p>
+  </section>
+
+  <section id="setup" class="card">
+    <h2>① どの市町村でプレイする？</h2>
+    <div class="small">首長の声つきで、地域の特徴を比べられます。カードを押すと、その自治体の「強み」と「課題」が下に表示されます。</div>
+    <div id="cityGrid" class="cityGrid setupBlock"></div>
+    <div id="cityPreview" class="speech hidden" style="margin-top:12px"></div>
+    <button id="previewMayorBtn" class="btn ghost hidden" style="margin-top:10px">🗣️ 首長の声を見る</button>
+
+    <div class="setupBlock">
+      <h2>② 自治体の初期データ（出発点）</h2>
+      <div id="setupFacts" class="facts"></div>
+      <div class="sourceBox"><b>📌 重要</b><div class="small">人口・0〜14歳割合・子ども人口は、5自治体を比較しやすいよう2025年1月1日の住民基本台帳ベースで統一しています。「地域資源」「強み」「課題」はゲーム用に整理した地域特性です。ゲーム開始後に変わる人口・事業所数などは、すべてゲーム内の仮想推計です。</div></div>
+    </div>
+
+    <div class="setupBlock">
+      <h2>③ この町をどう読む？</h2>
+      <div id="approachGrid" class="choiceGrid"></div>
+    </div>
+
+    <div class="setupBlock">
+      <h2>④ どんなまちを目指す？</h2>
+      <div id="goalGrid" class="choiceGrid"></div>
+    </div>
+
+    <div class="setupBlock">
+      <h2>⑤ 何年で見る？</h2>
+      <div id="durationGrid" class="choiceGrid"></div>
+    </div>
+
+    <button id="startBtn" class="btn full" style="margin-top:16px">この条件でスタート</button>
+  </section>
+
+  <div id="play" class="hidden">
+    <section class="card">
+      <div class="topbar">
+        <div>
+          <span class="pill" id="cityPill"></span>
+          <span class="pill" id="approachPill"></span>
+          <span class="pill" id="goalPill"></span>
+          <span class="pill" id="durationPill"></span>
+        </div>
+        <button id="resetTop" class="btn secondary">最初から</button>
+      </div>
+      <div id="milestone" class="milestone"></div>
+      <div class="yearHero">
+        <div class="small">いま</div>
+        <div class="big"><span id="year">1</span>年目 / <span id="durationLabelTop">5</span>年</div>
+        <div class="small">今年あと使える予算</div>
+        <div class="budget"><span id="budget">72</span> pt</div>
+      </div>
+    </section>
+
+    <div id="compactMetricsBar" class="compactMetricsBar"><div class="compactMetricsHead">📊 かんたんパラメータ</div><div id="compactMetricsInner" class="compactMetricsInner"></div></div>
+
+    <section id="townSnapshot" class="card"></section>
+
+    <section id="continuationCard" class="card hidden">
+      <h2>🔄 続けている施策を見直す</h2>
+      <p class="small">毎年、継続するか終了するかを決められます。初年度は新規2つまで。2年目以降は継続分も含めて最大3施策です。</p>
+      <div id="continuationList"></div>
+    </section>
+
+    <section id="residentPulse" class="card">
+      <h2>🗣️ 今年の住民関心</h2>
+      <div class="small">住民の関心は毎年変化します。前年までの選択や、その年の地域状況によって、声の集まり方も変わります。</div>
+      <div id="trendBox" class="trendBox" style="margin-top:10px"></div>
+      <div id="concernGrid" class="concernGrid" style="margin-top:10px"></div>
+    </section>
+
+    <section id="dilemmaCard" class="card dilemmaCard"></section>
+
+    <section class="card stickyMetrics">
+      <div class="metricHeader">
+        <div>
+          <h2>📊 まちの状態と、今年の予測</h2>
+          <p class="small">黒い線がいま、色の棒が今年の予測です。実行時には施策ごとの効果適正度に応じて、結果がぶれます。</p>
+        </div>
+        <div class="legend"><span>│ いま</span><span>■ 予測</span></div>
+      </div>
+      <div id="metricGrid" class="metricGrid"></div>
+    </section>
+
+    <div class="grid2">
+      <section class="card">
+        <h2>🧭 今年、何が起きている？</h2>
+        <div id="yearEvent" class="event"></div>
+        <h3 style="margin-top:12px">住民の声</h3>
+        <div id="voices" class="voiceGrid"></div>
+      </section>
+      <section class="card">
+        <h2>💰 今年の作戦</h2>
+        <div id="upkeepBox" class="notice"></div>
+        <div id="selectedSummary" class="notice" style="margin-top:10px"></div>
+        <div id="planPreview" class="speech" style="margin-top:10px"></div>
+      </section>
+    </div>
+
+    <section id="policySection" class="card">
+      <h2>🧩 新しく実行する施策を選ぶ</h2>
+      <p class="small">効果適正度は、地域特性・住民関心・連続投資・担い手疲労などを踏まえた成功しやすさの目安です。高いほど有利ですが、失敗もあります。マイナスの副作用や、後回しにした分野の低下は成功しても残ります。</p>
+      <div id="policyLockNote" class="notice">先に「今年の論点」を選んでください。</div>
+      <div id="policyGrid" class="policyGrid" style="margin-top:12px"></div>
+    </section>
+
+    <section id="result" class="card hidden">
+      <h2 id="resultTitle"></h2>
+      <div id="surprise" class="event"></div>
+      <div id="executionResult" style="margin-top:10px"></div>
+      <div class="grid2" style="margin-top:12px">
+        <div>
+          <h3>数値の変化</h3>
+          <div id="changes" class="changes"></div>
+        </div>
+        <div>
+          <h3>なぜそうなった？</h3>
+          <div id="reasons" class="notice"></div>
+        </div>
+      </div>
+      <h3 style="margin-top:12px">住民の反応</h3>
+      <div id="afterVoices" class="voiceGrid"></div>
+      <button id="nextYear" class="btn full secondary" style="margin-top:12px">次の年へ</button>
+    </section>
+
+    <section class="card historyWrap">
+      <h2>📒 年ごとの記録</h2>
+      <table>
+        <thead><tr><th>年</th><th>その年の施策</th><th>つながり</th><th>若者</th><th>子ども</th><th>高齢者</th><th>町内滞在</th><th>産業</th><th>観光</th><th>地区</th><th>納得</th><th>疲れ</th></tr></thead>
+        <tbody id="history"><tr><td colspan="12">まだ記録はありません</td></tr></tbody>
+      </table>
+    </section>
+  </div>
+
+  <section id="ending" class="card ending hidden">
+    <p>🎉 <span id="endingYearsLabel">5</span>年間終了</p>
+    <h2 id="endingTitle"></h2>
+    <div class="achievement"><span id="achievement">0</span>%</div>
+    <div id="endingLabel" class="score"></div>
+    <div id="scoreBreakdown" class="notice" style="text-align:left;margin:12px 0"></div>
+    <div id="finalTown" class="finalTown"></div>
+    <div class="reportGrid" style="margin-top:12px">
+      <div class="reportCard"><h3>📈 伸ばしたもの</h3><ul id="strengthReport"></ul></div>
+      <div class="reportCard"><h3>⚠️ 残った課題</h3><ul id="challengeReport"></ul></div>
+    </div>
+    <div id="endingQuestion" class="speech" style="text-align:left;margin-top:12px"></div>
+    <button id="restart" class="btn full" style="margin-top:12px">別の条件でやり直す</button>
+  </section>
+
+  <p class="disclaimer">この比較版は教育用の架空モデルです。住民関心、政策効果、首長の声、町データ推計は学習用に単純化したもので、実際の自治体評価や政策予測を示すものではありません。</p>
+</div>
+
+<div id="runDock" class="runDock">
+  <div>
+    <b id="dockTitle">今年の施策</b>
+    <div id="dockSummary" class="small"></div>
+  </div>
+  <button id="dockRun" class="btn">この施策で1年進める →</button>
+</div>
+
+<div id="fabStack" class="fabStack hidden">
+  <button id="mayorFab" class="fab mayor" type="button"><img id="mayorFabIcon" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="首長"><span>首長の声</span></button>
+  <button id="advisorFab" class="fab" type="button"><span>💡</span><span>ヘルプ</span></button>
+</div>
+
+<div id="mayorOverlay" class="overlay hidden" aria-hidden="true">
+  <div class="sheet" role="dialog" aria-modal="true">
+    <div class="sheetHead">
+      <div>
+        <div class="eyebrow">首長の声</div>
+        <h2 id="mayorTitle">この町の見立て</h2>
+      </div>
+      <button id="mayorClose" class="sheetClose" type="button">×</button>
+    </div>
+    <div class="mayorPanel" style="margin-top:10px">
+      <img id="mayorPortrait" class="mayorPortrait" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="首長イラスト">
+      <div>
+        <div id="mayorSpeech" class="mayorSpeech"></div>
+        <div class="mayorLists">
+          <div class="mayorList"><h3>強み</h3><ul id="mayorStrengths"></ul></div>
+          <div class="mayorList"><h3>課題</h3><ul id="mayorChallenges"></ul></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="advisorOverlay" class="overlay hidden" aria-hidden="true">
+  <div class="sheet" role="dialog" aria-modal="true">
+    <div class="sheetHead">
+      <div>
+        <div class="eyebrow">まちづくりアドバイザー</div>
+        <h2>今年をどう読む？</h2>
+      </div>
+      <button id="advisorClose" class="sheetClose" type="button">×</button>
+    </div>
+    <div id="advisorBody" style="margin-top:8px"></div>
+    <div class="small" style="margin-top:12px">アドバイザーは正解を教えません。何を優先し、何を後回しにするか、その意味を整理する補助役です。</div>
+  </div>
+</div>
+
+<script src="../machi-tsunagu-5cities-v13/boot.js"></script>
+<script src="../machi-tsunagu-5cities-v13/img-icon-female.js"></script>
+<script src="../machi-tsunagu-5cities-v13/img-icon-male.js"></script>
+<script src="../machi-tsunagu-5cities-v13/img-pf-a.js"></script>
+<script src="../machi-tsunagu-5cities-v13/img-pf-b.js"></script>
+<script src="../machi-tsunagu-5cities-v13/img-pf-c.js"></script>
+<script src="../machi-tsunagu-5cities-v13/img-popup-female-fixed.js"></script>
+<script src="../machi-tsunagu-5cities-v13/img-pm-a.js"></script>
+<script src="../machi-tsunagu-5cities-v13/img-pm-b.js"></script>
+<script src="../machi-tsunagu-5cities-v13/img-pm-c.js"></script>
+<script src="../machi-tsunagu-5cities-v13/core.js"></script>
+<script src="../machi-tsunagu-5cities-v13/ui-a.js"></script>
+<script src="../machi-tsunagu-5cities-v13/ui-b.js"></script>
+<script src="../machi-tsunagu-5cities-v13/run.js"></script>
+<script src="reflection.js"></script>
+</body>
+</html>
