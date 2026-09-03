@@ -8,9 +8,9 @@ const originalNextYear = window.nextYear;
 const originalFinishGame = window.finishGame;
 const originalStartGame = window.startGame;
 const originalResetGame = window.resetGame;
-function ensureReflectionState(){if(!window.S)return;if(!Array.isArray(S.reflections))S.reflections=[];if(!S.finalReflection)S.finalReflection={};}
+function ensureReflectionState(){if(typeof S==='undefined'||!S)return;if(!Array.isArray(S.reflections))S.reflections=[];if(!S.finalReflection)S.finalReflection={};}
 function reflectionForYear(year){ensureReflectionState();let x=S.reflections.find(v=>v.year===year);if(!x){x={year};S.reflections.push(x)}return x;}
-function dilemmaLabel(){const d=(window.DILEMMAS||[]).find(x=>x.id===S.dilemma);return d?d.title:(S.dilemma||'');}
+function dilemmaLabel(){const list=(typeof DILEMMAS!=='undefined'?DILEMMAS:[]);const d=list.find(x=>x.id===S.dilemma);return d?d.title:(S.dilemma||'');}
 function policySnap(){const cont=(typeof continuedIds==='function'?continuedIds():[]).map(id=>policyById(id)?.name||id);const fresh=(S.selected||[]).map(id=>policyById(id)?.name||id);const stop=(S.active||[]).filter(id=>S.keep[id]===false).map(id=>policyById(id)?.name||id);return {continued:cont,newPolicies:fresh,stopped:stop};}
 function concernSnap(){return (S.concerns||[]).map(c=>({name:c.name,pct:c.pct,id:c.id}));}
 function trendSnap(){return S.trend?{name:S.trend.name,text:S.trend.text,icon:S.trend.icon}:null;}
