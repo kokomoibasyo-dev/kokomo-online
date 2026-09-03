@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>みんなのレモネード屋さん</title>
+<style>
+:root {font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif;color:#302a20;background:#fff9df;--yellow:#ffd94d;--line:#eadf9c;--ink:#302a20}
+*{box-sizing:border-box}body{margin:0;min-height:100vh;background:linear-gradient(#fff7bd,#fffdf5 42%,#fff8dc)}
+.wrap{max-width:920px;margin:auto;padding:14px 14px 80px}.hero,.card{background:#fff;border:1px solid var(--line);border-radius:22px;box-shadow:0 10px 28px rgba(90,70,0,.09)}
+.hero{padding:22px;background:linear-gradient(135deg,#fff4a4,#ffd94d)}h1{margin:4px 0;font-size:clamp(32px,8vw,54px)}h2,h3,p{margin-top:0}.lead{line-height:1.75;margin-bottom:0}
+.actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0}.btn{display:flex;align-items:center;justify-content:center;text-decoration:none;border:0;border-radius:14px;padding:14px;font-size:15px;font-weight:900;cursor:pointer;background:#292720;color:#fff}.btn.secondary{background:#fff;color:#292720;border:1px solid #cfc7a6}.btn.yellow{background:#ffe267;color:#332b13;border:1px solid #e4c850}
+.info{padding:13px;border-radius:15px;background:#fff9d9;border:1px solid #ecdc94;line-height:1.7;font-size:13px}.toolbar{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin:12px 0}.meta{font-size:12px;color:#746d5b}.refresh{border:1px solid #d8d0ad;background:#fff;border-radius:999px;padding:9px 12px;font-weight:800;cursor:pointer}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}.resultCard{padding:14px;overflow:hidden}.cardTop{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}.order{font-size:11px;font-weight:900;background:#fff2ae;padding:6px 9px;border-radius:999px}.handle{font-size:20px;font-weight:900;overflow-wrap:anywhere}.sales{font-size:30px;font-weight:950;margin:5px 0 10px;color:#9b6b00}
+.shot{width:100%;aspect-ratio:9/14;object-fit:cover;object-position:top;border-radius:16px;border:1px solid #e7dfbf;background:#f7f2df;display:block}.tipBtn{width:100%;margin-top:10px;border:1px solid #d9cf9d;background:#fff9d8;border-radius:13px;padding:11px;font-weight:900;cursor:pointer;color:#443a1e}.tip{display:none;margin-top:9px;padding:12px;border-radius:13px;background:#f7f4e7;line-height:1.7;white-space:pre-wrap;overflow-wrap:anywhere}.tip.show{display:block}
+.empty,.error{padding:28px;text-align:center;line-height:1.8}.error{background:#fff1ed;border-color:#e8b9ae}.skeleton{height:320px;border-radius:20px;background:linear-gradient(90deg,#f5f0d9 25%,#fff9e8 50%,#f5f0d9 75%);background-size:200% 100%;animation:sh 1.2s infinite}@keyframes sh{to{background-position:-200% 0}}footer{text-align:center;color:#817965;font-size:11px;line-height:1.7;margin-top:18px}
+@media(max-width:680px){.grid{grid-template-columns:1fr}.actions{grid-template-columns:1fr}.wrap{padding:10px 10px 70px}.hero{padding:18px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<section class="hero"><div style="font-weight:900;font-size:13px">🍋 レモネードゲーム・みんなの結果</div><h1>みんなのレモネード屋さん</h1><p class="lead">店長ごとの結果と「ヒミツのアドバイス」を集めています。売上が多い順に並んでいますが、勝ち負けを決めるページではありません。ほかの店長が何を考えたのか、作戦を見比べてみよう。</p></section>
+<div class="actions"><a class="btn yellow" href="https://docs.google.com/forms/d/e/1FAIpQLScm0HnQlSphDEwaqFT9kzsGnp0B4cMdQ-nSb8Oa82LhVDEeRg/viewform" target="_blank" rel="noopener">📷 わたしの結果を投稿する</a><a class="btn secondary" href="./v6.html">🍹 レモネードゲームで遊ぶ</a></div>
+<div class="info">🤫 <b>ヒミツのアドバイス</b>は最初は隠れています。「ヒミツを見る」を押すと、その店長が考えたコツを読めます。ゲームを遊ぶ前と後で、考え方がどう変わるかも見てみてください。</div>
+<div class="toolbar"><div><b>売上が多い順</b><div class="meta" id="meta">読み込み中…</div></div><button class="refresh" id="refresh" type="button">↻ 更新</button></div>
+<div id="status" class="grid"><div class="skeleton"></div><div class="skeleton"></div></div>
+<footer>投稿内容はGoogleフォームから自動反映されます。表示するのはハンドルネーム・売上・結果スクリーンショット・ヒミツのアドバイスのみです。</footer>
+</div>
+<script>
+const API_URL='https://script.google.com/macros/s/AKfycbyCJZUq7l_RwB5-limiTEBlzq9EW9jWd97LNDEYEL7Abh0A9hRSPWF56jO9qwy9Xz0Xjw/exec';
+const statusEl=document.getElementById('status');const metaEl=document.getElementById('meta');const refreshBtn=document.getElementById('refresh');
+function yen(n){return '¥'+Number(n||0).toLocaleString('ja-JP')}
+function el(tag,cls,text){const x=document.createElement(tag);if(cls)x.className=cls;if(text!==undefined)x.textContent=text;return x}
+function render(data){statusEl.innerHTML='';const rows=Array.isArray(data.results)?data.results.slice():[];rows.sort((a,b)=>Number(b.sales||0)-Number(a.sales||0));metaEl.textContent=(data.count ?? rows.length)+'件の結果 ・ 更新 '+new Date(data.updatedAt||Date.now()).toLocaleString('ja-JP');if(!rows.length){const e=el('div','card empty');e.innerHTML='<b>まだ投稿はありません。</b><br>最初の店長として、結果とヒミツのアドバイスを共有してみよう！';statusEl.appendChild(e);return}rows.forEach((row,i)=>{const card=el('article','card resultCard');const top=el('div','cardTop');const left=document.createElement('div');left.appendChild(el('div','handle',row.handle||'ななし店長'));left.appendChild(el('div','sales',yen(row.sales)));top.appendChild(left);top.appendChild(el('span','order','売上順 '+(i+1)));card.appendChild(top);if(row.screenshot){const img=document.createElement('img');img.className='shot';img.loading='lazy';img.alt=(row.handle||'店長')+'の結果スクリーンショット';img.src=row.screenshot;img.referrerPolicy='no-referrer';img.onerror=()=>{img.style.display='none'};card.appendChild(img)}const b=el('button','tipBtn','🤫 ヒミツのアドバイスを見る');b.type='button';const tip=el('div','tip',row.tip||'ヒミツはまだ書かれていません。');b.addEventListener('click',()=>{const open=tip.classList.toggle('show');b.textContent=open?'🙈 ヒミツを閉じる':'🤫 ヒミツのアドバイスを見る'});card.appendChild(b);card.appendChild(tip);statusEl.appendChild(card)})}
+async function load(){refreshBtn.disabled=true;metaEl.textContent='読み込み中…';try{const res=await fetch(API_URL+'?t='+Date.now(),{cache:'no-store',redirect:'follow'});if(!res.ok)throw new Error('HTTP '+res.status);const data=await res.json();render(data)}catch(err){statusEl.innerHTML='';const e=el('div','card error');e.innerHTML='<b>結果を読み込めませんでした。</b><br>少し待って「更新」を押してください。<br><span class="meta">'+String(err.message||err)+'</span>';statusEl.appendChild(e);metaEl.textContent='接続エラー'}finally{refreshBtn.disabled=false}}
+refreshBtn.addEventListener('click',load);load();setInterval(load,60000);
+</script>
+</body>
+</html>
