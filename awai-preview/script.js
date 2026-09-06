@@ -113,3 +113,91 @@ submitButton.disabled = false;
 submitButton.textContent = originalText;
 }
 });
+
+// Image repair layer: chunk files are decoded independently and joined as binary.
+// This avoids malformed data URLs on iPhone/Safari when base64 chunks contain padding.
+(async () => {
+  const version = '20260906e';
+
+  function cleanBase64(text) {
+    return String(text || '').replace(/[^A-Za-z0-9+/=]/g, '');
+  }
+
+  function decodeBase64Chunk(text) {
+    let s = cleanBase64(text);
+    while (s.length % 4) s += '=';
+    const binary = atob(s);
+    const bytes = new Uint8Array(binary.length);
+    for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+    return bytes;
+  }
+
+  async function loadChunkedBlobUrl(urls, mime) {
+    const texts = await Promise.all(urls.map(async (url) => {
+      const separator = url.includes('?') ? '&' : '?';
+      const response = await fetch(`${url}${separator}v=${version}`, { cache: 'no-store' });
+      if (!response.ok) throw new Error(`asset ${response.status}: ${url}`);
+      return response.text();
+    }));
+
+    const chunks = texts.map(decodeBase64Chunk);
+    const blob = new Blob(chunks, { type: mime });
+    const objectUrl = URL.createObjectURL(blob);
+
+    await new Promise((resolve, reject) => {
+      const test = new Image();
+      test.onload = resolve;
+      test.onerror = () => reject(new Error(`decoded image failed: ${mime}`));
+      test.src = objectUrl;
+    });
+    return objectUrl;
+  }
+
+  // Representative portrait.
+  try {
+    const profileUrl = await loadChunkedBlobUrl([
+      'assets/profile-photo.1.txt',
+      'assets/profile-photo.2.txt'
+    ], 'image/jpeg');
+
+    const profileVisual = document.querySelector('.profile-visual');
+    if (profileVisual) {
+      profileVisual.innerHTML = '';
+      const img = document.createElement('img');
+      img.className = 'profile-photo-img';
+      img.alt = 'あわい代表 仲原英孝';
+      img.decoding = 'async';
+      img.src = profileUrl;
+      profileVisual.appendChild(img);
+    }
+  } catch (error) {
+    console.error('Profile image repair failed', error);
+  }
+
+  // Restore the high-resolution visual assets instead of the low-resolution SVG fallbacks.
+  const HQ = 'https://raw.githubusercontent.com/kokomoibasyo-dev/myLP/awai-preview/awai-preview-site/assets-hq/';
+  try {
+    const [heroUrl, blossomUrl, dialogueUrl] = await Promise.all([
+      loadChunkedBlobUrl([`${HQ}hero-dusk.1.txt`, `${HQ}hero-dusk.2.txt`], 'image/webp'),
+      loadChunkedBlobUrl([`${HQ}philosophy-blossom.1.txt`, `${HQ}philosophy-blossom.2.txt`], 'image/webp'),
+      loadChunkedBlobUrl([`${HQ}dialogue-room.1.txt`, `${HQ}dialogue-room.2.txt`, `${HQ}dialogue-room.3.txt`], 'image/webp')
+    ]);
+
+    const hero = document.querySelector('.hero-scene');
+    if (hero) hero.style.backgroundImage = `linear-gradient(90deg,rgba(247,244,239,.72) 0%,rgba(247,244,239,.5) 34%,rgba(25,45,63,.08) 64%,rgba(25,45,63,.2) 100%),url("${heroUrl}")`;
+
+    const philosophy = document.querySelector('.philosophy-art');
+    if (philosophy) philosophy.style.backgroundImage = `url("${blossomUrl}")`;
+
+    const case2 = document.querySelector('.cv-2');
+    if (case2) case2.style.backgroundImage = `linear-gradient(rgba(255,255,255,.02),rgba(23,41,60,.04)),url("${blossomUrl}")`;
+
+    const dialogue = document.querySelector('.dialogue');
+    if (dialogue) dialogue.style.backgroundImage = `linear-gradient(90deg,rgba(226,232,235,.93) 0%,rgba(238,236,231,.9) 52%,rgba(208,218,224,.78) 100%),url("${dialogueUrl}")`;
+
+    const case3 = document.querySelector('.cv-3');
+    if (case3) case3.style.backgroundImage = `linear-gradient(rgba(255,255,255,.02),rgba(23,41,60,.08)),url("${dialogueUrl}")`;
+  } catch (error) {
+    console.error('High-resolution image repair failed', error);
+  }
+})();
