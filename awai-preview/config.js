@@ -48,9 +48,10 @@ window.AWAI_CONFIG = { formEndpoint: "https://script.google.com/macros/s/AKfycbx
   apply(initial);
   document.querySelectorAll('[data-font-size]').forEach((button) => button.addEventListener('click', () => apply(button.dataset.fontSize)));
 
+  const HQ = 'https://raw.githubusercontent.com/kokomoibasyo-dev/myLP/awai-preview/awai-preview-site/assets-hq/';
   async function loadDataUri(parts) {
-    const texts = await Promise.all(parts.map(async (url) => {
-      const r = await fetch(url, { cache: 'no-cache' });
+    const texts = await Promise.all(parts.map(async (name) => {
+      const r = await fetch(HQ + name, { cache: 'no-cache' });
       if (!r.ok) throw new Error(`asset ${r.status}`);
       return r.text();
     }));
@@ -58,9 +59,9 @@ window.AWAI_CONFIG = { formEndpoint: "https://script.google.com/macros/s/AKfycbx
   }
 
   Promise.all([
-    loadDataUri(['assets-hq/hero-dusk.1.txt','assets-hq/hero-dusk.2.txt']),
-    loadDataUri(['assets-hq/philosophy-blossom.1.txt','assets-hq/philosophy-blossom.2.txt']),
-    loadDataUri(['assets-hq/dialogue-room.1.txt','assets-hq/dialogue-room.2.txt','assets-hq/dialogue-room.3.txt'])
+    loadDataUri(['hero-dusk.1.txt','hero-dusk.2.txt']),
+    loadDataUri(['philosophy-blossom.1.txt','philosophy-blossom.2.txt']),
+    loadDataUri(['dialogue-room.1.txt','dialogue-room.2.txt','dialogue-room.3.txt'])
   ]).then(([hero, philosophy, dialogue]) => {
     const heroEl = document.querySelector('.hero-scene');
     if (heroEl) heroEl.style.backgroundImage = `linear-gradient(90deg,rgba(247,244,239,.72) 0%,rgba(247,244,239,.5) 34%,rgba(25,45,63,.08) 64%,rgba(25,45,63,.2) 100%),url("${hero}")`;
