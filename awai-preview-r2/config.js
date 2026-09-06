@@ -1,0 +1,1 @@
+window.AWAI_CONFIG = window.AWAI_CONFIG || {};
