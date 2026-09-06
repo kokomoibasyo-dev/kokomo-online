@@ -42,7 +42,8 @@ window.AWAI_CONFIG = {
     .hero-descriptor{font-size:1.08rem!important}
 
     .profile-visual{
-      background-image:url("assets/profile-photo.svg")!important;
+      background-image:none!important;
+      background-color:#e9e5de!important;
       background-size:cover!important;
       background-position:center 16%!important;
       background-repeat:no-repeat!important;
@@ -52,16 +53,17 @@ window.AWAI_CONFIG = {
     .profile-visual:before,.profile-silhouette,.profile-silhouette:before{display:none!important;content:none!important}
 
     .ph-center,.ph-right{
-      padding:11px 15px!important;
-      border-radius:12px!important;
-      background:rgba(248,247,243,.86)!important;
+      padding:0!important;
+      border-radius:0!important;
+      background:transparent!important;
       color:#20364c!important;
-      text-shadow:none!important;
-      box-shadow:0 8px 26px rgba(32,54,76,.10)!important;
-      backdrop-filter:blur(5px);
-      -webkit-backdrop-filter:blur(5px);
+      text-shadow:0 1px 1px rgba(255,255,255,.96),0 0 8px rgba(255,255,255,.88)!important;
+      box-shadow:none!important;
+      backdrop-filter:none!important;
+      -webkit-backdrop-filter:none!important;
     }
-    .ph-right{text-align:left!important}
+    .ph-right{text-align:right!important}
+    .philosophy-art small{background:transparent!important;color:#44596d!important;padding:0!important;text-shadow:0 1px 5px rgba(255,255,255,.9)!important}
 
     @media(max-width:1100px){.site-nav{gap:15px}.font-size-control{margin-left:0}}
     @media(max-width:980px){
@@ -81,7 +83,6 @@ window.AWAI_CONFIG = {
       .profile-visual{height:390px!important;max-width:100%!important;border-radius:24px!important;background-position:center 10%!important}
       .ph-center{left:6%!important;top:48%!important;max-width:46%!important;font-size:.82rem!important;line-height:1.75!important}
       .ph-right{right:6%!important;top:29%!important;max-width:42%!important;font-size:.78rem!important;line-height:1.75!important}
-      .philosophy-art small{color:#44596d!important;background:rgba(248,247,243,.72);padding:3px 6px;border-radius:6px}
     }
   `;
   document.head.appendChild(style);
@@ -100,8 +101,7 @@ window.AWAI_CONFIG = {
   if (heroLead) heroLead.innerHTML = '学校・福祉・行政・地域団体などを対象に、<br class="desktop">課題整理、職員研修、企画設計、関係機関との連携、仕組みづくりまで伴走します。';
 
   const hero = document.querySelector('.hero');
-  const questions = document.querySelector('.questions');
-  if (hero && questions && !document.querySelector('.audience-snapshot')) {
+  if (hero && !document.querySelector('.audience-snapshot')) {
     const snapshot = document.createElement('section');
     snapshot.className = 'audience-snapshot';
     snapshot.setAttribute('aria-label','主な相談先と依頼内容');
@@ -111,21 +111,12 @@ window.AWAI_CONFIG = {
           <p class="audience-label">WHO WE WORK WITH</p>
           <p class="audience-heading">主に、子ども・教育・地域を支える<br>人・組織からのご依頼に対応します。</p>
           <p class="audience-copy">個人の保護者相談もお受けしますが、事業の中心は「支える側への支援」です。</p>
-          <div class="audience-tags" aria-label="主なご相談先">
-            <span>学校・教育関係者</span><span>福祉・相談支援事業所</span><span>行政</span><span>NPO・地域団体</span><span>支援者・専門職</span>
-          </div>
+          <div class="audience-tags"><span>学校・教育関係者</span><span>福祉・相談支援事業所</span><span>行政</span><span>NPO・地域団体</span><span>支援者・専門職</span></div>
         </div>
         <div>
           <p class="audience-label">WHAT YOU CAN ASK</p>
           <p class="audience-heading">こんな仕事を依頼できます。</p>
-          <div class="request-grid">
-            <p>職員向けの研修・講座をしてほしい</p>
-            <p>新しい活動・事業を一緒に設計したい</p>
-            <p>学校や関係機関との連携を整理したい</p>
-            <p>活動の目的・対象・成果を整理したい</p>
-            <p>支援の流れや記録方法を仕組みにしたい</p>
-            <p>まだ依頼内容が曖昧なので壁打ちしたい</p>
-          </div>
+          <div class="request-grid"><p>職員向けの研修・講座をしてほしい</p><p>新しい活動・事業を一緒に設計したい</p><p>学校や関係機関との連携を整理したい</p><p>活動の目的・対象・成果を整理したい</p><p>支援の流れや記録方法を仕組みにしたい</p><p>まだ依頼内容が曖昧なので壁打ちしたい</p></div>
         </div>
       </div>`;
     hero.insertAdjacentElement('afterend', snapshot);
@@ -135,14 +126,8 @@ window.AWAI_CONFIG = {
   if (qHeading) qHeading.innerHTML = 'こんな<br>ご相談に<br>対応します。';
   const qIntro = document.querySelector('.questions .section-heading > p:last-child');
   if (qIntro) qIntro.textContent = '依頼内容がまだ言葉になっていなくても、状況を聞きながら、何を整理・設計するとよいか一緒に考えます。';
-  const bubbles = document.querySelectorAll('.question-bubbles p');
-  const bubbleTexts = [
-    '職員向けに、子どもの見方や関わり方を学びたい。',
-    '新しい活動を始めたいが、目的や進め方が固まっていない。',
-    '学校・家庭・関係機関の間で、話をどう進めるか整理したい。',
-    '活動の目的・対象・成果を、説明できる形にしたい。'
-  ];
-  bubbles.forEach((el,i) => { if (bubbleTexts[i]) el.textContent = bubbleTexts[i]; });
+  const bubbleTexts = ['職員向けに、子どもの見方や関わり方を学びたい。','新しい活動を始めたいが、目的や進め方が固まっていない。','学校・家庭・関係機関の間で、話をどう進めるか整理したい。','活動の目的・対象・成果を、説明できる形にしたい。'];
+  document.querySelectorAll('.question-bubbles p').forEach((el,i) => { if (bubbleTexts[i]) el.textContent = bubbleTexts[i]; });
   const qSide = document.querySelector('.questions-side');
   if (qSide) qSide.innerHTML = '相談から、<br>研修・企画・連携設計へ。';
 
@@ -174,6 +159,19 @@ window.AWAI_CONFIG = {
   try { const saved = localStorage.getItem(key); if (allowed.has(saved)) initial = saved; } catch (_) {}
   apply(initial);
   document.querySelectorAll('[data-font-size]').forEach((button) => button.addEventListener('click', () => apply(button.dataset.fontSize)));
+
+  /* SafariでSVG内の埋め込み画像が壊れる場合があるため、データURIを取り出して直接背景へ設定 */
+  const profileVisual = document.querySelector('.profile-visual');
+  if (profileVisual) {
+    fetch('assets/profile-photo.svg', { cache: 'no-cache' })
+      .then((r) => { if (!r.ok) throw new Error(`profile ${r.status}`); return r.text(); })
+      .then((svg) => {
+        const m = svg.match(/href=["'](data:image\/(?:webp|jpeg|jpg|png);base64,[^"']+)["']/i);
+        if (!m) throw new Error('profile data URI not found');
+        profileVisual.style.setProperty('background-image', `url("${m[1]}")`, 'important');
+      })
+      .catch((err) => console.warn('Profile photo could not be loaded', err));
+  }
 
   const HQ = 'https://raw.githubusercontent.com/kokomoibasyo-dev/myLP/awai-preview/awai-preview-site/assets-hq/';
   async function loadDataUri(parts) {
