@@ -42,28 +42,26 @@ window.AWAI_CONFIG = {
     .hero-descriptor{font-size:1.08rem!important}
 
     .profile-visual{
-      background-image:none!important;
-      background-color:#e9e5de!important;
-      background-size:cover!important;
-      background-position:center 16%!important;
-      background-repeat:no-repeat!important;
+      position:relative!important;
+      overflow:hidden!important;
+      background:#ece9e3!important;
       border-radius:30px!important;
-      box-shadow:0 18px 50px rgba(44,58,72,.10);
+      box-shadow:0 18px 50px rgba(44,58,72,.10)!important;
     }
     .profile-visual:before,.profile-silhouette,.profile-silhouette:before{display:none!important;content:none!important}
+    .profile-photo-img{display:block;width:100%;height:100%;object-fit:cover;object-position:center 18%;border:0}
 
     .ph-center,.ph-right{
-      padding:0!important;
-      border-radius:0!important;
-      background:transparent!important;
-      color:#20364c!important;
-      text-shadow:0 1px 1px rgba(255,255,255,.96),0 0 8px rgba(255,255,255,.88)!important;
+      background:none!important;
       box-shadow:none!important;
       backdrop-filter:none!important;
       -webkit-backdrop-filter:none!important;
+      padding:0!important;
+      border-radius:0!important;
+      color:#20364c!important;
+      text-shadow:0 1px 2px rgba(255,255,255,.95),0 0 12px rgba(255,255,255,.82)!important;
     }
     .ph-right{text-align:right!important}
-    .philosophy-art small{background:transparent!important;color:#44596d!important;padding:0!important;text-shadow:0 1px 5px rgba(255,255,255,.9)!important}
 
     @media(max-width:1100px){.site-nav{gap:15px}.font-size-control{margin-left:0}}
     @media(max-width:980px){
@@ -80,9 +78,11 @@ window.AWAI_CONFIG = {
       .hero-scene{background-position:72% center!important}
       .hero-scene:after{background:linear-gradient(90deg,rgba(248,246,242,.98) 0%,rgba(248,246,242,.94) 40%,rgba(248,246,242,.70) 57%,rgba(30,47,65,.12) 100%)!important}
       .hero-copy{max-width:76%!important}
-      .profile-visual{height:390px!important;max-width:100%!important;border-radius:24px!important;background-position:center 10%!important}
-      .ph-center{left:6%!important;top:48%!important;max-width:46%!important;font-size:.82rem!important;line-height:1.75!important}
-      .ph-right{right:6%!important;top:29%!important;max-width:42%!important;font-size:.78rem!important;line-height:1.75!important}
+      .profile-visual{height:390px!important;max-width:100%!important;border-radius:24px!important}
+      .profile-photo-img{object-position:center 15%!important}
+      .ph-center{left:6%!important;top:49%!important;max-width:46%!important;font-size:.82rem!important;line-height:1.75!important}
+      .ph-right{right:6%!important;top:27%!important;max-width:42%!important;font-size:.78rem!important;line-height:1.75!important}
+      .philosophy-art small{color:#44596d!important;background:none!important;padding:0!important;border-radius:0!important;text-shadow:0 1px 2px rgba(255,255,255,.95),0 0 10px rgba(255,255,255,.8)}
     }
   `;
   document.head.appendChild(style);
@@ -111,12 +111,21 @@ window.AWAI_CONFIG = {
           <p class="audience-label">WHO WE WORK WITH</p>
           <p class="audience-heading">主に、子ども・教育・地域を支える<br>人・組織からのご依頼に対応します。</p>
           <p class="audience-copy">個人の保護者相談もお受けしますが、事業の中心は「支える側への支援」です。</p>
-          <div class="audience-tags"><span>学校・教育関係者</span><span>福祉・相談支援事業所</span><span>行政</span><span>NPO・地域団体</span><span>支援者・専門職</span></div>
+          <div class="audience-tags" aria-label="主なご相談先">
+            <span>学校・教育関係者</span><span>福祉・相談支援事業所</span><span>行政</span><span>NPO・地域団体</span><span>支援者・専門職</span>
+          </div>
         </div>
         <div>
           <p class="audience-label">WHAT YOU CAN ASK</p>
           <p class="audience-heading">こんな仕事を依頼できます。</p>
-          <div class="request-grid"><p>職員向けの研修・講座をしてほしい</p><p>新しい活動・事業を一緒に設計したい</p><p>学校や関係機関との連携を整理したい</p><p>活動の目的・対象・成果を整理したい</p><p>支援の流れや記録方法を仕組みにしたい</p><p>まだ依頼内容が曖昧なので壁打ちしたい</p></div>
+          <div class="request-grid">
+            <p>職員向けの研修・講座をしてほしい</p>
+            <p>新しい活動・事業を一緒に設計したい</p>
+            <p>学校や関係機関との連携を整理したい</p>
+            <p>活動の目的・対象・成果を整理したい</p>
+            <p>支援の流れや記録方法を仕組みにしたい</p>
+            <p>まだ依頼内容が曖昧なので壁打ちしたい</p>
+          </div>
         </div>
       </div>`;
     hero.insertAdjacentElement('afterend', snapshot);
@@ -126,8 +135,14 @@ window.AWAI_CONFIG = {
   if (qHeading) qHeading.innerHTML = 'こんな<br>ご相談に<br>対応します。';
   const qIntro = document.querySelector('.questions .section-heading > p:last-child');
   if (qIntro) qIntro.textContent = '依頼内容がまだ言葉になっていなくても、状況を聞きながら、何を整理・設計するとよいか一緒に考えます。';
-  const bubbleTexts = ['職員向けに、子どもの見方や関わり方を学びたい。','新しい活動を始めたいが、目的や進め方が固まっていない。','学校・家庭・関係機関の間で、話をどう進めるか整理したい。','活動の目的・対象・成果を、説明できる形にしたい。'];
-  document.querySelectorAll('.question-bubbles p').forEach((el,i) => { if (bubbleTexts[i]) el.textContent = bubbleTexts[i]; });
+  const bubbles = document.querySelectorAll('.question-bubbles p');
+  const bubbleTexts = [
+    '職員向けに、子どもの見方や関わり方を学びたい。',
+    '新しい活動を始めたいが、目的や進め方が固まっていない。',
+    '学校・家庭・関係機関の間で、話をどう進めるか整理したい。',
+    '活動の目的・対象・成果を、説明できる形にしたい。'
+  ];
+  bubbles.forEach((el,i) => { if (bubbleTexts[i]) el.textContent = bubbleTexts[i]; });
   const qSide = document.querySelector('.questions-side');
   if (qSide) qSide.innerHTML = '相談から、<br>研修・企画・連携設計へ。';
 
@@ -160,43 +175,60 @@ window.AWAI_CONFIG = {
   apply(initial);
   document.querySelectorAll('[data-font-size]').forEach((button) => button.addEventListener('click', () => apply(button.dataset.fontSize)));
 
-  /* SafariでSVG内の埋め込み画像が壊れる場合があるため、データURIを取り出して直接背景へ設定 */
-  const profileVisual = document.querySelector('.profile-visual');
-  if (profileVisual) {
-    fetch('assets/profile-photo.svg', { cache: 'no-cache' })
-      .then((r) => { if (!r.ok) throw new Error(`profile ${r.status}`); return r.text(); })
-      .then((svg) => {
-        const m = svg.match(/href=["'](data:image\/(?:webp|jpeg|jpg|png);base64,[^"']+)["']/i);
-        if (!m) throw new Error('profile data URI not found');
-        profileVisual.style.setProperty('background-image', `url("${m[1]}")`, 'important');
-      })
-      .catch((err) => console.warn('Profile photo could not be loaded', err));
+  async function assembleDataUri(parts, mime) {
+    const texts = await Promise.all(parts.map(async (url) => {
+      const r = await fetch(url, { cache: 'no-store' });
+      if (!r.ok) throw new Error(`asset ${r.status}`);
+      return (await r.text()).trim();
+    }));
+    return `data:${mime};base64,${texts.join('')}`;
   }
 
+  // Representative photo: same-origin data chunks for reliable iPhone/Safari display.
+  const profileVisual = document.querySelector('.profile-visual');
+  if (profileVisual) {
+    assembleDataUri([
+      'assets/profile-photo.1.txt?v=20260906c',
+      'assets/profile-photo.2.txt?v=20260906c'
+    ], 'image/jpeg').then((src) => {
+      profileVisual.innerHTML = '';
+      const img = document.createElement('img');
+      img.className = 'profile-photo-img';
+      img.alt = 'あわい代表 仲原英孝';
+      img.src = src;
+      profileVisual.appendChild(img);
+    }).catch((err) => console.warn('Profile photo could not be loaded', err));
+  }
+
+  // High-resolution visuals. Keep the image itself crisp; only the hero/dialogue retain readability overlays.
   const HQ = 'https://raw.githubusercontent.com/kokomoibasyo-dev/myLP/awai-preview/awai-preview-site/assets-hq/';
-  async function loadDataUri(parts) {
+  async function loadHQ(parts) {
     const texts = await Promise.all(parts.map(async (name) => {
-      const r = await fetch(HQ + name, { cache: 'no-cache' });
-      if (!r.ok) throw new Error(`asset ${r.status}`);
-      return r.text();
+      const sep = name.includes('?') ? '&' : '?';
+      const r = await fetch(HQ + name + sep + 'v=20260906c', { cache: 'no-store' });
+      if (!r.ok) throw new Error(`HQ asset ${r.status}`);
+      return (await r.text()).trim();
     }));
     return `data:image/webp;base64,${texts.join('')}`;
   }
 
   Promise.all([
-    loadDataUri(['hero-dusk.1.txt','hero-dusk.2.txt']),
-    loadDataUri(['philosophy-blossom.1.txt','philosophy-blossom.2.txt']),
-    loadDataUri(['dialogue-room.1.txt','dialogue-room.2.txt','dialogue-room.3.txt'])
-  ]).then(([heroImage, philosophy, dialogue]) => {
+    loadHQ(['hero-dusk.1.txt','hero-dusk.2.txt']),
+    loadHQ(['philosophy-blossom.1.txt','philosophy-blossom.2.txt']),
+    loadHQ(['dialogue-room.1.txt','dialogue-room.2.txt','dialogue-room.3.txt'])
+  ]).then(([heroImage, philosophyImage, dialogueImage]) => {
     const heroEl = document.querySelector('.hero-scene');
-    if (heroEl) heroEl.style.backgroundImage = `linear-gradient(90deg,rgba(247,244,239,.72) 0%,rgba(247,244,239,.5) 34%,rgba(25,45,63,.08) 64%,rgba(25,45,63,.2) 100%),url("${heroImage}")`;
+    if (heroEl) heroEl.style.backgroundImage = `linear-gradient(90deg,rgba(247,244,239,.72) 0%,rgba(247,244,239,.50) 34%,rgba(25,45,63,.08) 64%,rgba(25,45,63,.18) 100%),url("${heroImage}")`;
+
+    const philosophyEl = document.querySelector('.philosophy-art');
+    if (philosophyEl) philosophyEl.style.backgroundImage = `url("${philosophyImage}")`;
+
     const dialogueEl = document.querySelector('.dialogue');
-    if (dialogueEl) dialogueEl.style.backgroundImage = `linear-gradient(90deg,rgba(226,232,235,.93) 0%,rgba(238,236,231,.9) 52%,rgba(208,218,224,.78) 100%),url("${dialogue}")`;
-    const ph = document.querySelector('.philosophy-art');
-    if (ph) ph.style.backgroundImage = `linear-gradient(90deg,rgba(249,246,241,.18),rgba(28,48,66,.04)),url("${philosophy}")`;
+    if (dialogueEl) dialogueEl.style.backgroundImage = `linear-gradient(90deg,rgba(226,232,235,.90) 0%,rgba(238,236,231,.86) 52%,rgba(208,218,224,.72) 100%),url("${dialogueImage}")`;
+
     const cv2 = document.querySelector('.cv-2');
-    if (cv2) cv2.style.backgroundImage = `linear-gradient(rgba(255,255,255,.04),rgba(23,41,60,.08)),url("${philosophy}")`;
+    if (cv2) cv2.style.backgroundImage = `url("${philosophyImage}")`;
     const cv3 = document.querySelector('.cv-3');
-    if (cv3) cv3.style.backgroundImage = `linear-gradient(rgba(255,255,255,.02),rgba(23,41,60,.12)),url("${dialogue}")`;
+    if (cv3) cv3.style.backgroundImage = `linear-gradient(rgba(255,255,255,.02),rgba(23,41,60,.10)),url("${dialogueImage}")`;
   }).catch((err) => console.warn('HQ preview assets could not be loaded', err));
 })();
