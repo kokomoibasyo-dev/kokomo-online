@@ -1,4 +1,8 @@
-window.AWAI_CONFIG = { formEndpoint: "https://script.google.com/macros/s/AKfycbxOkXOGDj-Kk_lRskFUuzvu8WR34yc5n2YUaEEeURkuIuMfdwv2v3c2-PWrinqdj_pX/exec", representativeName: "仲原英孝", contactEmail: "fire55hide@gmail.com" };
+window.AWAI_CONFIG = {
+  formEndpoint: "https://script.google.com/macros/s/AKfycbxOkXOGDj-Kk_lRskFUuzvu8WR34yc5n2YUaEEeURkuIuMfdwv2v3c2-PWrinqdj_pX/exec",
+  representativeName: "仲原英孝",
+  contactEmail: "fire55hide@gmail.com"
+};
 
 (() => {
   const fontLink = document.createElement('link');
@@ -14,6 +18,7 @@ window.AWAI_CONFIG = { formEndpoint: "https://script.google.com/macros/s/AKfycbx
     html[data-font-size="large"]{font-size:18px}
     body{font-family:"Noto Sans JP",-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif}
     h1,h2,h3,.brand-name,.hero-logo,.hero-descriptor,.hero-tagline,.hero-note p,.question-bubbles p,.dialogue-lead,.dialogue-quote,.about-copy blockquote,.ph-center,.ph-right,.profile-name,.contact-lead,.footer-brand{font-family:"Shippori Mincho","Yu Mincho","Hiragino Mincho ProN",serif}
+
     .font-size-control{display:flex;align-items:center;gap:3px;margin-left:2px;padding:3px;border:1px solid rgba(23,41,60,.14);border-radius:999px;background:rgba(255,255,255,.72);white-space:nowrap}
     .font-size-label{font-size:.62rem;color:#697482;padding:0 5px 0 7px}
     .font-size-control button{appearance:none;border:0;background:transparent;color:#697482;font:inherit;font-size:.62rem;line-height:1;padding:7px 8px;border-radius:999px;cursor:pointer;transition:.2s ease}
@@ -36,6 +41,10 @@ window.AWAI_CONFIG = { formEndpoint: "https://script.google.com/macros/s/AKfycbx
     .hero-lead{max-width:720px!important}
     .hero-descriptor{font-size:1.08rem!important}
 
+    /* Representative photo */
+    .profile-visual{background-image:url("assets/profile-photo.svg")!important;background-size:cover!important;background-position:center 18%!important;border-radius:28px!important;box-shadow:0 18px 46px rgba(32,49,65,.10)}
+    .profile-visual:before,.profile-silhouette{display:none!important}
+
     @media(max-width:1100px){.site-nav{gap:15px}.font-size-control{margin-left:0}}
     @media(max-width:980px){
       .font-size-control{margin:10px 0 6px;width:max-content}.font-size-label{font-size:.7rem}.font-size-control button{font-size:.7rem;padding:8px 10px}
@@ -45,14 +54,24 @@ window.AWAI_CONFIG = { formEndpoint: "https://script.google.com/macros/s/AKfycbx
       .audience-snapshot{padding:28px 0}
       .request-grid{grid-template-columns:1fr}
       .audience-heading{font-size:1.08rem}
-      .hero-descriptor{font-size:.84rem!important;line-height:1.65}
-      .hero-tagline{font-size:1.08rem!important;line-height:1.65}
-      .hero-lead{font-size:.84rem;line-height:1.9}
+
+      /* Mobile hero: keep copy away from the people in the photo and secure contrast. */
+      .hero{min-height:660px}
+      .hero-scene{background-position:76% center!important;transform:none!important}
+      .hero-scene:after{background:linear-gradient(90deg,rgba(248,246,241,.95) 0%,rgba(248,246,241,.88) 50%,rgba(248,246,241,.58) 72%,rgba(248,246,241,.12) 100%)!important}
+      .hero-inner{min-height:660px!important;padding-top:24px!important;padding-bottom:54px!important;align-items:center!important}
+      .hero-copy{position:relative;z-index:5;max-width:88%;padding:18px 14px 22px 0;color:#10263a;text-shadow:0 1px 0 rgba(255,255,255,.45)}
+      .hero-descriptor{font-size:.84rem!important;line-height:1.65;color:#243b50}
+      .hero-tagline{font-size:1.08rem!important;line-height:1.65;max-width:96%;color:#10263a}
+      .hero-lead{font-size:.84rem;line-height:1.9;max-width:94%!important;color:#263e53!important}
+      .hero-rule{background:rgba(16,38,58,.45)!important}
+      .hero-copy .button{margin-top:6px}
+
+      .profile-visual{height:420px!important;max-width:360px!important;margin-inline:auto;background-position:center 15%!important;border-radius:24px!important}
     }
   `;
   document.head.appendChild(style);
 
-  // First-view copy: make both the audience and purchasable work explicit before the philosophy.
   document.title = 'あわい｜教育・子ども・地域の相談・研修・企画伴走';
   const description = '学校・福祉・行政・地域団体など、子どもや地域に関わる人・組織を対象に、課題整理、職員研修、企画設計、関係機関との連携、仕組みづくりを支援します。';
   document.querySelector('meta[name="description"]')?.setAttribute('content', description);
@@ -118,6 +137,13 @@ window.AWAI_CONFIG = { formEndpoint: "https://script.google.com/macros/s/AKfycbx
   const serviceIntro = document.querySelector('.services .service-heading > p:last-child');
   if (serviceIntro) serviceIntro.textContent = '相談・伴走、研修・講座、企画・仕組みづくりを基本に、課題に応じて組み合わせます。';
 
+  const profileVisual = document.querySelector('.profile-visual');
+  if (profileVisual) {
+    profileVisual.removeAttribute('aria-hidden');
+    profileVisual.setAttribute('role','img');
+    profileVisual.setAttribute('aria-label','あわい代表 仲原英孝');
+  }
+
   const nav = document.querySelector('.site-nav');
   const navCta = nav?.querySelector('.nav-cta');
   if (nav && navCta && !nav.querySelector('.font-size-control')) {
@@ -142,10 +168,11 @@ window.AWAI_CONFIG = { formEndpoint: "https://script.google.com/macros/s/AKfycbx
   apply(initial);
   document.querySelectorAll('[data-font-size]').forEach((button) => button.addEventListener('click', () => apply(button.dataset.fontSize)));
 
+  /* High-resolution visual upgrade. The local SVGs remain the guaranteed fallback. */
   const HQ = 'https://raw.githubusercontent.com/kokomoibasyo-dev/myLP/awai-preview/awai-preview-site/assets-hq/';
   async function loadDataUri(parts) {
     const texts = await Promise.all(parts.map(async (name) => {
-      const r = await fetch(HQ + name, { cache: 'no-cache' });
+      const r = await fetch(HQ + name, { cache: 'force-cache' });
       if (!r.ok) throw new Error(`asset ${r.status}`);
       return r.text();
     }));
@@ -167,5 +194,5 @@ window.AWAI_CONFIG = { formEndpoint: "https://script.google.com/macros/s/AKfycbx
     if (cv2) cv2.style.backgroundImage = `linear-gradient(rgba(255,255,255,.04),rgba(23,41,60,.08)),url("${philosophy}")`;
     const cv3 = document.querySelector('.cv-3');
     if (cv3) cv3.style.backgroundImage = `linear-gradient(rgba(255,255,255,.02),rgba(23,41,60,.12)),url("${dialogue}")`;
-  }).catch((err) => console.warn('HQ preview assets could not be loaded', err));
+  }).catch((err) => console.warn('HQ preview assets could not be loaded; local fallback is shown instead.', err));
 })();
