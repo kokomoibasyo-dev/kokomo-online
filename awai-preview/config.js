@@ -41,9 +41,27 @@ window.AWAI_CONFIG = {
     .hero-lead{max-width:720px!important}
     .hero-descriptor{font-size:1.08rem!important}
 
-    /* Representative photo */
-    .profile-visual{background-image:url("assets/profile-photo.svg")!important;background-size:cover!important;background-position:center 18%!important;border-radius:28px!important;box-shadow:0 18px 46px rgba(32,49,65,.10)}
-    .profile-visual:before,.profile-silhouette{display:none!important}
+    .profile-visual{
+      background-image:url("assets/profile-photo.svg")!important;
+      background-size:cover!important;
+      background-position:center 16%!important;
+      background-repeat:no-repeat!important;
+      border-radius:30px!important;
+      box-shadow:0 18px 50px rgba(44,58,72,.10);
+    }
+    .profile-visual:before,.profile-silhouette,.profile-silhouette:before{display:none!important;content:none!important}
+
+    .ph-center,.ph-right{
+      padding:11px 15px!important;
+      border-radius:12px!important;
+      background:rgba(248,247,243,.86)!important;
+      color:#20364c!important;
+      text-shadow:none!important;
+      box-shadow:0 8px 26px rgba(32,54,76,.10)!important;
+      backdrop-filter:blur(5px);
+      -webkit-backdrop-filter:blur(5px);
+    }
+    .ph-right{text-align:left!important}
 
     @media(max-width:1100px){.site-nav{gap:15px}.font-size-control{margin-left:0}}
     @media(max-width:980px){
@@ -54,20 +72,16 @@ window.AWAI_CONFIG = {
       .audience-snapshot{padding:28px 0}
       .request-grid{grid-template-columns:1fr}
       .audience-heading{font-size:1.08rem}
-
-      /* Mobile hero: keep copy away from the people in the photo and secure contrast. */
-      .hero{min-height:660px}
-      .hero-scene{background-position:76% center!important;transform:none!important}
-      .hero-scene:after{background:linear-gradient(90deg,rgba(248,246,241,.95) 0%,rgba(248,246,241,.88) 50%,rgba(248,246,241,.58) 72%,rgba(248,246,241,.12) 100%)!important}
-      .hero-inner{min-height:660px!important;padding-top:24px!important;padding-bottom:54px!important;align-items:center!important}
-      .hero-copy{position:relative;z-index:5;max-width:88%;padding:18px 14px 22px 0;color:#10263a;text-shadow:0 1px 0 rgba(255,255,255,.45)}
-      .hero-descriptor{font-size:.84rem!important;line-height:1.65;color:#243b50}
-      .hero-tagline{font-size:1.08rem!important;line-height:1.65;max-width:96%;color:#10263a}
-      .hero-lead{font-size:.84rem;line-height:1.9;max-width:94%!important;color:#263e53!important}
-      .hero-rule{background:rgba(16,38,58,.45)!important}
-      .hero-copy .button{margin-top:6px}
-
-      .profile-visual{height:420px!important;max-width:360px!important;margin-inline:auto;background-position:center 15%!important;border-radius:24px!important}
+      .hero-descriptor{font-size:.84rem!important;line-height:1.65}
+      .hero-tagline{font-size:1.08rem!important;line-height:1.65}
+      .hero-lead{font-size:.84rem;line-height:1.9}
+      .hero-scene{background-position:72% center!important}
+      .hero-scene:after{background:linear-gradient(90deg,rgba(248,246,242,.98) 0%,rgba(248,246,242,.94) 40%,rgba(248,246,242,.70) 57%,rgba(30,47,65,.12) 100%)!important}
+      .hero-copy{max-width:76%!important}
+      .profile-visual{height:390px!important;max-width:100%!important;border-radius:24px!important;background-position:center 10%!important}
+      .ph-center{left:6%!important;top:48%!important;max-width:46%!important;font-size:.82rem!important;line-height:1.75!important}
+      .ph-right{right:6%!important;top:29%!important;max-width:42%!important;font-size:.78rem!important;line-height:1.75!important}
+      .philosophy-art small{color:#44596d!important;background:rgba(248,247,243,.72);padding:3px 6px;border-radius:6px}
     }
   `;
   document.head.appendChild(style);
@@ -137,13 +151,6 @@ window.AWAI_CONFIG = {
   const serviceIntro = document.querySelector('.services .service-heading > p:last-child');
   if (serviceIntro) serviceIntro.textContent = '相談・伴走、研修・講座、企画・仕組みづくりを基本に、課題に応じて組み合わせます。';
 
-  const profileVisual = document.querySelector('.profile-visual');
-  if (profileVisual) {
-    profileVisual.removeAttribute('aria-hidden');
-    profileVisual.setAttribute('role','img');
-    profileVisual.setAttribute('aria-label','あわい代表 仲原英孝');
-  }
-
   const nav = document.querySelector('.site-nav');
   const navCta = nav?.querySelector('.nav-cta');
   if (nav && navCta && !nav.querySelector('.font-size-control')) {
@@ -168,11 +175,10 @@ window.AWAI_CONFIG = {
   apply(initial);
   document.querySelectorAll('[data-font-size]').forEach((button) => button.addEventListener('click', () => apply(button.dataset.fontSize)));
 
-  /* High-resolution visual upgrade. The local SVGs remain the guaranteed fallback. */
   const HQ = 'https://raw.githubusercontent.com/kokomoibasyo-dev/myLP/awai-preview/awai-preview-site/assets-hq/';
   async function loadDataUri(parts) {
     const texts = await Promise.all(parts.map(async (name) => {
-      const r = await fetch(HQ + name, { cache: 'force-cache' });
+      const r = await fetch(HQ + name, { cache: 'no-cache' });
       if (!r.ok) throw new Error(`asset ${r.status}`);
       return r.text();
     }));
@@ -194,5 +200,5 @@ window.AWAI_CONFIG = {
     if (cv2) cv2.style.backgroundImage = `linear-gradient(rgba(255,255,255,.04),rgba(23,41,60,.08)),url("${philosophy}")`;
     const cv3 = document.querySelector('.cv-3');
     if (cv3) cv3.style.backgroundImage = `linear-gradient(rgba(255,255,255,.02),rgba(23,41,60,.12)),url("${dialogue}")`;
-  }).catch((err) => console.warn('HQ preview assets could not be loaded; local fallback is shown instead.', err));
+  }).catch((err) => console.warn('HQ preview assets could not be loaded', err));
 })();
