@@ -1,0 +1,1 @@
+Awai r8 direct image assets. Binary image files are stored in this directory.
