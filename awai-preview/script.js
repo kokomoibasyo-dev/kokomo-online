@@ -201,3 +201,22 @@ submitButton.textContent = originalText;
     console.error('High-resolution image repair failed', error);
   }
 })();
+
+// Make the "研修・講座" service card an entry point to the dedicated training pages.
+const trainingServiceCard = document.querySelectorAll('.service-card')[1];
+if (trainingServiceCard) {
+  trainingServiceCard.setAttribute('role', 'link');
+  trainingServiceCard.setAttribute('tabindex', '0');
+  trainingServiceCard.style.cursor = 'pointer';
+  const openTraining = () => { window.location.href = 'training/'; };
+  trainingServiceCard.addEventListener('click', (event) => {
+    if (event.target.closest('a,button,input,select,textarea')) return;
+    openTraining();
+  });
+  trainingServiceCard.addEventListener('keydown', (event) => {
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault();
+      openTraining();
+    }
+  });
+}
