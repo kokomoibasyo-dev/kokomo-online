@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice">
+<defs>
+  <linearGradient id="paper" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f8f5ef"/><stop offset=".48" stop-color="#e9edf1"/><stop offset="1" stop-color="#cdd9e1"/></linearGradient>
+  <radialGradient id="sun" cx="50%" cy="35%" r="45%"><stop offset="0" stop-color="#f6d7aa" stop-opacity=".95"/><stop offset=".45" stop-color="#e7c0a0" stop-opacity=".42"/><stop offset="1" stop-color="#e7c0a0" stop-opacity="0"/></radialGradient>
+  <filter id="wash" x="-20%" y="-20%" width="140%" height="140%"><feTurbulence type="fractalNoise" baseFrequency=".018" numOctaves="3" seed="7" result="noise"/><feDisplacementMap in="SourceGraphic" in2="noise" scale="18"/><feGaussianBlur stdDeviation="1.6"/></filter>
+  <filter id="papergrain"><feTurbulence type="fractalNoise" baseFrequency=".7" numOctaves="2" seed="9" result="g"/><feColorMatrix in="g" type="saturate" values="0"/><feComponentTransfer><feFuncA type="table" tableValues="0 .08"/></feComponentTransfer></filter>
+</defs>
+<rect width="1600" height="900" fill="url(#paper)"/>
+<rect width="1600" height="900" fill="#fff" filter="url(#papergrain)" opacity=".35"/>
+<ellipse cx="875" cy="310" rx="560" ry="310" fill="url(#sun)"/>
+<g filter="url(#wash)">
+  <path d="M0 420 C240 300 390 340 560 430 C720 520 900 330 1120 360 C1300 385 1430 330 1600 250 L1600 690 L0 690 Z" fill="#aebfd0" opacity=".42"/>
+  <path d="M0 500 C210 380 430 410 650 505 C860 595 1030 395 1250 430 C1400 455 1510 430 1600 390 L1600 735 L0 735 Z" fill="#7892a6" opacity=".38"/>
+  <path d="M0 590 C230 560 390 575 560 615 C760 660 940 590 1120 575 C1310 560 1470 585 1600 605 L1600 900 L0 900 Z" fill="#adc5d2" opacity=".66"/>
+  <path d="M0 650 C250 630 420 645 610 690 C790 730 1000 650 1180 640 C1370 630 1510 660 1600 690 L1600 900 L0 900 Z" fill="#d8e4e8" opacity=".8"/>
+  <path d="M1060 565 C1140 535 1250 530 1360 548 C1460 565 1535 610 1600 670 L1600 900 L1100 900 Z" fill="#4f6d80" opacity=".42"/>
+</g>
+<g opacity=".84">
+  <ellipse cx="1162" cy="682" rx="42" ry="58" fill="#2f4351"/><rect x="1130" y="720" width="68" height="95" rx="25" fill="#415868"/>
+  <ellipse cx="1260" cy="668" rx="46" ry="62" fill="#273b49"/><rect x="1220" y="710" width="82" height="108" rx="28" fill="#374e5d"/>
+  <ellipse cx="1360" cy="682" rx="42" ry="58" fill="#253946"/><rect x="1327" y="720" width="68" height="95" rx="25" fill="#314958"/>
+</g>
+<path d="M0 845 C360 820 650 836 920 850 C1180 863 1380 840 1600 828" fill="none" stroke="#6f8290" stroke-width="18" stroke-linecap="round" opacity=".32"/>
+</svg>
