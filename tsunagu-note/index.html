@@ -273,7 +273,7 @@
   });
 
   function classifySpecial(text){
-    var childContext=/子ども|こども|子供|娘|息子|児童|園児|保育園|幼稚園|小学生|中学生|高校生|学校/.test(text);
+    var childContext=/子ども|こども|子供|子の|子が|の子|うちの子|娘|息子|児童|園児|保育園|幼稚園|小学生|中学生|高校生|学校/.test(text);
     if(childContext && /虐待|ネグレクト|育児放棄|殴|叩|蹴|性的虐待/.test(text)) return 'abuse';
     if(/死にたい|消えたい|自殺|自傷|リストカット|生きていたくない|死んだほうが/.test(text)) return 'selfharm';
     if(/DV|ドメスティック|パートナー|夫|旦那|妻|恋人|彼氏|彼女/.test(text) && /暴力|殴|蹴|怖い|逃げたい|怒鳴|監視|支配|脅/.test(text)) return 'dv';
@@ -377,7 +377,7 @@
     var city=document.getElementById('city').value;
     if(!concern || !city)return;
     var topics=detect(concern);
-    var childContext=/子ども|こども|子供|娘|息子|児童|園児|保育園|幼稚園|小学生|中学生|高校生|学校/.test(concern);
+    var childContext=/子ども|こども|子供|子の|子が|の子|うちの子|娘|息子|児童|園児|保育園|幼稚園|小学生|中学生|高校生|学校/.test(concern);
     var isChildDevelopment=childContext && /発達|発達障害|発達障がい|自閉|ADHD|ASD|療育|言葉|ことば|こだわり|かんしゃく|多動|感覚過敏/.test(concern);
     var special=classifySpecial(concern);
     current={id:Date.now(),createdAt:new Date().toISOString(),concern:concern,city:city,topics:topics,isChildDevelopment:isChildDevelopment,special:special,route:routes[city]};
