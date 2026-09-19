@@ -7,7 +7,7 @@
 <title>つなぐノート v0.3</title>
 <style>
 :root{--bg:#f6f1e8;--paper:#fffdf9;--ink:#26312f;--muted:#68706c;--line:#ddd8ce;--green:#315f51;--soft:#e4eee9;--amber:#fff1dc}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif}.wrap{max-width:720px;margin:auto;padding:0 16px 80px}.top{position:sticky;top:0;z-index:5;background:rgba(246,241,232,.94);backdrop-filter:blur(12px);padding:14px 0;border-bottom:1px solid var(--line)}.brand{font-weight:800}.brand small{display:block;font-size:11px;color:var(--muted);font-weight:500;margin-top:2px}.screen{display:none;padding-top:22px}.screen.active{display:block}.hero{padding:12px 2px}.eyebrow{font-size:12px;font-weight:800;color:var(--green);letter-spacing:.06em}.hero h1,.head h2{font-size:clamp(30px,8vw,44px);line-height:1.18;letter-spacing:-.04em;margin:10px 0 14px}.hero p,.head p{line-height:1.8;color:var(--muted)}.card{background:var(--paper);border:1px solid var(--line);border-radius:20px;padding:18px;margin:14px 0;box-shadow:0 8px 28px rgba(48,54,51,.06)}label{display:block;font-weight:750;margin:12px 0 8px}textarea,select,input{width:100%;border:1.5px solid #cbc5bb;border-radius:14px;background:#fff;padding:13px;font:inherit;line-height:1.6}textarea:focus,select:focus{outline:none;border-color:var(--green);box-shadow:0 0 0 3px rgba(49,95,81,.1)}.chips{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0 16px}.chip{border:1px solid var(--line);background:#fff;border-radius:999px;padding:9px 12px;font-size:13px}.chip.on,.choice.on{background:var(--soft);border-color:var(--green);color:var(--green);font-weight:700}.choice{width:100%;text-align:left;border:1px solid var(--line);background:#fff;border-radius:14px;padding:13px 14px;font:inherit;margin:6px 0;cursor:pointer}.primary,.ghost,.miniBtn{border:0;border-radius:13px;padding:13px 15px;font:inherit;font-weight:800;cursor:pointer}.primary{background:var(--green);color:#fff;width:100%}.ghost{background:transparent;border:1px solid var(--line);color:var(--green)}.miniBtn{background:var(--soft);color:var(--green)}.notice{background:var(--soft);border-radius:16px;padding:13px 14px;font-size:13px;line-height:1.65;margin:12px 0}.warning{background:var(--amber)}.badge{display:inline-block;background:var(--soft);color:var(--green);border-radius:999px;padding:7px 10px;font-size:12px;font-weight:800;margin:0 6px 6px 0}.section{font-size:12px;font-weight:800;color:var(--green);letter-spacing:.05em;margin-bottom:8px}.place h3{font-size:22px;margin:4px 0 8px}.muted{color:var(--muted);line-height:1.7}.row{display:flex;gap:8px;flex-wrap:wrap}.row>*{flex:1}.link{display:inline-flex;justify-content:center;align-items:center;text-decoration:none;background:var(--green);color:#fff;border-radius:13px;padding:12px 14px;font-weight:800}.link.alt{background:var(--soft);color:var(--green)}.item{border:1px solid var(--line);border-radius:14px;padding:12px;margin-top:9px}.item strong{display:block}.item p{margin:5px 0 0;color:var(--muted);font-size:13px;line-height:1.55}.back{border:0;background:none;color:var(--green);font:inherit;font-weight:800;padding:0 0 12px}.bottom{display:flex;gap:8px;margin-top:14px}.bottom>*{flex:1}.historyItem{border:1px solid var(--line);border-radius:14px;padding:13px;margin-top:10px}.historyItem small{color:var(--muted)}.historyItem p{color:var(--muted);line-height:1.5;font-size:13px}.empty{color:var(--muted);text-align:center;padding:30px 10px}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif}.wrap{max-width:720px;margin:auto;padding:0 16px 80px}.top{position:sticky;top:0;z-index:5;background:rgba(246,241,232,.94);backdrop-filter:blur(12px);padding:14px 0;border-bottom:1px solid var(--line)}.brand{font-weight:800}.brand small{display:block;font-size:11px;color:var(--muted);font-weight:500;margin-top:2px}.screen{display:none;padding-top:22px}.screen.active{display:block}.hero{padding:12px 2px}.eyebrow{font-size:12px;font-weight:800;color:var(--green);letter-spacing:.06em}.hero h1,.head h2{font-size:clamp(30px,8vw,44px);line-height:1.18;letter-spacing:-.04em;margin:10px 0 14px}.hero p,.head p{line-height:1.8;color:var(--muted)}.card{background:var(--paper);border:1px solid var(--line);border-radius:20px;padding:18px;margin:14px 0;box-shadow:0 8px 28px rgba(48,54,51,.06)}label{display:block;font-weight:750;margin:12px 0 8px}textarea,select,input{width:100%;border:1.5px solid #cbc5bb;border-radius:14px;background:#fff;padding:13px;font:inherit;line-height:1.6}textarea:focus,select:focus{outline:none;border-color:var(--green);box-shadow:0 0 0 3px rgba(49,95,81,.1)}.chips{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0 16px}.chip{border:1px solid var(--line);background:#fff;border-radius:999px;padding:9px 12px;font-size:13px}.chip.on,.choice.on{background:var(--soft);border-color:var(--green);color:var(--green);font-weight:700}.choice{width:100%;text-align:left;border:1px solid var(--line);background:#fff;border-radius:14px;padding:13px 14px;font:inherit;margin:6px 0;cursor:pointer}.primary,.ghost,.miniBtn{border:0;border-radius:13px;padding:13px 15px;font:inherit;font-weight:800;cursor:pointer}.primary{background:var(--green);color:#fff;width:100%}.ghost{background:transparent;border:1px solid var(--line);color:var(--green)}.miniBtn{background:var(--soft);color:var(--green)}.notice{background:var(--soft);border-radius:16px;padding:13px 14px;font-size:13px;line-height:1.65;margin:12px 0}.warning{background:var(--amber)}.badge{display:inline-block;background:var(--soft);color:var(--green);border-radius:999px;padding:7px 10px;font-size:12px;font-weight:800;margin:0 6px 6px 0}.section{font-size:12px;font-weight:800;color:var(--green);letter-spacing:.05em;margin-bottom:8px}.place h3{font-size:22px;margin:4px 0 8px}.muted{color:var(--muted);line-height:1.7}.row{display:flex;gap:8px;flex-wrap:wrap}.row>*{flex:1}.link{display:inline-flex;justify-content:center;align-items:center;text-decoration:none;background:var(--green);color:#fff;border-radius:13px;padding:12px 14px;font-weight:800}.link.alt{background:var(--soft);color:var(--green)}.item{border:1px solid var(--line);border-radius:14px;padding:12px;margin-top:9px}.item strong{display:block}.routeStep{border:1px solid var(--line);border-radius:16px;padding:14px;margin-top:10px;background:#fff}.routeStep .stepTag{display:inline-block;font-size:11px;font-weight:800;color:var(--green);background:var(--soft);border-radius:999px;padding:5px 8px;margin-bottom:7px}.routeStep h4{margin:0 0 7px;font-size:17px}.routeStep p{margin:0;color:var(--muted);font-size:13px;line-height:1.6}.routeStep a{display:inline-block;margin-top:9px;color:var(--green);font-weight:800;text-decoration:none}.item p{margin:5px 0 0;color:var(--muted);font-size:13px;line-height:1.55}.back{border:0;background:none;color:var(--green);font:inherit;font-weight:800;padding:0 0 12px}.bottom{display:flex;gap:8px;margin-top:14px}.bottom>*{flex:1}.historyItem{border:1px solid var(--line);border-radius:14px;padding:13px;margin-top:10px}.historyItem small{color:var(--muted)}.historyItem p{color:var(--muted);line-height:1.5;font-size:13px}.empty{color:var(--muted);text-align:center;padding:30px 10px}
 @media print{.top,.back,.bottom,.hidePrint{display:none!important}.wrap{max-width:none}.screen{display:none!important}#result.active{display:block!important}.card{box-shadow:none}}
 </style>
 </head>
@@ -150,6 +150,12 @@
         <a id="sourceLink" class="link alt" target="_blank" rel="noopener">公式情報</a>
       </div>
       <p class="muted" id="placeMeta" style="font-size:13px"></p>
+    </div>
+
+    <div id="nextRoutesCard" class="card" style="display:none">
+      <div class="section">次につなぐ先・同時に相談してよい先</div>
+      <div id="nextRoutes"></div>
+      <div class="notice">全部を一度に回る必要はありません。まず上の窓口で相談し、この一覧を見せて「ほかにもつないだ方がよい先がありますか？」と確認しても大丈夫です。</div>
     </div>
 
     <div class="card">
@@ -342,6 +348,97 @@
     return '';
   }
 
+  function collectIssues(text){
+    var out=[];
+    function add(k){if(out.indexOf(k)===-1)out.push(k);}
+    var childContext=/子ども|こども|子供|子の|子が|の子|うちの子|娘|息子|児童|園児|保育園|幼稚園|小学生|中学生|高校生|学校/.test(text);
+
+    if(/ネグレクト|育児放棄|性的虐待/.test(text) || (childContext && /虐待|殴|叩|蹴/.test(text))) add('abuse');
+    if(/死にたい|消えたい|消えてしまいたい|消えてなくなりたい|自殺|自傷|リストカット|生きていたくない|死んだほうが/.test(text)) add('selfharm');
+    if(/DV|ドメスティック|パートナー|夫|旦那|妻|恋人|彼氏|彼女/.test(text) && /暴力|殴|蹴|怖い|逃げたい|怒鳴|監視|支配|脅/.test(text)) add('dv');
+
+    if(childContext && /発達|発達障害|発達障がい|自閉|ADHD|ASD|療育|言葉|ことば|こだわり|かんしゃく|多動|感覚過敏/.test(text)) add('child-development');
+    if(childContext && /不登校|いじめ|登校|学校生活|学校.*行け|学校に行け|行きたくない|休みがち|保健室|別室|学習|先生|友人関係|友達関係/.test(text)) add('school');
+
+    if(/ひきこも|引きこも|引き篭|家から出ない|社会に出られな|社会に出られず|外に出られな|外に出られず|家族以外と会わな|家族以外と会いません|人と会えな/.test(text)) add('hikikomori');
+    if(/障害年金|障がい年金/.test(text)) add('disability_pension');
+    if(/障害者手帳|障がい者手帳|療育手帳|精神障害者保健福祉手帳|身体障害者手帳/.test(text)) add('disability_handbook');
+    if(/障害|障がい|ADHD|ASD|発達障害|発達障がい|精神障害|知的障害|身体障害/.test(text) && /就職|就労|働きたい|仕事探し|職場定着|復職/.test(text)) add('disability_work');
+    if(/障害福祉サービス|障がい福祉サービス|居宅介護|就労移行|就労継続|生活介護|短期入所|受給者証|児童発達支援|放課後等デイ|放デイ/.test(text)) add('disability_service');
+
+    if(/借金|多重債務|消費者金融|サラ金|カードローン|カード.*払え|ローン.*払え|返済.*できな|債務整理|奨学金.*返せ/.test(text)) add('debt');
+    if(/定期購入|通販|ネット通販|訪問販売|悪質商法|詐欺サイト|商品.*届か|契約.*解約|クーリングオフ|架空請求|高額請求|ぼったくり/.test(text)) add('consumer');
+    if(/残業代|給料.*払|給与.*払|賃金.*払|不当解雇|解雇|退職.*強要|辞めろと言われ|パワハラ|セクハラ|職場.*ハラスメント|労働時間|有給.*取れ|有給.*取らせ|雇い止め/.test(text)) add('labor');
+    if(/相続|遺産|離婚|養育費|親権|慰謝料|裁判|訴えら|弁護士|法律相談|隣人トラブル|大家.*トラブル|貸したお金/.test(text)) add('legal');
+    if(/介護|認知症|要介護|ケアマネ|高齢|デイサービス|親の世話|介護保険/.test(text)) add('elderly');
+    if(/妊娠|出産|中絶|避妊|産後|妊婦|性感染症/.test(text)) add('pregnancy');
+
+    if(!childContext && /障害|障がい|障害者|障がい者|ADHD|ASD|発達障害|発達障がい|身体障害|知的障害|精神障害/.test(text)
+      && !out.some(function(k){return ['disability_pension','disability_handbook','disability_work','disability_service'].indexOf(k)!==-1;})) add('disability');
+
+    if(/うつ|鬱|眠れない|不安が強い|パニック|精神的|こころがつらい|心がつらい|気分が落ち込|幻聴|拒食|過食|摂食障害|統合失調|双極|躁うつ|適応障害|強迫|依存症|アルコール|お酒.*やめ|ギャンブル.*やめ|薬物|親もしんどい|保護者.*しんど|限界/.test(text)) add('mental');
+
+    if(/お金|生活費|収入|貯金|滞納|払え|払えな|支払|食費|電気|ガス|水道|生活保護|仕事を辞め|失業|離職|無職|家賃|住まい|住宅|退去|住む場所|アパート|立ち退き|転居|食べるもの/.test(text)) add('life');
+
+    return out;
+  }
+
+  function routeForIssue(issue,city){
+    if(issue==='selfharm') return specialRoutes.selfharm;
+    if(issue==='abuse') return specialRoutes.abuse;
+    if(issue==='dv') return specialRoutes.dv;
+    if(issue==='child-development') return childDevRoutes[city];
+    if(issue==='school') return prefectureRoutes.school;
+    if(issue==='hikikomori') return specialRoutes.hikikomori;
+    if(issue==='mental') return specialRoutes.mental;
+    if(issue==='debt') return specialRoutes.debt;
+    if(issue==='consumer') return specialRoutes.consumer;
+    if(issue==='labor') return specialRoutes.labor;
+    if(issue==='legal') return specialRoutes.legal;
+    if(issue==='elderly') return specialRoutes.elderly;
+    if(issue==='pregnancy') return specialRoutes.pregnancy;
+    if(issue==='disability_pension') return specialRoutes.disability_pension;
+    if(issue==='disability_handbook'||issue==='disability_service'||issue==='disability') return childServiceRoutes[city];
+    if(issue==='disability_work') return disabilityWorkRoutes[city];
+    if(issue==='life') return routes[city];
+    return null;
+  }
+
+  function issueLabel(issue){
+    var m={
+      selfharm:'自傷・自殺に関する安全',abuse:'子どもの安全・虐待',dv:'DV・安全確保',
+      life:'生活費・住まい・仕事',child-development:'子どもの発達',school:'学校・不登校・学習',
+      mental:'こころの不調',hikikomori:'ひきこもり',debt:'借金・多重債務',
+      consumer:'消費者トラブル',labor:'労働問題',legal:'法律問題',elderly:'高齢・介護',
+      pregnancy:'妊娠・出産・性の相談',disability_pension:'障害年金',
+      disability_handbook:'障害者手帳',disability_service:'障害福祉サービス',
+      disability_work:'障害のある方の就労',disability:'障害に関する生活相談'
+    };
+    return m[issue]||issue;
+  }
+
+  function prioritizeIssues(issues,text){
+    var priority=['selfharm','abuse','dv'];
+    // Basic living needs come before non-safety specialist routes when money/housing is explicitly strained.
+    if(issues.indexOf('life')!==-1) priority.push('life');
+    priority=priority.concat(['child-development','school','mental','hikikomori','elderly','pregnancy','disability_service','disability_handbook','disability_pension','disability_work','disability','debt','labor','consumer','legal']);
+    return issues.slice().sort(function(a,b){return priority.indexOf(a)-priority.indexOf(b);});
+  }
+
+  function uniqueSecondaryRoutes(issues,primaryIssue,city){
+    var seen={}, arr=[];
+    issues.forEach(function(issue){
+      if(issue===primaryIssue)return;
+      var r=routeForIssue(issue,city);
+      if(!r)return;
+      var key=r.name+'|'+(r.phone||'');
+      if(seen[key])return;
+      seen[key]=true;
+      arr.push({issue:issue,route:r});
+    });
+    return arr.slice(0,4);
+  }
+
   function detect(text){
     var out=[];
     Object.keys(selected).forEach(function(k){if(selected[k])out.push(k);});
@@ -376,9 +473,12 @@
     var concern=current.concern, city=current.city, topics=current.topics, route=current.route;
     document.getElementById('badges').innerHTML=topics.map(function(t){return '<span class="badge">'+labels[t]+'</span>';}).join('');
     var needText={development:'発達・行動・ことば',school:'学校生活・学習・教育上の配慮',medical:'診断・医療機関',service:'療育・障害福祉サービス',parent:'子育て・家庭全体の相談'};
-    document.getElementById('summary').textContent=current.isChildDevelopment
-      ? '入力内容と追加の確認から、「'+(needText[current.followNeed]||'子どもの発達・子育て')+'」の相談先を優先して案内しています。'
-      : '入力内容から、まず「'+topics.map(function(t){return labels[t];}).join('・')+'」の入口を確認するのがよさそうです。';
+    var issueSummary=(current.issues||[]).map(issueLabel);
+    document.getElementById('summary').textContent=current.isChildDevelopment && current.followNeed
+      ? '入力内容と追加の確認から、「'+(needText[current.followNeed]||'子どもの発達・子育て')+'」を最初の入口にしています。'+(issueSummary.length>1?' あわせて「'+issueSummary.filter(function(x){return x!==(needText[current.followNeed]||'子どもの発達・子育て');}).join('・')+'」も見つかっています。':'')
+      : (issueSummary.length>1
+          ? '困りごとが複数重なっています。まず「'+issueLabel(current.primaryIssue)+'」を優先し、その後につなぐ先も下に整理しています。'
+          : '入力内容から、まず「'+(issueSummary[0]||topics.map(function(t){return labels[t];}).join('・'))+'」の入口を確認するのがよさそうです。');
     document.getElementById('placeName').textContent=route.name;
     document.getElementById('placeWhy').textContent=route.why;
     var phoneLink=document.getElementById('phoneLink');
@@ -393,6 +493,21 @@
     document.getElementById('placeMeta').textContent='場所：'+route.place+'｜情報確認：2026年9月20日。受付時間・利用条件は公式情報で最新内容を確認してください。';
     var urgent=document.getElementById('urgentNotice');
     if(route.alert){urgent.textContent=route.alert;urgent.style.display='block';}else{urgent.textContent='';urgent.style.display='none';}
+
+    var nextCard=document.getElementById('nextRoutesCard');
+    var nextRoot=document.getElementById('nextRoutes');
+    var secondaries=uniqueSecondaryRoutes(current.issues||[],current.primaryIssue,city);
+    if(secondaries.length){
+      nextCard.style.display='block';
+      nextRoot.innerHTML=secondaries.map(function(x,i){
+        var r=x.route;
+        var tel=r.phone ? '<a href="'+(r.tel||('tel:'+r.phone.replace(/-/g,'')))+'">☎ '+r.phone+'</a>' : '';
+        return '<div class="routeStep"><span class="stepTag">'+(i===0?'次に':'同時に相談可')+'</span><h4>'+issueLabel(x.issue)+'｜'+r.name+'</h4><p>'+r.why+'</p>'+tel+'</div>';
+      }).join('');
+    } else {
+      nextCard.style.display='none';
+      nextRoot.innerHTML='';
+    }
 
     var ps=programs(topics,concern);
     if(current.special==='mental'||current.special==='selfharm') ps.unshift(['精神保健福祉相談','こころの状態、受診、家族としての関わり、利用できる福祉サービス等を相談できます。']);
@@ -420,7 +535,7 @@
     document.getElementById('memo').value='【相談したいこと】\n'+concern+'\n\n'
       +(current.ageStage?'【子どもの年齢・学年】\n'+ageText[current.ageStage]+'\n\n':'')
       +(current.followNeed?'【今いちばん相談したいこと】\n'+(needText[current.followNeed]||current.followNeed)+'\n\n':'')
-      +'【主なテーマ】\n'+topics.map(function(t){return labels[t];}).join('・')
+      +'【主なテーマ】\n'+((current.issues&&current.issues.length)?current.issues.map(issueLabel).join('・'):topics.map(function(t){return labels[t];}).join('・'))
       +'\n\n【お願いしたいこと】\n利用できる支援や制度、次に相談した方がよい窓口があれば教えてください。必要な手続きや書類も確認したいです。\n\n居住地：'+city;
 
     var qs=questions(topics);
@@ -437,12 +552,28 @@
     var city=document.getElementById('city').value;
     if(!concern || !city)return;
     var topics=detect(concern);
+    var issues=prioritizeIssues(collectIssues(concern),concern);
     var childContext=/子ども|こども|子供|子の|子が|の子|うちの子|娘|息子|児童|園児|保育園|幼稚園|小学生|中学生|高校生|学校/.test(concern);
-    var isChildDevelopment=childContext && /発達|発達障害|発達障がい|自閉|ADHD|ASD|療育|言葉|ことば|こだわり|かんしゃく|多動|感覚過敏/.test(concern);
-    var special=classifySpecial(concern);
-    current={id:Date.now(),createdAt:new Date().toISOString(),concern:concern,city:city,topics:topics,isChildDevelopment:isChildDevelopment,special:special,route:routes[city]};
+    var isChildDevelopment=issues.indexOf('child-development')!==-1;
+    var primaryIssue=issues.length?issues[0]:'';
+    current={id:Date.now(),createdAt:new Date().toISOString(),concern:concern,city:city,topics:topics,issues:issues,primaryIssue:primaryIssue,isChildDevelopment:isChildDevelopment,special:primaryIssue,route:routes[city]};
 
-    if(isChildDevelopment){
+    // Safety always comes before follow-up questions.
+    if(['selfharm','abuse','dv'].indexOf(primaryIssue)!==-1){
+      current.route=routeForIssue(primaryIssue,city);
+      renderResult();
+      return;
+    }
+
+    // If basic living needs are also present, start there and show child/specialist routes next.
+    if(primaryIssue==='life'){
+      current.route=routes[city];
+      renderResult();
+      return;
+    }
+
+    // Child development gets a small follow-up only when it is the main non-safety issue.
+    if(primaryIssue==='child-development'){
       followNeed='';
       document.getElementById('ageStage').value='';
       document.querySelectorAll('#devChoices .choice').forEach(function(x){x.classList.remove('on');});
@@ -450,20 +581,18 @@
       return;
     }
 
-    if(special==='school'){current.route=prefectureRoutes.school;renderResult();return;}
-    if(special==='disability'){
+    if(primaryIssue==='disability'){
       disabilityKind='';
       document.querySelectorAll('#disabilityChoices .choice').forEach(function(x){x.classList.remove('on');});
       document.getElementById('disabilityError').style.display='none';
       go('disabilityFollowup');
       return;
     }
-    if(special==='disability_handbook'||special==='disability_service'){current.route=childServiceRoutes[city];renderResult();return;}
-    if(special==='disability_work'){current.route=disabilityWorkRoutes[city];renderResult();return;}
-    if(special && specialRoutes[special]){current.route=specialRoutes[special];renderResult();return;}
 
-    var hasLife=topics.some(function(t){return ['money','work','housing'].indexOf(t)!==-1;});
-    if(hasLife){current.route=routes[city];renderResult();return;}
+    if(primaryIssue){
+      current.route=routeForIssue(primaryIssue,city);
+      if(current.route){renderResult();return;}
+    }
 
     triageKind='';
     document.querySelectorAll('#triageChoices .choice').forEach(function(x){x.classList.remove('on');});
@@ -475,6 +604,8 @@
     e.preventDefault();
     if(!disabilityKind){document.getElementById('disabilityError').style.display='block';return;}
     current.special=disabilityKind;
+    current.primaryIssue=disabilityKind;
+    if(current.issues.indexOf(disabilityKind)===-1) current.issues.unshift(disabilityKind);
     if(disabilityKind==='disability_pension') current.route=specialRoutes.disability_pension;
     else if(disabilityKind==='disability_work') current.route=disabilityWorkRoutes[current.city];
     else if(disabilityKind==='disability_handbook') current.route=childServiceRoutes[current.city];
@@ -486,6 +617,9 @@
     e.preventDefault();
     if(!triageKind){document.getElementById('triageError').style.display='block';return;}
     current.special=triageKind;
+    current.primaryIssue=triageKind;
+    current.issues=current.issues||[];
+    if(current.issues.indexOf(triageKind)===-1) current.issues.unshift(triageKind);
     if(triageKind==='child'){current.route=childDevRoutes[current.city];}
     else if(triageKind==='disability'){
       disabilityKind='';
@@ -510,9 +644,18 @@
     current.ageStage=age;
     current.followNeed=followNeed;
     current.special='child-development';
-    if(followNeed==='school') current.route=prefectureRoutes.school;
+    current.primaryIssue='child-development';
+    if(followNeed==='school'){
+      current.route=prefectureRoutes.school;
+      current.primaryIssue='school';
+      if(current.issues.indexOf('school')===-1) current.issues.unshift('school');
+    }
     else if(followNeed==='medical') current.route=prefectureRoutes.medical;
-    else if(followNeed==='service') current.route=childServiceRoutes[current.city];
+    else if(followNeed==='service'){
+      current.route=childServiceRoutes[current.city];
+      current.primaryIssue='disability_service';
+      if(current.issues.indexOf('disability_service')===-1) current.issues.unshift('disability_service');
+    }
     else current.route=childDevRoutes[current.city];
     renderResult();
   });
