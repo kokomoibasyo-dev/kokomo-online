@@ -273,17 +273,17 @@
   });
 
   function classifySpecial(text){
-    var childContext=/子ども|こども|娘|息子|児童|園児|保育園|幼稚園|小学生|中学生|高校生|学校/.test(text);
-    if(childContext && /虐待|ネグレクト|育児放棄|殴られ|叩かれ|性的虐待|子どもを殴|子供を殴/.test(text)) return 'abuse';
+    var childContext=/子ども|こども|子供|娘|息子|児童|園児|保育園|幼稚園|小学生|中学生|高校生|学校/.test(text);
+    if(childContext && /虐待|ネグレクト|育児放棄|殴|叩|蹴|性的虐待/.test(text)) return 'abuse';
     if(/死にたい|消えたい|自殺|自傷|リストカット|生きていたくない|死んだほうが/.test(text)) return 'selfharm';
     if(/DV|ドメスティック|パートナー|夫|旦那|妻|恋人|彼氏|彼女/.test(text) && /暴力|殴|蹴|怖い|逃げたい|怒鳴|監視|支配|脅/.test(text)) return 'dv';
-    if(/ひきこもり|引きこもり|家から出ない|社会に出られない|外に出られない/.test(text)) return 'hikikomori';
+    if(/ひきこも|引きこも|引き篭|家から出ない|社会に出られない|外に出られない/.test(text)) return 'hikikomori';
     if(/借金|多重債務|消費者金融|サラ金|カード.*払え|ローン.*払え|債務整理/.test(text)) return 'debt';
     if(/介護|認知症|要介護|ケアマネ|高齢|デイサービス|親の世話|介護保険/.test(text)) return 'elderly';
     if(/妊娠|出産|中絶|避妊|産後|妊婦|性感染症/.test(text)) return 'pregnancy';
-    if(childContext && /不登校|いじめ|登校|学校生活|学習|先生|友人関係/.test(text)) return 'school';
+    if(childContext && /不登校|いじめ|登校|学校生活|学校.*行け|学校に行け|行きたくない|休みがち|学習|先生|友人関係|友達関係/.test(text)) return 'school';
     if(!childContext && /障害者手帳|障害年金|障害福祉|就労移行|就労継続|B型|Ａ型|A型|身体障害|知的障害|精神障害|発達障害|発達障がい|ADHD|ASD/.test(text)) return 'disability';
-    if(/うつ|鬱|眠れない|不安が強い|パニック|精神的|こころがつらい|心がつらい|気分が落ち込|幻聴|拒食|過食|摂食障害/.test(text)) return 'mental';
+    if(/うつ|鬱|眠れない|不安が強い|パニック|精神的|こころがつらい|心がつらい|気分が落ち込|幻聴|拒食|過食|摂食障害|統合失調|双極|躁うつ|適応障害|強迫|依存症|アルコール|お酒.*やめ|ギャンブル.*やめ|薬物/.test(text)) return 'mental';
     return '';
   }
 
@@ -377,7 +377,7 @@
     var city=document.getElementById('city').value;
     if(!concern || !city)return;
     var topics=detect(concern);
-    var childContext=/子ども|こども|娘|息子|児童|園児|保育園|幼稚園|小学生|中学生|高校生|学校/.test(concern);
+    var childContext=/子ども|こども|子供|娘|息子|児童|園児|保育園|幼稚園|小学生|中学生|高校生|学校/.test(concern);
     var isChildDevelopment=childContext && /発達|発達障害|発達障がい|自閉|ADHD|ASD|療育|言葉|ことば|こだわり|かんしゃく|多動|感覚過敏/.test(concern);
     var special=classifySpecial(concern);
     current={id:Date.now(),createdAt:new Date().toISOString(),concern:concern,city:city,topics:topics,isChildDevelopment:isChildDevelopment,special:special,route:routes[city]};
