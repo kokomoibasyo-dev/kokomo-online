@@ -7,7 +7,7 @@
 <title>つなぐノート v0.1</title>
 <style>
 :root{--bg:#f6f1e8;--paper:#fffdf9;--ink:#26312f;--muted:#68706c;--line:#ddd8ce;--green:#315f51;--soft:#e4eee9;--amber:#fff1dc}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif}.wrap{max-width:720px;margin:auto;padding:0 16px 80px}.top{position:sticky;top:0;z-index:5;background:rgba(246,241,232,.94);backdrop-filter:blur(12px);padding:14px 0;border-bottom:1px solid var(--line)}.brand{font-weight:800}.brand small{display:block;font-size:11px;color:var(--muted);font-weight:500;margin-top:2px}.screen{display:none;padding-top:22px}.screen.active{display:block}.hero{padding:12px 2px}.eyebrow{font-size:12px;font-weight:800;color:var(--green);letter-spacing:.06em}.hero h1,.head h2{font-size:clamp(30px,8vw,44px);line-height:1.18;letter-spacing:-.04em;margin:10px 0 14px}.hero p,.head p{line-height:1.8;color:var(--muted)}.card{background:var(--paper);border:1px solid var(--line);border-radius:20px;padding:18px;margin:14px 0;box-shadow:0 8px 28px rgba(48,54,51,.06)}label{display:block;font-weight:750;margin:12px 0 8px}textarea,select,input{width:100%;border:1.5px solid #cbc5bb;border-radius:14px;background:#fff;padding:13px;font:inherit;line-height:1.6}textarea:focus,select:focus{outline:none;border-color:var(--green);box-shadow:0 0 0 3px rgba(49,95,81,.1)}.chips{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0 16px}.chip{border:1px solid var(--line);background:#fff;border-radius:999px;padding:9px 12px;font-size:13px}.chip.on{background:var(--soft);border-color:var(--green);color:var(--green);font-weight:700}.primary,.ghost,.miniBtn{border:0;border-radius:13px;padding:13px 15px;font:inherit;font-weight:800;cursor:pointer}.primary{background:var(--green);color:#fff;width:100%}.ghost{background:transparent;border:1px solid var(--line);color:var(--green)}.miniBtn{background:var(--soft);color:var(--green)}.notice{background:var(--soft);border-radius:16px;padding:13px 14px;font-size:13px;line-height:1.65;margin:12px 0}.warning{background:var(--amber)}.badge{display:inline-block;background:var(--soft);color:var(--green);border-radius:999px;padding:7px 10px;font-size:12px;font-weight:800;margin:0 6px 6px 0}.section{font-size:12px;font-weight:800;color:var(--green);letter-spacing:.05em;margin-bottom:8px}.place h3{font-size:22px;margin:4px 0 8px}.muted{color:var(--muted);line-height:1.7}.row{display:flex;gap:8px;flex-wrap:wrap}.row>*{flex:1}.link{display:inline-flex;justify-content:center;align-items:center;text-decoration:none;background:var(--green);color:#fff;border-radius:13px;padding:12px 14px;font-weight:800}.link.alt{background:var(--soft);color:var(--green)}.item{border:1px solid var(--line);border-radius:14px;padding:12px;margin-top:9px}.item strong{display:block}.item p{margin:5px 0 0;color:var(--muted);font-size:13px;line-height:1.55}.back{border:0;background:none;color:var(--green);font:inherit;font-weight:800;padding:0 0 12px}.bottom{display:flex;gap:8px;margin-top:14px}.bottom>*{flex:1}.historyItem{border:1px solid var(--line);border-radius:14px;padding:13px;margin-top:10px}.historyItem small{color:var(--muted)}.historyItem p{color:var(--muted);line-height:1.5;font-size:13px}.empty{color:var(--muted);text-align:center;padding:30px 10px}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif}.wrap{max-width:720px;margin:auto;padding:0 16px 80px}.top{position:sticky;top:0;z-index:5;background:rgba(246,241,232,.94);backdrop-filter:blur(12px);padding:14px 0;border-bottom:1px solid var(--line)}.brand{font-weight:800}.brand small{display:block;font-size:11px;color:var(--muted);font-weight:500;margin-top:2px}.screen{display:none;padding-top:22px}.screen.active{display:block}.hero{padding:12px 2px}.eyebrow{font-size:12px;font-weight:800;color:var(--green);letter-spacing:.06em}.hero h1,.head h2{font-size:clamp(30px,8vw,44px);line-height:1.18;letter-spacing:-.04em;margin:10px 0 14px}.hero p,.head p{line-height:1.8;color:var(--muted)}.card{background:var(--paper);border:1px solid var(--line);border-radius:20px;padding:18px;margin:14px 0;box-shadow:0 8px 28px rgba(48,54,51,.06)}label{display:block;font-weight:750;margin:12px 0 8px}textarea,select,input{width:100%;border:1.5px solid #cbc5bb;border-radius:14px;background:#fff;padding:13px;font:inherit;line-height:1.6}textarea:focus,select:focus{outline:none;border-color:var(--green);box-shadow:0 0 0 3px rgba(49,95,81,.1)}.chips{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0 16px}.chip{border:1px solid var(--line);background:#fff;border-radius:999px;padding:9px 12px;font-size:13px}.chip.on,.choice.on{background:var(--soft);border-color:var(--green);color:var(--green);font-weight:700}.choice{width:100%;text-align:left;border:1px solid var(--line);background:#fff;border-radius:14px;padding:13px 14px;font:inherit;margin:6px 0;cursor:pointer}.primary,.ghost,.miniBtn{border:0;border-radius:13px;padding:13px 15px;font:inherit;font-weight:800;cursor:pointer}.primary{background:var(--green);color:#fff;width:100%}.ghost{background:transparent;border:1px solid var(--line);color:var(--green)}.miniBtn{background:var(--soft);color:var(--green)}.notice{background:var(--soft);border-radius:16px;padding:13px 14px;font-size:13px;line-height:1.65;margin:12px 0}.warning{background:var(--amber)}.badge{display:inline-block;background:var(--soft);color:var(--green);border-radius:999px;padding:7px 10px;font-size:12px;font-weight:800;margin:0 6px 6px 0}.section{font-size:12px;font-weight:800;color:var(--green);letter-spacing:.05em;margin-bottom:8px}.place h3{font-size:22px;margin:4px 0 8px}.muted{color:var(--muted);line-height:1.7}.row{display:flex;gap:8px;flex-wrap:wrap}.row>*{flex:1}.link{display:inline-flex;justify-content:center;align-items:center;text-decoration:none;background:var(--green);color:#fff;border-radius:13px;padding:12px 14px;font-weight:800}.link.alt{background:var(--soft);color:var(--green)}.item{border:1px solid var(--line);border-radius:14px;padding:12px;margin-top:9px}.item strong{display:block}.item p{margin:5px 0 0;color:var(--muted);font-size:13px;line-height:1.55}.back{border:0;background:none;color:var(--green);font:inherit;font-weight:800;padding:0 0 12px}.bottom{display:flex;gap:8px;margin-top:14px}.bottom>*{flex:1}.historyItem{border:1px solid var(--line);border-radius:14px;padding:13px;margin-top:10px}.historyItem small{color:var(--muted)}.historyItem p{color:var(--muted);line-height:1.5;font-size:13px}.empty{color:var(--muted);text-align:center;padding:30px 10px}
 @media print{.top,.back,.bottom,.hidePrint{display:none!important}.wrap{max-width:none}.screen{display:none!important}#result.active{display:block!important}.card{box-shadow:none}}
 </style>
 </head>
@@ -33,9 +33,6 @@
         <option>宜野湾市</option><option>浦添市</option><option>那覇市</option><option>西原町</option><option>南風原町</option><option>与那原町</option><option>豊見城市</option><option>八重瀬町</option><option>南城市</option><option>糸満市</option>
       </select>
 
-      <label for="childAge">お子さんの年齢・学年 <span style="font-weight:500;color:var(--muted)">子どもの相談の場合のみ・任意</span></label>
-      <input id="childAge" placeholder="例：5歳／小学4年生／中学2年生">
-
       <label>特に気になっていること <span style="font-weight:500;color:var(--muted)">任意・複数可</span></label>
       <div class="chips" id="chips">
         <button type="button" class="chip" data-topic="money">生活費・お金</button>
@@ -48,6 +45,38 @@
     </form>
 
     <button class="ghost hidePrint" id="showHistory" style="width:100%">保存した相談を見る</button>
+  </section>
+
+  <section id="followup" class="screen">
+    <div class="head">
+      <button class="back" data-go="home">← 戻る</button>
+      <div class="eyebrow">あと少しだけ</div>
+      <h2>案内先を絞るために、<br>2つだけ教えてください。</h2>
+      <p>必要なことだけ確認します。答えにくいものは「わからない」で大丈夫です。</p>
+    </div>
+
+    <form id="followForm" class="card">
+      <label for="ageStage">お子さんの年齢・学年に近いもの</label>
+      <select id="ageStage" required>
+        <option value="">選んでください</option>
+        <option value="preschool">未就学</option>
+        <option value="elementary">小学生</option>
+        <option value="junior">中学生</option>
+        <option value="high">高校生年代</option>
+        <option value="unknown">わからない・答えたくない</option>
+      </select>
+
+      <label style="margin-top:20px">今いちばん知りたい・相談したいこと</label>
+      <div id="devChoices">
+        <button type="button" class="choice" data-need="development">発達や行動、ことばなどについて相談したい</button>
+        <button type="button" class="choice" data-need="school">学校生活・学習・不登校や配慮について相談したい</button>
+        <button type="button" class="choice" data-need="medical">診断や医療機関について知りたい</button>
+        <button type="button" class="choice" data-need="service">療育・児童発達支援・放課後等デイなどを知りたい</button>
+        <button type="button" class="choice" data-need="parent">保護者自身もしんどい／どこから相談すればいいかわからない</button>
+      </div>
+      <div id="followError" class="notice warning" style="display:none">ひとつ選んでください。</div>
+      <button class="primary" type="submit" style="margin-top:12px">案内先を見る →</button>
+    </form>
   </section>
 
   <section id="result" class="screen">
@@ -149,6 +178,26 @@
     '糸満市':{name:'糸満市こども家庭センター',phone:'098-840-8126',why:'子どもの発育や発達が気になるときに、保健師・社会福祉士・保育士等へ相談でき、必要な支援につながります。',place:'糸満市役所2階 子育て応援課',source:'https://www.city.itoman.lg.jp/site/kosodate/29022.html'}
   };
 
+  var childServiceRoutes = {
+    '宜野湾市':{name:'宜野湾市 障がい福祉課',phone:'098-893-4411',why:'児童発達支援や放課後等デイサービスなど、障害福祉サービスの利用手続き・相談先を確認する市の窓口です。',place:'宜野湾市役所',source:'https://www.pref.okinawa.jp/kyoiku/jido/1007997/1007695.html'},
+    '浦添市':{name:'浦添市 福祉給付課（障害福祉担当）',phone:'098-876-1234',why:'障害福祉サービスや障害児通所支援について確認する市の窓口です。',place:'浦添市役所',source:'https://www.pref.okinawa.jp/kyoiku/jido/1007997/1007695.html'},
+    '那覇市':{name:'那覇市 障がい福祉課',phone:'098-862-3275',why:'障害児通所支援など、障害福祉サービスの利用について相談・申請先を確認できます。',place:'那覇市役所',source:'https://www.pref.okinawa.jp/kyoiku/jido/1007997/1007695.html'},
+    '西原町':{name:'西原町 障害福祉担当窓口',phone:'098-945-5013',why:'障害児通所支援などの利用について町の担当窓口へ確認できます。',place:'西原町役場',source:'https://www.pref.okinawa.jp/kyoiku/jido/1007997/1007695.html'},
+    '南風原町':{name:'南風原町 保健福祉課',phone:'098-889-4416',why:'児童発達支援や放課後等デイサービスなど、障害福祉サービスについて確認する町の窓口です。',place:'南風原町役場',source:'https://www.pref.okinawa.jp/kyoiku/jido/1007997/1007695.html'},
+    '与那原町':{name:'与那原町 福祉課',phone:'098-945-1525',why:'障害児通所支援などの利用について町の担当窓口へ確認できます。',place:'与那原町役場',source:'https://www.pref.okinawa.jp/kyoiku/jido/1007997/1007695.html'},
+    '豊見城市':{name:'豊見城市 障がい・長寿課',phone:'098-850-5320',why:'障害児通所支援などの福祉サービスについて相談・申請先を確認できます。',place:'豊見城市役所',source:'https://www.pref.okinawa.jp/kyoiku/jido/1007997/1007695.html'},
+    '八重瀬町':{name:'八重瀬町 社会福祉課',phone:'098-998-9598',why:'障害児通所支援などの福祉サービスについて町の窓口で確認できます。',place:'八重瀬町役場',source:'https://www.pref.okinawa.jp/kyoiku/jido/1007997/1007695.html'},
+    '南城市':{name:'南城市 障害福祉担当窓口',phone:'098-946-8985',why:'障害児通所支援などの福祉サービスについて相談・申請先を確認できます。',place:'南城市役所',source:'https://www.pref.okinawa.jp/kyoiku/jido/1007997/1007695.html'},
+    '糸満市':{name:'糸満市 社会福祉課 障害福祉係',phone:'098-840-8130',why:'障害児通所支援などの福祉サービスについて相談・申請先を確認できます。',place:'糸満市役所',source:'https://www.pref.okinawa.jp/kyoiku/jido/1007997/1007695.html'}
+  };
+
+  var prefectureRoutes = {
+    school:{name:'沖縄県立総合教育センター 特別支援教育班',phone:'098-933-7526',why:'発達や障害に関する学校生活・学習・教育上の配慮について、県内の幼児児童生徒や保護者が相談できます。',place:'沖縄市与儀3-11-1',source:'https://www.pref.okinawa.jp/_res/projects/default_project/_page_/001/009/479/sienmap.pdf'},
+    medical:{name:'沖縄県発達障害者支援センター がじゅま〜る',phone:'098-982-2113',why:'発達障害に関する相談に応じ、必要な支援機関や地域資源につなぐ県の専門相談拠点です。診断そのものは医療機関で行います。',place:'沖縄県内の発達障害者支援拠点',source:'https://www.pref.okinawa.jp/kyoiku/shogaifukushi/1018751/1007711/1007712.html'}
+  };
+
+  var followNeed = '';
+
   function go(id){
     document.querySelectorAll('.screen').forEach(function(s){s.classList.toggle('active',s.id===id);});
     window.scrollTo(0,0);
@@ -164,6 +213,14 @@
       var t=b.getAttribute('data-topic');
       selected[t]=!selected[t];
       b.classList.toggle('on',!!selected[t]);
+    });
+  });
+
+  document.querySelectorAll('#devChoices .choice').forEach(function(b){
+    b.addEventListener('click',function(){
+      followNeed=b.getAttribute('data-need');
+      document.querySelectorAll('#devChoices .choice').forEach(function(x){x.classList.toggle('on',x===b);});
+      document.getElementById('followError').style.display='none';
     });
   });
 
@@ -197,20 +254,12 @@
     return q;
   }
 
-  document.getElementById('form').addEventListener('submit',function(e){
-    e.preventDefault();
-    var concern=document.getElementById('concern').value.trim();
-    var city=document.getElementById('city').value;
-    var childAge=document.getElementById('childAge').value.trim();
-    if(!concern || !city)return;
-    var topics=detect(concern);
-    var isChildDevelopment=/発達|発達障害|発達障がい|自閉|ADHD|ASD|療育|言葉|ことば|こだわり|かんしゃく|多動|感覚過敏/.test(concern);
-    var route=(isChildDevelopment && childDevRoutes[city]) ? childDevRoutes[city] : routes[city];
-    current={id:Date.now(),createdAt:new Date().toISOString(),concern:concern,city:city,childAge:childAge,topics:topics,route:route,isChildDevelopment:isChildDevelopment};
-
+  function renderResult(){
+    var concern=current.concern, city=current.city, topics=current.topics, route=current.route;
     document.getElementById('badges').innerHTML=topics.map(function(t){return '<span class="badge">'+labels[t]+'</span>';}).join('');
+    var needText={development:'発達・行動・ことば',school:'学校生活・学習・教育上の配慮',medical:'診断・医療機関',service:'療育・障害福祉サービス',parent:'子育て・家庭全体の相談'};
     document.getElementById('summary').textContent=current.isChildDevelopment
-      ? '入力内容から、生活困窮の窓口ではなく「子どもの発達・子育て」の相談窓口を優先して案内しています。'
+      ? '入力内容と追加の確認から、「'+(needText[current.followNeed]||'子どもの発達・子育て')+'」の相談先を優先して案内しています。'
       : '入力内容から、まず「'+topics.map(function(t){return labels[t];}).join('・')+'」の入口を確認するのがよさそうです。';
     document.getElementById('placeName').textContent=route.name;
     document.getElementById('placeWhy').textContent=route.why;
@@ -219,12 +268,62 @@
     document.getElementById('sourceLink').href=route.source;
     document.getElementById('placeMeta').textContent='場所：'+route.place+'｜制度・受付時間は公式情報で最新内容を確認してください。';
 
-    document.getElementById('programs').innerHTML=programs(topics,concern).map(function(x){return '<div class="item"><strong>'+x[0]+'</strong><p>'+x[1]+'</p></div>';}).join('') || '<div class="item"><strong>まずは相談内容の整理から</strong><p>現時点では特定の制度を絞り込みません。困りごと全体を伝えてください。</p></div>';
+    var ps=programs(topics,concern);
+    if(current.isChildDevelopment){
+      if(current.followNeed==='school') ps.unshift(['教育相談・特別支援教育','学校生活や学習、教育上の配慮について相談できます。必要に応じて学校・教育委員会との相談も候補になります。']);
+      if(current.followNeed==='medical') ps.unshift(['発達障害の診療を行う医療機関','県は医療機関情報を案内しています。診断の可否・対象年齢・予約状況は各医療機関への確認が必要です。']);
+      if(current.followNeed==='service') ps.unshift(['障害児通所支援','児童発達支援・放課後等デイサービス等が候補です。利用要件や受給者証の手続きは市町村窓口で確認します。']);
+      if(current.followNeed==='development'||current.followNeed==='parent') ps.unshift(['こども家庭センター等の相談','発達・子育て・家庭の困りごとを整理し、必要な支援機関につなぐ入口です。']);
+    }
+    document.getElementById('programs').innerHTML=ps.map(function(x){return '<div class="item"><strong>'+x[0]+'</strong><p>'+x[1]+'</p></div>';}).join('') || '<div class="item"><strong>まずは相談内容の整理から</strong><p>現時点では特定の制度を絞り込みません。困りごと全体を伝えてください。</p></div>';
 
-    document.getElementById('memo').value='【相談したいこと】\n'+concern+'\n\n'+(childAge?'【子どもの年齢・学年】\n'+childAge+'\n\n':'')+'【主なテーマ】\n'+topics.map(function(t){return labels[t];}).join('・')+'\n\n【お願いしたいこと】\n利用できる支援や制度、次に相談した方がよい窓口があれば教えてください。必要な手続きや書類も確認したいです。\n\n居住地：'+city;
+    var ageText={preschool:'未就学',elementary:'小学生',junior:'中学生',high:'高校生年代',unknown:'未回答'};
+    document.getElementById('memo').value='【相談したいこと】\n'+concern+'\n\n'
+      +(current.ageStage?'【子どもの年齢・学年】\n'+ageText[current.ageStage]+'\n\n':'')
+      +(current.followNeed?'【今いちばん相談したいこと】\n'+(needText[current.followNeed]||current.followNeed)+'\n\n':'')
+      +'【主なテーマ】\n'+topics.map(function(t){return labels[t];}).join('・')
+      +'\n\n【お願いしたいこと】\n利用できる支援や制度、次に相談した方がよい窓口があれば教えてください。必要な手続きや書類も確認したいです。\n\n居住地：'+city;
 
-    document.getElementById('questions').innerHTML=questions(topics).map(function(q){return '<div class="item">'+q+'</div>';}).join('');
+    var qs=questions(topics);
+    if(current.followNeed==='medical') qs.unshift('診断や受診が必要かも含め、どの医療機関・専門機関に相談するとよいですか？');
+    if(current.followNeed==='service') qs.unshift('児童発達支援や放課後等デイなど、利用できる可能性のあるサービスと手続きは何ですか？');
+    if(current.followNeed==='school') qs.unshift('学校で受けられる配慮や、教育相談・特別支援教育の相談先はどこですか？');
+    document.getElementById('questions').innerHTML=qs.map(function(q){return '<div class="item">'+q+'</div>';}).join('');
     go('result');
+  }
+
+  document.getElementById('form').addEventListener('submit',function(e){
+    e.preventDefault();
+    var concern=document.getElementById('concern').value.trim();
+    var city=document.getElementById('city').value;
+    if(!concern || !city)return;
+    var topics=detect(concern);
+    var isChildDevelopment=/発達|発達障害|発達障がい|自閉|ADHD|ASD|療育|言葉|ことば|こだわり|かんしゃく|多動|感覚過敏/.test(concern);
+    current={id:Date.now(),createdAt:new Date().toISOString(),concern:concern,city:city,topics:topics,isChildDevelopment:isChildDevelopment,route:routes[city]};
+    if(isChildDevelopment){
+      followNeed='';
+      document.getElementById('ageStage').value='';
+      document.querySelectorAll('#devChoices .choice').forEach(function(x){x.classList.remove('on');});
+      go('followup');
+      return;
+    }
+    renderResult();
+  });
+
+  document.getElementById('followForm').addEventListener('submit',function(e){
+    e.preventDefault();
+    var age=document.getElementById('ageStage').value;
+    if(!age || !followNeed){
+      document.getElementById('followError').style.display='block';
+      return;
+    }
+    current.ageStage=age;
+    current.followNeed=followNeed;
+    if(followNeed==='school') current.route=prefectureRoutes.school;
+    else if(followNeed==='medical') current.route=prefectureRoutes.medical;
+    else if(followNeed==='service') current.route=childServiceRoutes[current.city];
+    else current.route=childDevRoutes[current.city];
+    renderResult();
   });
 
   document.getElementById('copyBtn').addEventListener('click',function(){
