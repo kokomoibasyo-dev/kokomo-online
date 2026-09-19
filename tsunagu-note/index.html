@@ -7,7 +7,7 @@
 <title>つなぐノート v0.1</title>
 <style>
 :root{--bg:#f6f1e8;--paper:#fffdf9;--ink:#26312f;--muted:#68706c;--line:#ddd8ce;--green:#315f51;--soft:#e4eee9;--amber:#fff1dc}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif}.wrap{max-width:720px;margin:auto;padding:0 16px 80px}.top{position:sticky;top:0;z-index:5;background:rgba(246,241,232,.94);backdrop-filter:blur(12px);padding:14px 0;border-bottom:1px solid var(--line)}.brand{font-weight:800}.brand small{display:block;font-size:11px;color:var(--muted);font-weight:500;margin-top:2px}.screen{display:none;padding-top:22px}.screen.active{display:block}.hero{padding:12px 2px}.eyebrow{font-size:12px;font-weight:800;color:var(--green);letter-spacing:.06em}.hero h1,.head h2{font-size:clamp(30px,8vw,44px);line-height:1.18;letter-spacing:-.04em;margin:10px 0 14px}.hero p,.head p{line-height:1.8;color:var(--muted)}.card{background:var(--paper);border:1px solid var(--line);border-radius:20px;padding:18px;margin:14px 0;box-shadow:0 8px 28px rgba(48,54,51,.06)}label{display:block;font-weight:750;margin:12px 0 8px}textarea,select{width:100%;border:1.5px solid #cbc5bb;border-radius:14px;background:#fff;padding:13px;font:inherit;line-height:1.6}textarea:focus,select:focus{outline:none;border-color:var(--green);box-shadow:0 0 0 3px rgba(49,95,81,.1)}.chips{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0 16px}.chip{border:1px solid var(--line);background:#fff;border-radius:999px;padding:9px 12px;font-size:13px}.chip.on{background:var(--soft);border-color:var(--green);color:var(--green);font-weight:700}.primary,.ghost,.miniBtn{border:0;border-radius:13px;padding:13px 15px;font:inherit;font-weight:800;cursor:pointer}.primary{background:var(--green);color:#fff;width:100%}.ghost{background:transparent;border:1px solid var(--line);color:var(--green)}.miniBtn{background:var(--soft);color:var(--green)}.notice{background:var(--soft);border-radius:16px;padding:13px 14px;font-size:13px;line-height:1.65;margin:12px 0}.warning{background:var(--amber)}.badge{display:inline-block;background:var(--soft);color:var(--green);border-radius:999px;padding:7px 10px;font-size:12px;font-weight:800;margin:0 6px 6px 0}.section{font-size:12px;font-weight:800;color:var(--green);letter-spacing:.05em;margin-bottom:8px}.place h3{font-size:22px;margin:4px 0 8px}.muted{color:var(--muted);line-height:1.7}.row{display:flex;gap:8px;flex-wrap:wrap}.row>*{flex:1}.link{display:inline-flex;justify-content:center;align-items:center;text-decoration:none;background:var(--green);color:#fff;border-radius:13px;padding:12px 14px;font-weight:800}.link.alt{background:var(--soft);color:var(--green)}.item{border:1px solid var(--line);border-radius:14px;padding:12px;margin-top:9px}.item strong{display:block}.item p{margin:5px 0 0;color:var(--muted);font-size:13px;line-height:1.55}.back{border:0;background:none;color:var(--green);font:inherit;font-weight:800;padding:0 0 12px}.bottom{display:flex;gap:8px;margin-top:14px}.bottom>*{flex:1}.historyItem{border:1px solid var(--line);border-radius:14px;padding:13px;margin-top:10px}.historyItem small{color:var(--muted)}.historyItem p{color:var(--muted);line-height:1.5;font-size:13px}.empty{color:var(--muted);text-align:center;padding:30px 10px}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif}.wrap{max-width:720px;margin:auto;padding:0 16px 80px}.top{position:sticky;top:0;z-index:5;background:rgba(246,241,232,.94);backdrop-filter:blur(12px);padding:14px 0;border-bottom:1px solid var(--line)}.brand{font-weight:800}.brand small{display:block;font-size:11px;color:var(--muted);font-weight:500;margin-top:2px}.screen{display:none;padding-top:22px}.screen.active{display:block}.hero{padding:12px 2px}.eyebrow{font-size:12px;font-weight:800;color:var(--green);letter-spacing:.06em}.hero h1,.head h2{font-size:clamp(30px,8vw,44px);line-height:1.18;letter-spacing:-.04em;margin:10px 0 14px}.hero p,.head p{line-height:1.8;color:var(--muted)}.card{background:var(--paper);border:1px solid var(--line);border-radius:20px;padding:18px;margin:14px 0;box-shadow:0 8px 28px rgba(48,54,51,.06)}label{display:block;font-weight:750;margin:12px 0 8px}textarea,select,input{width:100%;border:1.5px solid #cbc5bb;border-radius:14px;background:#fff;padding:13px;font:inherit;line-height:1.6}textarea:focus,select:focus{outline:none;border-color:var(--green);box-shadow:0 0 0 3px rgba(49,95,81,.1)}.chips{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0 16px}.chip{border:1px solid var(--line);background:#fff;border-radius:999px;padding:9px 12px;font-size:13px}.chip.on{background:var(--soft);border-color:var(--green);color:var(--green);font-weight:700}.primary,.ghost,.miniBtn{border:0;border-radius:13px;padding:13px 15px;font:inherit;font-weight:800;cursor:pointer}.primary{background:var(--green);color:#fff;width:100%}.ghost{background:transparent;border:1px solid var(--line);color:var(--green)}.miniBtn{background:var(--soft);color:var(--green)}.notice{background:var(--soft);border-radius:16px;padding:13px 14px;font-size:13px;line-height:1.65;margin:12px 0}.warning{background:var(--amber)}.badge{display:inline-block;background:var(--soft);color:var(--green);border-radius:999px;padding:7px 10px;font-size:12px;font-weight:800;margin:0 6px 6px 0}.section{font-size:12px;font-weight:800;color:var(--green);letter-spacing:.05em;margin-bottom:8px}.place h3{font-size:22px;margin:4px 0 8px}.muted{color:var(--muted);line-height:1.7}.row{display:flex;gap:8px;flex-wrap:wrap}.row>*{flex:1}.link{display:inline-flex;justify-content:center;align-items:center;text-decoration:none;background:var(--green);color:#fff;border-radius:13px;padding:12px 14px;font-weight:800}.link.alt{background:var(--soft);color:var(--green)}.item{border:1px solid var(--line);border-radius:14px;padding:12px;margin-top:9px}.item strong{display:block}.item p{margin:5px 0 0;color:var(--muted);font-size:13px;line-height:1.55}.back{border:0;background:none;color:var(--green);font:inherit;font-weight:800;padding:0 0 12px}.bottom{display:flex;gap:8px;margin-top:14px}.bottom>*{flex:1}.historyItem{border:1px solid var(--line);border-radius:14px;padding:13px;margin-top:10px}.historyItem small{color:var(--muted)}.historyItem p{color:var(--muted);line-height:1.5;font-size:13px}.empty{color:var(--muted);text-align:center;padding:30px 10px}
 @media print{.top,.back,.bottom,.hidePrint{display:none!important}.wrap{max-width:none}.screen{display:none!important}#result.active{display:block!important}.card{box-shadow:none}}
 </style>
 </head>
@@ -32,6 +32,9 @@
         <option value="">選んでください</option>
         <option>宜野湾市</option><option>浦添市</option><option>那覇市</option><option>西原町</option><option>南風原町</option><option>与那原町</option><option>豊見城市</option><option>八重瀬町</option><option>南城市</option><option>糸満市</option>
       </select>
+
+      <label for="childAge">お子さんの年齢・学年 <span style="font-weight:500;color:var(--muted)">子どもの相談の場合のみ・任意</span></label>
+      <input id="childAge" placeholder="例：5歳／小学4年生／中学2年生">
 
       <label>特に気になっていること <span style="font-weight:500;color:var(--muted)">任意・複数可</span></label>
       <div class="chips" id="chips">
@@ -133,6 +136,19 @@
     routes[c]={name:'沖縄県 就職・生活支援パーソナルサポートセンター 南部',phone:'098-851-7105',why:'町村部に住む方の生活困窮・就労・住居などをまとめて相談できる県の窓口です。',place:'南風原町宮平496-21 SKSビル1階',source:'https://www.pref.okinawa.jp/kyoiku/seikatufukushi/1007920/1021880.html'};
   });
 
+  var childDevRoutes = {
+    '宜野湾市':{name:'宜野湾市こども家庭センター すこやか親子係',phone:'098-893-4121',why:'子どもの発達やことば、関わり方などについて相談でき、必要に応じて専門機関の紹介も受けられます。',place:'宜野湾市役所 こども家庭課',source:'https://www.city.ginowan.lg.jp/soshiki/kodomo/3/sukoyakaoyako/7/12983.html'},
+    '浦添市':{name:'浦添市こども家庭センター こども家庭課',phone:'098-876-1707',why:'子育て、子どもの発達、家庭の問題などを相談できる市の総合窓口です。',place:'浦添市役所 本庁2階',source:'https://www.city.urasoe.lg.jp/doc/65c06a516e33864cca685164/'},
+    '那覇市':{name:'那覇市 発達の気になるこども相談窓口（障がい福祉課）',phone:'098-862-3275',why:'発達が気になる子どもや発達障がいに関する相談先を案内している市の窓口です。',place:'那覇市役所3階 障がい福祉課',source:'https://www.city.naha.okinawa.jp/fukusi/syougaifukushi/1003197/1008835.html'},
+    '西原町':{name:'西原町こども家庭センター',phone:'098-945-5311',why:'0〜18歳の子どもと家族を対象に、子どもの発達の状態を含む子育て全般を相談できます。',place:'西原町役場 こども課',source:'https://www.town.nishihara.okinawa.jp/site/nabi/7735.html'},
+    '南風原町':{name:'こども家庭センターはえばる',phone:'098-889-4524',why:'子どもの発達や子育てに関する相談を受け、必要な支援やサービス、関係機関につなぐ町の総合窓口です。',place:'南風原町役場2階 こども課',source:'https://www.town.haebaru.lg.jp/soshiki/11/18691.html'},
+    '与那原町':{name:'与那原町こども家庭センター（母子保健機能）',phone:'098-945-6633',why:'子どもの発育・発達を含む、妊娠期から子育て期の相談に対応しています。',place:'与那原町役場 健康保険課',source:'https://www.town.yonabaru.okinawa.jp/soshiki/11/9057.html'},
+    '豊見城市':{name:'豊見城市こども家庭センター 家庭児童相談室',phone:'098-840-5633',why:'18歳未満の子どもの発達、育児、養育などに関する相談を受けています。',place:'豊見城市役所 子育て支援課',source:'https://www.city.tomigusuku.lg.jp/iryo_kenko_fukushi/shakaifukushi/9882.html'},
+    '八重瀬町':{name:'八重瀬町こども家庭センター',phone:'098-998-7163',why:'子どものこと・家庭のことを含む子育て相談の入口として、必要な支援につなぐ窓口です。',place:'八重瀬町役場 児童家庭課',source:'https://www.town.yaese.lg.jp/docs/2025121100017/'},
+    '南城市':{name:'南城市こども家庭センター こども相談課',phone:'098-917-5212',why:'子どもの養育や家庭での心配ごとを、社会福祉士・精神保健福祉士等に相談できます。',place:'南城市役所',source:'https://www.city.nanjo.okinawa.jp/kosodate/kosodate/1758509059/'},
+    '糸満市':{name:'糸満市こども家庭センター',phone:'098-840-8126',why:'子どもの発育や発達が気になるときに、保健師・社会福祉士・保育士等へ相談でき、必要な支援につながります。',place:'糸満市役所2階 子育て応援課',source:'https://www.city.itoman.lg.jp/site/kosodate/29022.html'}
+  };
+
   function go(id){
     document.querySelectorAll('.screen').forEach(function(s){s.classList.toggle('active',s.id===id);});
     window.scrollTo(0,0);
@@ -185,13 +201,17 @@
     e.preventDefault();
     var concern=document.getElementById('concern').value.trim();
     var city=document.getElementById('city').value;
+    var childAge=document.getElementById('childAge').value.trim();
     if(!concern || !city)return;
     var topics=detect(concern);
-    var route=routes[city];
-    current={id:Date.now(),createdAt:new Date().toISOString(),concern:concern,city:city,topics:topics,route:route};
+    var isChildDevelopment=/発達|発達障害|発達障がい|自閉|ADHD|ASD|療育|言葉|ことば|こだわり|かんしゃく|多動|感覚過敏/.test(concern);
+    var route=(isChildDevelopment && childDevRoutes[city]) ? childDevRoutes[city] : routes[city];
+    current={id:Date.now(),createdAt:new Date().toISOString(),concern:concern,city:city,childAge:childAge,topics:topics,route:route,isChildDevelopment:isChildDevelopment};
 
     document.getElementById('badges').innerHTML=topics.map(function(t){return '<span class="badge">'+labels[t]+'</span>';}).join('');
-    document.getElementById('summary').textContent='入力内容から、まず「'+topics.map(function(t){return labels[t];}).join('・')+'」の入口を確認するのがよさそうです。';
+    document.getElementById('summary').textContent=current.isChildDevelopment
+      ? '入力内容から、生活困窮の窓口ではなく「子どもの発達・子育て」の相談窓口を優先して案内しています。'
+      : '入力内容から、まず「'+topics.map(function(t){return labels[t];}).join('・')+'」の入口を確認するのがよさそうです。';
     document.getElementById('placeName').textContent=route.name;
     document.getElementById('placeWhy').textContent=route.why;
     document.getElementById('phoneLink').href='tel:'+route.phone.replace(/-/g,'');
@@ -201,7 +221,7 @@
 
     document.getElementById('programs').innerHTML=programs(topics,concern).map(function(x){return '<div class="item"><strong>'+x[0]+'</strong><p>'+x[1]+'</p></div>';}).join('') || '<div class="item"><strong>まずは相談内容の整理から</strong><p>現時点では特定の制度を絞り込みません。困りごと全体を伝えてください。</p></div>';
 
-    document.getElementById('memo').value='【相談したいこと】\n'+concern+'\n\n【主なテーマ】\n'+topics.map(function(t){return labels[t];}).join('・')+'\n\n【お願いしたいこと】\n利用できる支援や制度、次に相談した方がよい窓口があれば教えてください。必要な手続きや書類も確認したいです。\n\n居住地：'+city;
+    document.getElementById('memo').value='【相談したいこと】\n'+concern+'\n\n'+(childAge?'【子どもの年齢・学年】\n'+childAge+'\n\n':'')+'【主なテーマ】\n'+topics.map(function(t){return labels[t];}).join('・')+'\n\n【お願いしたいこと】\n利用できる支援や制度、次に相談した方がよい窓口があれば教えてください。必要な手続きや書類も確認したいです。\n\n居住地：'+city;
 
     document.getElementById('questions').innerHTML=questions(topics).map(function(q){return '<div class="item">'+q+'</div>';}).join('');
     go('result');
