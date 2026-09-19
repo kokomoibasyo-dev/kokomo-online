@@ -79,6 +79,31 @@
     </form>
   </section>
 
+  <section id="triage" class="screen">
+    <div class="head">
+      <button class="back" data-go="home">← 戻る</button>
+      <div class="eyebrow">もう1つだけ</div>
+      <h2>いちばん近いものを<br>選んでください。</h2>
+      <p>入力だけでは相談先を安全に絞りきれなかったときだけ確認します。</p>
+    </div>
+    <form id="triageForm" class="card">
+      <div id="triageChoices">
+        <button type="button" class="choice" data-kind="child">子ども・子育て・学校</button>
+        <button type="button" class="choice" data-kind="mental">こころ・精神的なしんどさ</button>
+        <button type="button" class="choice" data-kind="hikikomori">ひきこもり・社会とのつながり</button>
+        <button type="button" class="choice" data-kind="disability">障害・障害福祉サービス</button>
+        <button type="button" class="choice" data-kind="elderly">高齢者・介護・認知症</button>
+        <button type="button" class="choice" data-kind="dv">パートナーからの暴力・安全</button>
+        <button type="button" class="choice" data-kind="debt">借金・多重債務</button>
+        <button type="button" class="choice" data-kind="pregnancy">妊娠・出産・性やからだ</button>
+        <button type="button" class="choice" data-kind="life">生活費・仕事・住まい</button>
+        <button type="button" class="choice" data-kind="other">どれにも当てはまらない／わからない</button>
+      </div>
+      <div id="triageError" class="notice warning" style="display:none">ひとつ選んでください。</div>
+      <button class="primary" type="submit" style="margin-top:12px">案内先を見る →</button>
+    </form>
+  </section>
+
   <section id="result" class="screen">
     <div class="head">
       <button class="back" data-go="home">← 書き直す</button>
@@ -91,6 +116,8 @@
       <div id="badges"></div>
       <p class="muted" id="summary"></p>
     </div>
+
+    <div id="urgentNotice" class="notice warning" style="display:none"></div>
 
     <div class="card place">
       <div class="section">まず相談するところ</div>
@@ -192,11 +219,24 @@
   };
 
   var prefectureRoutes = {
-    school:{name:'沖縄県立総合教育センター 特別支援教育班',phone:'098-933-7526',why:'発達や障害に関する学校生活・学習・教育上の配慮について、県内の幼児児童生徒や保護者が相談できます。',place:'沖縄市与儀3-11-1',source:'https://www.pref.okinawa.jp/_res/projects/default_project/_page_/001/009/479/sienmap.pdf'},
+    school:{name:'沖縄県立総合教育センター 教育相談室',phone:'098-933-7573',why:'不登校、いじめ、学校生活などについて、県内の児童生徒・保護者等が相談できる教育相談窓口です。',place:'沖縄市与儀3-11-1',source:'https://www.pref.okinawa.jp/_res/projects/default_project/_page_/001/006/133/hutoukoutebiki.pdf'},
     medical:{name:'沖縄県発達障害者支援センター がじゅま〜る',phone:'098-982-2113',why:'発達障害に関する相談に応じ、必要な支援機関や地域資源につなぐ県の専門相談拠点です。診断そのものは医療機関で行います。',place:'沖縄県内の発達障害者支援拠点',source:'https://www.pref.okinawa.jp/kyoiku/shogaifukushi/1018751/1007711/1007712.html'}
   };
 
+  var specialRoutes = {
+    mental:{name:'沖縄県立総合精神保健福祉センター こころの電話',phone:'098-888-1450',why:'こころの不調、精神的なしんどさ、受診や福祉サービスなどについて相談できる県の窓口です。',place:'南風原町宮平212-3',source:'https://www.pref.okinawa.jp/iryokenko/kenko/1006296/1025042/1007840.html'},
+    hikikomori:{name:'沖縄県ひきこもり専門支援センター',phone:'098-888-1455',why:'ひきこもり状態にある本人や家族の相談を受け、医療・保健・福祉・教育・労働など必要な機関と連携します。',place:'南風原町宮平212-3 沖縄県立総合精神保健福祉センター内',source:'https://www.pref.okinawa.jp/iryokenko/kenko/1018569/1006133.html'},
+    debt:{name:'沖縄総合事務局 財務部 多重債務者相談窓口',phone:'098-866-5070',why:'借金や多重債務について、早めに専門相談につながるための相談窓口です。',place:'那覇市',source:'https://www.pref.okinawa.jp/kurashikankyo/shohi/1003841/1003855/1003856.html'},
+    pregnancy:{name:'沖縄県 性と健康の相談センター',phone:'098-989-1181',why:'妊娠・出産・子育て、避妊、性感染症など性やからだに関する悩みを助産師等に相談できます。',place:'沖縄県内',source:'https://www.pref.okinawa.jp/kyoiku/jido/1007994/1035385.html'},
+    dv:{name:'DV相談ナビ',phone:'#8008',tel:'tel:%238008',why:'配偶者や交際相手からの暴力について、最寄りの配偶者暴力相談支援センターにつながる全国共通窓口です。',place:'最寄りの相談支援センターへ接続',source:'https://www.gender.go.jp/policy/no_violence/dv_navi/',alert:'今すぐ身の危険がある場合は、110など緊急の安全確保を優先してください。'},
+    abuse:{name:'児童相談所 虐待対応ダイヤル',phone:'189',why:'「虐待かもしれない」という段階でも、地域の児童相談所へ通告・相談できる全国共通番号です。',place:'お近くの児童相談所へ接続',source:'https://kodomoshien.cfa.go.jp/no-gyakutai/189/',alert:'子どもの生命・身体に差し迫った危険がある場合は、110・119など緊急機関への連絡を優先してください。'},
+    selfharm:{name:'沖縄県立総合精神保健福祉センター こころの電話',phone:'098-888-1450',why:'自傷、自殺についての悩みを含む、こころの相談を受ける公的窓口です。',place:'南風原町宮平212-3',source:'https://www.pref.okinawa.jp/iryokenko/kenko/1006296/1025042/1007840.html',alert:'今すぐ自分の命に危険がある、または自分を傷つけそうな場合は119など緊急の支援につながってください。'},
+    elderly:{name:'お住まいの地域の地域包括支援センター',phone:'',why:'高齢者の介護・福祉・保健・医療・認知症・生活全般について相談できる地域の総合窓口です。担当センターは住所によって異なります。',place:'お住まいの地域を担当するセンター',source:'https://www.pref.okinawa.jp/kyoiku/ippanfukushi/1006831/1030173.html'},
+    general:{name:'生活全般の自立相談支援窓口',phone:'',why:'相談先を一つに絞れないときは、生活全般の困りごとを整理し、必要な機関につなぐ自立相談支援機関が入口になります。',place:'お住まいの市町村・県の担当窓口',source:'https://www.pref.okinawa.jp/kyoiku/seikatufukushi/1007920/1021880.html'}
+  };
+
   var followNeed = '';
+  var triageKind = '';
 
   function go(id){
     document.querySelectorAll('.screen').forEach(function(s){s.classList.toggle('active',s.id===id);});
@@ -223,6 +263,29 @@
       document.getElementById('followError').style.display='none';
     });
   });
+
+  document.querySelectorAll('#triageChoices .choice').forEach(function(b){
+    b.addEventListener('click',function(){
+      triageKind=b.getAttribute('data-kind');
+      document.querySelectorAll('#triageChoices .choice').forEach(function(x){x.classList.toggle('on',x===b);});
+      document.getElementById('triageError').style.display='none';
+    });
+  });
+
+  function classifySpecial(text){
+    var childContext=/子ども|こども|娘|息子|児童|園児|保育園|幼稚園|小学生|中学生|高校生|学校/.test(text);
+    if(childContext && /虐待|ネグレクト|育児放棄|殴られ|叩かれ|性的虐待|子どもを殴|子供を殴/.test(text)) return 'abuse';
+    if(/死にたい|消えたい|自殺|自傷|リストカット|生きていたくない|死んだほうが/.test(text)) return 'selfharm';
+    if(/DV|ドメスティック|パートナー|夫|旦那|妻|恋人|彼氏|彼女/.test(text) && /暴力|殴|蹴|怖い|逃げたい|怒鳴|監視|支配|脅/.test(text)) return 'dv';
+    if(/ひきこもり|引きこもり|家から出ない|社会に出られない|外に出られない/.test(text)) return 'hikikomori';
+    if(/借金|多重債務|消費者金融|サラ金|カード.*払え|ローン.*払え|債務整理/.test(text)) return 'debt';
+    if(/介護|認知症|要介護|ケアマネ|高齢|デイサービス|親の世話|介護保険/.test(text)) return 'elderly';
+    if(/妊娠|出産|中絶|避妊|産後|妊婦|性感染症/.test(text)) return 'pregnancy';
+    if(childContext && /不登校|いじめ|登校|学校生活|学習|先生|友人関係/.test(text)) return 'school';
+    if(!childContext && /障害者手帳|障害年金|障害福祉|就労移行|就労継続|B型|Ａ型|A型|身体障害|知的障害|精神障害|発達障害|発達障がい|ADHD|ASD/.test(text)) return 'disability';
+    if(/うつ|鬱|眠れない|不安が強い|パニック|精神的|こころがつらい|心がつらい|気分が落ち込|幻聴|拒食|過食|摂食障害/.test(text)) return 'mental';
+    return '';
+  }
 
   function detect(text){
     var out=[];
@@ -263,12 +326,28 @@
       : '入力内容から、まず「'+topics.map(function(t){return labels[t];}).join('・')+'」の入口を確認するのがよさそうです。';
     document.getElementById('placeName').textContent=route.name;
     document.getElementById('placeWhy').textContent=route.why;
-    document.getElementById('phoneLink').href='tel:'+route.phone.replace(/-/g,'');
-    document.getElementById('phoneLink').textContent='☎ '+route.phone;
+    var phoneLink=document.getElementById('phoneLink');
+    if(route.phone){
+      phoneLink.style.display='inline-flex';
+      phoneLink.href=route.tel || ('tel:'+route.phone.replace(/-/g,''));
+      phoneLink.textContent='☎ '+route.phone;
+    } else {
+      phoneLink.style.display='none';
+    }
     document.getElementById('sourceLink').href=route.source;
-    document.getElementById('placeMeta').textContent='場所：'+route.place+'｜制度・受付時間は公式情報で最新内容を確認してください。';
+    document.getElementById('placeMeta').textContent='場所：'+route.place+'｜情報確認：2026年9月20日。受付時間・利用条件は公式情報で最新内容を確認してください。';
+    var urgent=document.getElementById('urgentNotice');
+    if(route.alert){urgent.textContent=route.alert;urgent.style.display='block';}else{urgent.textContent='';urgent.style.display='none';}
 
     var ps=programs(topics,concern);
+    if(current.special==='mental'||current.special==='selfharm') ps.unshift(['精神保健福祉相談','こころの状態、受診、家族としての関わり、利用できる福祉サービス等を相談できます。']);
+    if(current.special==='hikikomori') ps.unshift(['ひきこもり専門相談','本人だけでなく家族からも相談でき、必要に応じて医療・福祉・教育・就労等につながります。']);
+    if(current.special==='debt') ps.unshift(['多重債務相談','返済が難しい場合は、債務整理を含む専門相談につながることが重要です。']);
+    if(current.special==='elderly') ps.unshift(['地域包括支援センター','介護保険の申請前でも、高齢者本人・家族の相談ができます。']);
+    if(current.special==='pregnancy') ps.unshift(['性と健康の相談','妊娠・出産・性やからだのことを、年齢や性別を問わず相談できます。']);
+    if(current.special==='dv') ps.unshift(['DV相談','安全確保、保護、今後の生活等について専門窓口に相談できます。']);
+    if(current.special==='abuse') ps.unshift(['児童相談所への相談・通告','「虐待と断定できない」段階でも相談できます。']);
+    if(current.special==='disability') ps.unshift(['障害福祉相談','手帳、福祉サービス、障害児・者の支援などは市町村の障害福祉担当課が申請・相談の入口になります。']);
     if(current.isChildDevelopment){
       if(current.followNeed==='school') ps.unshift(['教育相談・特別支援教育','学校生活や学習、教育上の配慮について相談できます。必要に応じて学校・教育委員会との相談も候補になります。']);
       if(current.followNeed==='medical') ps.unshift(['発達障害の診療を行う医療機関','県は医療機関情報を案内しています。診断の可否・対象年齢・予約状況は各医療機関への確認が必要です。']);
@@ -298,8 +377,11 @@
     var city=document.getElementById('city').value;
     if(!concern || !city)return;
     var topics=detect(concern);
-    var isChildDevelopment=/発達|発達障害|発達障がい|自閉|ADHD|ASD|療育|言葉|ことば|こだわり|かんしゃく|多動|感覚過敏/.test(concern);
-    current={id:Date.now(),createdAt:new Date().toISOString(),concern:concern,city:city,topics:topics,isChildDevelopment:isChildDevelopment,route:routes[city]};
+    var childContext=/子ども|こども|娘|息子|児童|園児|保育園|幼稚園|小学生|中学生|高校生|学校/.test(concern);
+    var isChildDevelopment=childContext && /発達|発達障害|発達障がい|自閉|ADHD|ASD|療育|言葉|ことば|こだわり|かんしゃく|多動|感覚過敏/.test(concern);
+    var special=classifySpecial(concern);
+    current={id:Date.now(),createdAt:new Date().toISOString(),concern:concern,city:city,topics:topics,isChildDevelopment:isChildDevelopment,special:special,route:routes[city]};
+
     if(isChildDevelopment){
       followNeed='';
       document.getElementById('ageStage').value='';
@@ -307,6 +389,29 @@
       go('followup');
       return;
     }
+
+    if(special==='school'){current.route=prefectureRoutes.school;renderResult();return;}
+    if(special==='disability'){current.route=childServiceRoutes[city];renderResult();return;}
+    if(special && specialRoutes[special]){current.route=specialRoutes[special];renderResult();return;}
+
+    var hasLife=topics.some(function(t){return ['money','work','housing'].indexOf(t)!==-1;});
+    if(hasLife){current.route=routes[city];renderResult();return;}
+
+    triageKind='';
+    document.querySelectorAll('#triageChoices .choice').forEach(function(x){x.classList.remove('on');});
+    document.getElementById('triageError').style.display='none';
+    go('triage');
+  });
+
+  document.getElementById('triageForm').addEventListener('submit',function(e){
+    e.preventDefault();
+    if(!triageKind){document.getElementById('triageError').style.display='block';return;}
+    current.special=triageKind;
+    if(triageKind==='child'){current.route=childDevRoutes[current.city];}
+    else if(triageKind==='disability'){current.route=childServiceRoutes[current.city];}
+    else if(triageKind==='life'){current.route=routes[current.city];}
+    else if(triageKind==='other'){current.route=specialRoutes.general;}
+    else {current.route=specialRoutes[triageKind] || specialRoutes.general;}
     renderResult();
   });
 
@@ -319,6 +424,7 @@
     }
     current.ageStage=age;
     current.followNeed=followNeed;
+    current.special='child-development';
     if(followNeed==='school') current.route=prefectureRoutes.school;
     else if(followNeed==='medical') current.route=prefectureRoutes.medical;
     else if(followNeed==='service') current.route=childServiceRoutes[current.city];
