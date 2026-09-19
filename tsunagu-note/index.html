@@ -322,17 +322,17 @@
 
   function classifySpecial(text){
     var childContext=/子ども|こども|子供|子の|子が|の子|うちの子|娘|息子|児童|園児|保育園|幼稚園|小学生|中学生|高校生|学校/.test(text);
-    if(childContext && /虐待|ネグレクト|育児放棄|殴|叩|蹴|性的虐待/.test(text)) return 'abuse';
-    if(/死にたい|消えたい|自殺|自傷|リストカット|生きていたくない|死んだほうが/.test(text)) return 'selfharm';
+    if(/ネグレクト|育児放棄|性的虐待/.test(text) || (childContext && /虐待|殴|叩|蹴/.test(text))) return 'abuse';
+    if(/死にたい|消えたい|消えてしまいたい|消えてなくなりたい|自殺|自傷|リストカット|生きていたくない|死んだほうが/.test(text)) return 'selfharm';
     if(/DV|ドメスティック|パートナー|夫|旦那|妻|恋人|彼氏|彼女/.test(text) && /暴力|殴|蹴|怖い|逃げたい|怒鳴|監視|支配|脅/.test(text)) return 'dv';
-    if(/ひきこも|引きこも|引き篭|家から出ない|社会に出られない|外に出られない/.test(text)) return 'hikikomori';
+    if(/ひきこも|引きこも|引き篭|家から出ない|社会に出られな|外に出られな|家族以外と会わな|人と会えな/.test(text)) return 'hikikomori';
     if(/障害年金|障がい年金/.test(text)) return 'disability_pension';
     if(/障害者手帳|障がい者手帳|療育手帳|精神障害者保健福祉手帳|身体障害者手帳/.test(text)) return 'disability_handbook';
     if(/障害|障がい|ADHD|ASD|発達障害|発達障がい|精神障害|知的障害|身体障害/.test(text) && /就職|就労|働きたい|仕事探し|職場定着|復職/.test(text)) return 'disability_work';
     if(/障害福祉サービス|障がい福祉サービス|居宅介護|就労移行|就労継続|生活介護|短期入所|受給者証/.test(text)) return 'disability_service';
-    if(/借金|多重債務|消費者金融|サラ金|カード.*払え|ローン.*払え|債務整理|奨学金.*返せ/.test(text)) return 'debt';
+    if(/借金|多重債務|消費者金融|サラ金|カードローン|カード.*払え|ローン.*払え|返済.*できな|債務整理|奨学金.*返せ/.test(text)) return 'debt';
     if(/定期購入|通販|ネット通販|訪問販売|悪質商法|詐欺サイト|商品.*届か|契約.*解約|クーリングオフ|架空請求|高額請求|ぼったくり/.test(text)) return 'consumer';
-    if(/残業代|給料.*払|給与.*払|賃金.*払|不当解雇|解雇された|退職強要|パワハラ|セクハラ|職場.*ハラスメント|労働時間|有給.*取れ|雇い止め/.test(text)) return 'labor';
+    if(/残業代|給料.*払|給与.*払|賃金.*払|不当解雇|解雇|退職.*強要|辞めろと言われ|パワハラ|セクハラ|職場.*ハラスメント|労働時間|有給.*取れ|有給.*取らせ|雇い止め/.test(text)) return 'labor';
     if(/相続|遺産|離婚|養育費|親権|慰謝料|裁判|訴えら|弁護士|法律相談|隣人トラブル|大家.*トラブル|貸したお金/.test(text)) return 'legal';
     if(/介護|認知症|要介護|ケアマネ|高齢|デイサービス|親の世話|介護保険/.test(text)) return 'elderly';
     if(/妊娠|出産|中絶|避妊|産後|妊婦|性感染症/.test(text)) return 'pregnancy';
