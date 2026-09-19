@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#f6f1e8">
-<title>つなぐノート v0.3</title>
+<title>つなぐノート v0.4</title>
 <style>
 :root{--bg:#f6f1e8;--paper:#fffdf9;--ink:#26312f;--muted:#68706c;--line:#ddd8ce;--green:#315f51;--soft:#e4eee9;--amber:#fff1dc}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif}.wrap{max-width:720px;margin:auto;padding:0 16px 80px}.top{position:sticky;top:0;z-index:5;background:rgba(246,241,232,.94);backdrop-filter:blur(12px);padding:14px 0;border-bottom:1px solid var(--line)}.brand{font-weight:800}.brand small{display:block;font-size:11px;color:var(--muted);font-weight:500;margin-top:2px}.screen{display:none;padding-top:22px}.screen.active{display:block}.hero{padding:12px 2px}.eyebrow{font-size:12px;font-weight:800;color:var(--green);letter-spacing:.06em}.hero h1,.head h2{font-size:clamp(30px,8vw,44px);line-height:1.18;letter-spacing:-.04em;margin:10px 0 14px}.hero p,.head p{line-height:1.8;color:var(--muted)}.card{background:var(--paper);border:1px solid var(--line);border-radius:20px;padding:18px;margin:14px 0;box-shadow:0 8px 28px rgba(48,54,51,.06)}label{display:block;font-weight:750;margin:12px 0 8px}textarea,select,input{width:100%;border:1.5px solid #cbc5bb;border-radius:14px;background:#fff;padding:13px;font:inherit;line-height:1.6}textarea:focus,select:focus{outline:none;border-color:var(--green);box-shadow:0 0 0 3px rgba(49,95,81,.1)}.chips{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0 16px}.chip{border:1px solid var(--line);background:#fff;border-radius:999px;padding:9px 12px;font-size:13px}.chip.on,.choice.on{background:var(--soft);border-color:var(--green);color:var(--green);font-weight:700}.choice{width:100%;text-align:left;border:1px solid var(--line);background:#fff;border-radius:14px;padding:13px 14px;font:inherit;margin:6px 0;cursor:pointer}.primary,.ghost,.miniBtn{border:0;border-radius:13px;padding:13px 15px;font:inherit;font-weight:800;cursor:pointer}.primary{background:var(--green);color:#fff;width:100%}.ghost{background:transparent;border:1px solid var(--line);color:var(--green)}.miniBtn{background:var(--soft);color:var(--green)}.notice{background:var(--soft);border-radius:16px;padding:13px 14px;font-size:13px;line-height:1.65;margin:12px 0}.warning{background:var(--amber)}.badge{display:inline-block;background:var(--soft);color:var(--green);border-radius:999px;padding:7px 10px;font-size:12px;font-weight:800;margin:0 6px 6px 0}.section{font-size:12px;font-weight:800;color:var(--green);letter-spacing:.05em;margin-bottom:8px}.place h3{font-size:22px;margin:4px 0 8px}.muted{color:var(--muted);line-height:1.7}.row{display:flex;gap:8px;flex-wrap:wrap}.row>*{flex:1}.link{display:inline-flex;justify-content:center;align-items:center;text-decoration:none;background:var(--green);color:#fff;border-radius:13px;padding:12px 14px;font-weight:800}.link.alt{background:var(--soft);color:var(--green)}.item{border:1px solid var(--line);border-radius:14px;padding:12px;margin-top:9px}.item strong{display:block}.routeStep{border:1px solid var(--line);border-radius:16px;padding:14px;margin-top:10px;background:#fff}.routeStep .stepTag{display:inline-block;font-size:11px;font-weight:800;color:var(--green);background:var(--soft);border-radius:999px;padding:5px 8px;margin-bottom:7px}.routeStep h4{margin:0 0 7px;font-size:17px}.routeStep p{margin:0;color:var(--muted);font-size:13px;line-height:1.6}.routeStep a{display:inline-block;margin-top:9px;color:var(--green);font-weight:800;text-decoration:none}.item p{margin:5px 0 0;color:var(--muted);font-size:13px;line-height:1.55}.back{border:0;background:none;color:var(--green);font:inherit;font-weight:800;padding:0 0 12px}.bottom{display:flex;gap:8px;margin-top:14px}.bottom>*{flex:1}.historyItem{border:1px solid var(--line);border-radius:14px;padding:13px;margin-top:10px}.historyItem small{color:var(--muted)}.historyItem p{color:var(--muted);line-height:1.5;font-size:13px}.empty{color:var(--muted);text-align:center;padding:30px 10px}
@@ -17,7 +17,7 @@
 
   <section id="home" class="screen active">
     <div class="hero">
-      <div class="eyebrow">沖縄本島・宜野湾市以南｜v0.3 試作版</div>
+      <div class="eyebrow">沖縄本島・宜野湾市以南｜v0.4 試作版</div>
       <h1>どこに相談したらいいか<br>わからないときのノート。</h1>
       <p>制度名を知らなくても大丈夫。いま困っていることを、そのまま書いてください。</p>
     </div>
@@ -331,7 +331,7 @@
     if(/ネグレクト|育児放棄|性的虐待/.test(text) || (childContext && /虐待|殴|叩|蹴/.test(text))) return 'abuse';
     if(/死にたい|消えたい|消えてしまいたい|消えてなくなりたい|自殺|自傷|リストカット|生きていたくない|死んだほうが/.test(text)) return 'selfharm';
     if(/DV|ドメスティック|パートナー|夫|旦那|妻|恋人|彼氏|彼女/.test(text) && /暴力|殴|蹴|怖い|逃げたい|怒鳴|監視|支配|脅/.test(text)) return 'dv';
-    if(/ひきこも|引きこも|引き篭|家から出ない|家から出なくな|社会に出られな|社会に出られず|外に出られな|外に出られず|家族以外と会わな|家族以外と会いません|人と会えな/.test(text)) return 'hikikomori';
+    if(/ひきこも|引きこも|引き篭|家から出ない|家から.*出なくな|社会に出られな|社会に出られず|外に出られな|外に出られず|家族以外と会わな|家族以外と会いません|人と会えな/.test(text)) return 'hikikomori';
     if(/障害年金|障がい年金/.test(text)) return 'disability_pension';
     if(/障害者手帳|障がい者手帳|療育手帳|精神障害者保健福祉手帳|身体障害者手帳/.test(text)) return 'disability_handbook';
     if(/障害|障がい|ADHD|ASD|発達障害|発達障がい|精神障害|知的障害|身体障害/.test(text) && /就職|就労|働きたい|働けない|働けず|仕事探し|仕事.*できな|職場定着|復職/.test(text)) return 'disability_work';
