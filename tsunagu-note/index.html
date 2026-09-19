@@ -79,6 +79,25 @@
     </form>
   </section>
 
+  <section id="disabilityFollowup" class="screen">
+    <div class="head">
+      <button class="back" data-go="home">← 戻る</button>
+      <div class="eyebrow">障害に関する相談</div>
+      <h2>いま知りたいことに<br>近いものは？</h2>
+      <p>窓口が分かれるため、ここだけ確認します。</p>
+    </div>
+    <form id="disabilityForm" class="card">
+      <div id="disabilityChoices">
+        <button type="button" class="choice" data-kind="disability_handbook">障害者手帳・福祉サービス・受給者証</button>
+        <button type="button" class="choice" data-kind="disability_pension">障害年金</button>
+        <button type="button" class="choice" data-kind="disability_work">働くこと・就職・職場定着</button>
+        <button type="button" class="choice" data-kind="disability_other">生活全般／何から相談すればいいかわからない</button>
+      </div>
+      <div id="disabilityError" class="notice warning" style="display:none">ひとつ選んでください。</div>
+      <button class="primary" type="submit" style="margin-top:12px">案内先を見る →</button>
+    </form>
+  </section>
+
   <section id="triage" class="screen">
     <div class="head">
       <button class="back" data-go="home">← 戻る</button>
@@ -95,6 +114,9 @@
         <button type="button" class="choice" data-kind="elderly">高齢者・介護・認知症</button>
         <button type="button" class="choice" data-kind="dv">パートナーからの暴力・安全</button>
         <button type="button" class="choice" data-kind="debt">借金・多重債務</button>
+        <button type="button" class="choice" data-kind="consumer">買い物・契約・悪質商法</button>
+        <button type="button" class="choice" data-kind="labor">職場・賃金・解雇・ハラスメント</button>
+        <button type="button" class="choice" data-kind="legal">離婚・相続など法律問題</button>
         <button type="button" class="choice" data-kind="pregnancy">妊娠・出産・性やからだ</button>
         <button type="button" class="choice" data-kind="life">生活費・仕事・住まい</button>
         <button type="button" class="choice" data-kind="other">どれにも当てはまらない／わからない</button>
@@ -227,6 +249,10 @@
     mental:{name:'沖縄県立総合精神保健福祉センター こころの電話',phone:'098-888-1450',why:'こころの不調、精神的なしんどさ、受診や福祉サービスなどについて相談できる県の窓口です。',place:'南風原町宮平212-3',source:'https://www.pref.okinawa.jp/iryokenko/kenko/1006296/1025042/1007840.html'},
     hikikomori:{name:'沖縄県ひきこもり専門支援センター',phone:'098-888-1455',why:'ひきこもり状態にある本人や家族の相談を受け、医療・保健・福祉・教育・労働など必要な機関と連携します。',place:'南風原町宮平212-3 沖縄県立総合精神保健福祉センター内',source:'https://www.pref.okinawa.jp/iryokenko/kenko/1018569/1006133.html'},
     debt:{name:'沖縄総合事務局 財務部 多重債務者相談窓口',phone:'098-866-5070',why:'借金や多重債務について、早めに専門相談につながるための相談窓口です。',place:'那覇市',source:'https://www.pref.okinawa.jp/kurashikankyo/shohi/1003841/1003855/1003856.html'},
+    consumer:{name:'消費者ホットライン',phone:'188',why:'定期購入、訪問販売、悪質商法、商品・サービスの契約トラブルなどについて、最寄りの消費生活相談窓口につながります。',place:'最寄りの消費生活センター等へ接続',source:'https://www.caa.go.jp/policies/policy/local_cooperation/local_consumer_administration/hotline/'},
+    labor:{name:'沖縄県 労働相談窓口',phone:'0120-610-223',why:'解雇、賃金不払い、退職強要、労働時間、配置転換など、職場の労働問題を無料で相談できます。',place:'沖縄県内',source:'https://www.pref.okinawa.jp/shigoto/koyorodo/1012030/1012054/1012047.html'},
+    legal:{name:'法テラス・サポートダイヤル',phone:'0570-078374',why:'離婚、相続、金銭、労働など法的な問題について、利用できる法制度や相談機関を案内します。一定の要件で無料法律相談もあります。',place:'法テラス沖縄等',source:'https://www.houterasu.or.jp/site/chihoujimusho-okinawa/'},
+    disability_pension:{name:'日本年金機構 ねんきんダイヤル',phone:'0570-05-1165',why:'障害年金を含む年金の相談や手続きについて案内を受けられます。窓口相談は年金事務所でも受け付けています。',place:'全国の年金事務所・相談センター',source:'https://www.nenkin.go.jp/service/riyoushabetsu/disability/'},
     pregnancy:{name:'沖縄県 性と健康の相談センター',phone:'098-989-1181',why:'妊娠・出産・子育て、避妊、性感染症など性やからだに関する悩みを助産師等に相談できます。',place:'沖縄県内',source:'https://www.pref.okinawa.jp/kyoiku/jido/1007994/1035385.html'},
     dv:{name:'DV相談ナビ',phone:'#8008',tel:'tel:%238008',why:'配偶者や交際相手からの暴力について、最寄りの配偶者暴力相談支援センターにつながる全国共通窓口です。',place:'最寄りの相談支援センターへ接続',source:'https://www.gender.go.jp/policy/no_violence/dv_navi/',alert:'今すぐ身の危険がある場合は、110など緊急の安全確保を優先してください。'},
     abuse:{name:'児童相談所 虐待対応ダイヤル',phone:'189',why:'「虐待かもしれない」という段階でも、地域の児童相談所へ通告・相談できる全国共通番号です。',place:'お近くの児童相談所へ接続',source:'https://kodomoshien.cfa.go.jp/no-gyakutai/189/',alert:'子どもの生命・身体に差し迫った危険がある場合は、110・119など緊急機関への連絡を優先してください。'},
@@ -235,8 +261,22 @@
     general:{name:'生活全般の自立相談支援窓口',phone:'',why:'相談先を一つに絞れないときは、生活全般の困りごとを整理し、必要な機関につなぐ自立相談支援機関が入口になります。',place:'お住まいの市町村・県の担当窓口',source:'https://www.pref.okinawa.jp/kyoiku/seikatufukushi/1007920/1021880.html'}
   };
 
+  var disabilityWorkRoutes = {
+    '宜野湾市':{name:'中部地区障害者就業・生活支援センター 花灯',phone:'098-989-6527',why:'障害のある方の就業面と生活面を一体的に支援し、就職準備や職場定着などを相談できます。',place:'沖縄市知花5丁目24番18号',source:'https://www.pref.okinawa.jp/shigoto/koyorodo/1012003/1012018/1012022.html'},
+    '浦添市':{name:'南部地区障がい者就業・生活支援センター かるにあ',phone:'098-871-3456',why:'障害のある方の就業と生活を一体的に相談できます。',place:'浦添市前田1004-9 2F',source:'https://www.pref.okinawa.jp/shigoto/koyorodo/1012003/1012018/1012022.html'},
+    '西原町':{name:'南部地区障がい者就業・生活支援センター かるにあ',phone:'098-871-3456',why:'障害のある方の就業と生活を一体的に相談できます。',place:'浦添市前田1004-9 2F',source:'https://www.pref.okinawa.jp/shigoto/koyorodo/1012003/1012018/1012022.html'},
+    '南風原町':{name:'南部地区障がい者就業・生活支援センター かるにあ',phone:'098-871-3456',why:'障害のある方の就業と生活を一体的に相談できます。',place:'浦添市前田1004-9 2F',source:'https://www.pref.okinawa.jp/shigoto/koyorodo/1012003/1012018/1012022.html'},
+    '豊見城市':{name:'南部地区障害者就業・生活支援センター ブリッジ',phone:'098-996-2805',why:'障害のある方の就業面と生活面を一体的に支援し、就職準備や職場定着などを相談できます。',place:'糸満市阿波根1556-1 豊ビル202号室',source:'https://www.pref.okinawa.jp/shigoto/koyorodo/1012003/1012018/1012022.html'},
+    '南城市':{name:'南部地区障害者就業・生活支援センター ブリッジ',phone:'098-996-2805',why:'障害のある方の就業面と生活面を一体的に支援し、就職準備や職場定着などを相談できます。',place:'糸満市阿波根1556-1 豊ビル202号室',source:'https://www.pref.okinawa.jp/shigoto/koyorodo/1012003/1012018/1012022.html'},
+    '与那原町':{name:'南部地区障害者就業・生活支援センター ブリッジ',phone:'098-996-2805',why:'障害のある方の就業面と生活面を一体的に支援し、就職準備や職場定着などを相談できます。',place:'糸満市阿波根1556-1 豊ビル202号室',source:'https://www.pref.okinawa.jp/shigoto/koyorodo/1012003/1012018/1012022.html'},
+    '八重瀬町':{name:'南部地区障害者就業・生活支援センター ブリッジ',phone:'098-996-2805',why:'障害のある方の就業面と生活面を一体的に支援し、就職準備や職場定着などを相談できます。',place:'糸満市阿波根1556-1 豊ビル202号室',source:'https://www.pref.okinawa.jp/shigoto/koyorodo/1012003/1012018/1012022.html'},
+    '糸満市':{name:'南部地区障害者就業・生活支援センター ブリッジ',phone:'098-996-2805',why:'障害のある方の就業面と生活面を一体的に支援し、就職準備や職場定着などを相談できます。',place:'糸満市阿波根1556-1 豊ビル202号室',source:'https://www.pref.okinawa.jp/shigoto/koyorodo/1012003/1012018/1012022.html'},
+    '那覇市':{name:'障害者就業・生活支援センター（沖縄県案内）',phone:'',why:'那覇市は小禄地区かそれ以外かで担当センターが異なるため、県の一覧から居住地域に合うセンターを確認します。',place:'那覇市の地域により「かるにあ」または「ブリッジ」',source:'https://www.pref.okinawa.jp/shigoto/koyorodo/1012003/1012018/1012022.html'}
+  };
+
   var followNeed = '';
   var triageKind = '';
+  var disabilityKind = '';
 
   function go(id){
     document.querySelectorAll('.screen').forEach(function(s){s.classList.toggle('active',s.id===id);});
@@ -264,6 +304,14 @@
     });
   });
 
+  document.querySelectorAll('#disabilityChoices .choice').forEach(function(b){
+    b.addEventListener('click',function(){
+      disabilityKind=b.getAttribute('data-kind');
+      document.querySelectorAll('#disabilityChoices .choice').forEach(function(x){x.classList.toggle('on',x===b);});
+      document.getElementById('disabilityError').style.display='none';
+    });
+  });
+
   document.querySelectorAll('#triageChoices .choice').forEach(function(b){
     b.addEventListener('click',function(){
       triageKind=b.getAttribute('data-kind');
@@ -278,11 +326,18 @@
     if(/死にたい|消えたい|自殺|自傷|リストカット|生きていたくない|死んだほうが/.test(text)) return 'selfharm';
     if(/DV|ドメスティック|パートナー|夫|旦那|妻|恋人|彼氏|彼女/.test(text) && /暴力|殴|蹴|怖い|逃げたい|怒鳴|監視|支配|脅/.test(text)) return 'dv';
     if(/ひきこも|引きこも|引き篭|家から出ない|社会に出られない|外に出られない/.test(text)) return 'hikikomori';
-    if(/借金|多重債務|消費者金融|サラ金|カード.*払え|ローン.*払え|債務整理/.test(text)) return 'debt';
+    if(/障害年金|障がい年金/.test(text)) return 'disability_pension';
+    if(/障害者手帳|障がい者手帳|療育手帳|精神障害者保健福祉手帳|身体障害者手帳/.test(text)) return 'disability_handbook';
+    if(/障害|障がい|ADHD|ASD|発達障害|発達障がい|精神障害|知的障害|身体障害/.test(text) && /就職|就労|働きたい|仕事探し|職場定着|復職/.test(text)) return 'disability_work';
+    if(/障害福祉サービス|障がい福祉サービス|居宅介護|就労移行|就労継続|生活介護|短期入所|受給者証/.test(text)) return 'disability_service';
+    if(/借金|多重債務|消費者金融|サラ金|カード.*払え|ローン.*払え|債務整理|奨学金.*返せ/.test(text)) return 'debt';
+    if(/定期購入|通販|ネット通販|訪問販売|悪質商法|詐欺サイト|商品.*届か|契約.*解約|クーリングオフ|架空請求|高額請求|ぼったくり/.test(text)) return 'consumer';
+    if(/残業代|給料.*払|給与.*払|賃金.*払|不当解雇|解雇された|退職強要|パワハラ|セクハラ|職場.*ハラスメント|労働時間|有給.*取れ|雇い止め/.test(text)) return 'labor';
+    if(/相続|遺産|離婚|養育費|親権|慰謝料|裁判|訴えら|弁護士|法律相談|隣人トラブル|大家.*トラブル|貸したお金/.test(text)) return 'legal';
     if(/介護|認知症|要介護|ケアマネ|高齢|デイサービス|親の世話|介護保険/.test(text)) return 'elderly';
     if(/妊娠|出産|中絶|避妊|産後|妊婦|性感染症/.test(text)) return 'pregnancy';
     if(childContext && /不登校|いじめ|登校|学校生活|学校.*行け|学校に行け|行きたくない|休みがち|学習|先生|友人関係|友達関係/.test(text)) return 'school';
-    if(!childContext && /障害者手帳|障害年金|障害福祉|就労移行|就労継続|B型|Ａ型|A型|身体障害|知的障害|精神障害|発達障害|発達障がい|ADHD|ASD/.test(text)) return 'disability';
+    if(!childContext && /障害|障がい|障害者|障がい者|ADHD|ASD|発達障害|発達障がい|身体障害|知的障害|精神障害/.test(text)) return 'disability';
     if(/うつ|鬱|眠れない|不安が強い|パニック|精神的|こころがつらい|心がつらい|気分が落ち込|幻聴|拒食|過食|摂食障害|統合失調|双極|躁うつ|適応障害|強迫|依存症|アルコール|お酒.*やめ|ギャンブル.*やめ|薬物/.test(text)) return 'mental';
     return '';
   }
@@ -347,7 +402,12 @@
     if(current.special==='pregnancy') ps.unshift(['性と健康の相談','妊娠・出産・性やからだのことを、年齢や性別を問わず相談できます。']);
     if(current.special==='dv') ps.unshift(['DV相談','安全確保、保護、今後の生活等について専門窓口に相談できます。']);
     if(current.special==='abuse') ps.unshift(['児童相談所への相談・通告','「虐待と断定できない」段階でも相談できます。']);
-    if(current.special==='disability') ps.unshift(['障害福祉相談','手帳、福祉サービス、障害児・者の支援などは市町村の障害福祉担当課が申請・相談の入口になります。']);
+    if(current.special==='disability'||current.special==='disability_handbook'||current.special==='disability_service') ps.unshift(['障害福祉相談','手帳や障害福祉サービスは、市町村の障害福祉担当課が申請・相談の入口になります。']);
+    if(current.special==='disability_pension') ps.unshift(['障害年金','障害年金の相談・手続きは年金事務所等で受け付けています。手帳の有無だけで決まる制度ではありません。']);
+    if(current.special==='disability_work') ps.unshift(['障害者就業・生活支援','就業面と生活面を一体的に支援する地域のセンターがあります。']);
+    if(current.special==='consumer') ps.unshift(['消費生活相談','商品・サービスの契約、定期購入、悪質商法などを消費生活センター等へ相談できます。']);
+    if(current.special==='labor') ps.unshift(['労働相談','解雇、賃金、労働時間、ハラスメント等の職場問題を相談できます。']);
+    if(current.special==='legal') ps.unshift(['法的トラブルの案内','問題に応じた法制度や相談機関の案内を受けられます。']);
     if(current.isChildDevelopment){
       if(current.followNeed==='school') ps.unshift(['教育相談・特別支援教育','学校生活や学習、教育上の配慮について相談できます。必要に応じて学校・教育委員会との相談も候補になります。']);
       if(current.followNeed==='medical') ps.unshift(['発達障害の診療を行う医療機関','県は医療機関情報を案内しています。診断の可否・対象年齢・予約状況は各医療機関への確認が必要です。']);
@@ -391,7 +451,15 @@
     }
 
     if(special==='school'){current.route=prefectureRoutes.school;renderResult();return;}
-    if(special==='disability'){current.route=childServiceRoutes[city];renderResult();return;}
+    if(special==='disability'){
+      disabilityKind='';
+      document.querySelectorAll('#disabilityChoices .choice').forEach(function(x){x.classList.remove('on');});
+      document.getElementById('disabilityError').style.display='none';
+      go('disabilityFollowup');
+      return;
+    }
+    if(special==='disability_handbook'||special==='disability_service'){current.route=childServiceRoutes[city];renderResult();return;}
+    if(special==='disability_work'){current.route=disabilityWorkRoutes[city];renderResult();return;}
     if(special && specialRoutes[special]){current.route=specialRoutes[special];renderResult();return;}
 
     var hasLife=topics.some(function(t){return ['money','work','housing'].indexOf(t)!==-1;});
@@ -403,12 +471,29 @@
     go('triage');
   });
 
+  document.getElementById('disabilityForm').addEventListener('submit',function(e){
+    e.preventDefault();
+    if(!disabilityKind){document.getElementById('disabilityError').style.display='block';return;}
+    current.special=disabilityKind;
+    if(disabilityKind==='disability_pension') current.route=specialRoutes.disability_pension;
+    else if(disabilityKind==='disability_work') current.route=disabilityWorkRoutes[current.city];
+    else if(disabilityKind==='disability_handbook') current.route=childServiceRoutes[current.city];
+    else current.route=specialRoutes.general;
+    renderResult();
+  });
+
   document.getElementById('triageForm').addEventListener('submit',function(e){
     e.preventDefault();
     if(!triageKind){document.getElementById('triageError').style.display='block';return;}
     current.special=triageKind;
     if(triageKind==='child'){current.route=childDevRoutes[current.city];}
-    else if(triageKind==='disability'){current.route=childServiceRoutes[current.city];}
+    else if(triageKind==='disability'){
+      disabilityKind='';
+      document.querySelectorAll('#disabilityChoices .choice').forEach(function(x){x.classList.remove('on');});
+      document.getElementById('disabilityError').style.display='none';
+      go('disabilityFollowup');
+      return;
+    }
     else if(triageKind==='life'){current.route=routes[current.city];}
     else if(triageKind==='other'){current.route=specialRoutes.general;}
     else {current.route=specialRoutes[triageKind] || specialRoutes.general;}
