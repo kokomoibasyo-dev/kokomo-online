@@ -331,15 +331,15 @@
     if(/ネグレクト|育児放棄|性的虐待/.test(text) || (childContext && /虐待|殴|叩|蹴/.test(text))) return 'abuse';
     if(/死にたい|消えたい|消えてしまいたい|消えてなくなりたい|自殺|自傷|リストカット|生きていたくない|死んだほうが/.test(text)) return 'selfharm';
     if(/DV|ドメスティック|パートナー|夫|旦那|妻|恋人|彼氏|彼女/.test(text) && /暴力|殴|蹴|怖い|逃げたい|怒鳴|監視|支配|脅/.test(text)) return 'dv';
-    if(/ひきこも|引きこも|引き篭|家から出ない|社会に出られな|社会に出られず|外に出られな|外に出られず|家族以外と会わな|家族以外と会いません|人と会えな/.test(text)) return 'hikikomori';
+    if(/ひきこも|引きこも|引き篭|家から出ない|家から出なくな|社会に出られな|社会に出られず|外に出られな|外に出られず|家族以外と会わな|家族以外と会いません|人と会えな/.test(text)) return 'hikikomori';
     if(/障害年金|障がい年金/.test(text)) return 'disability_pension';
     if(/障害者手帳|障がい者手帳|療育手帳|精神障害者保健福祉手帳|身体障害者手帳/.test(text)) return 'disability_handbook';
-    if(/障害|障がい|ADHD|ASD|発達障害|発達障がい|精神障害|知的障害|身体障害/.test(text) && /就職|就労|働きたい|仕事探し|職場定着|復職/.test(text)) return 'disability_work';
+    if(/障害|障がい|ADHD|ASD|発達障害|発達障がい|精神障害|知的障害|身体障害/.test(text) && /就職|就労|働きたい|働けない|働けず|仕事探し|仕事.*できな|職場定着|復職/.test(text)) return 'disability_work';
     if(/障害福祉サービス|障がい福祉サービス|居宅介護|就労移行|就労継続|生活介護|短期入所|受給者証/.test(text)) return 'disability_service';
-    if(/借金|多重債務|消費者金融|サラ金|カードローン|カード.*払え|ローン.*払え|返済.*できな|債務整理|奨学金.*返せ/.test(text)) return 'debt';
+    if(/借金|多重債務|消費者金融|サラ金|カードローン|カード.*払え|ローン.*払え|返済.*でき|債務整理|奨学金.*返せ/.test(text)) return 'debt';
     if(/定期購入|通販|ネット通販|訪問販売|悪質商法|詐欺サイト|商品.*届か|契約.*解約|クーリングオフ|架空請求|高額請求|ぼったくり/.test(text)) return 'consumer';
-    if(/残業代|給料.*払|給与.*払|賃金.*払|不当解雇|解雇|退職.*強要|辞めろと言われ|パワハラ|セクハラ|職場.*ハラスメント|労働時間|有給.*取れ|有給.*取らせ|雇い止め/.test(text)) return 'labor';
-    if(/相続|遺産|離婚|養育費|親権|慰謝料|裁判|訴えら|弁護士|法律相談|隣人トラブル|大家.*トラブル|貸したお金/.test(text)) return 'legal';
+    if(/残業代|給料.*払|給与.*払|賃金.*払|不当解雇|解雇|退職.*強要|退職.*迫|辞職.*迫|辞めろと言われ|パワハラ|セクハラ|職場.*ハラスメント|労働時間|有給.*取れ|有給.*取らせ|雇い止め/.test(text)) return 'labor';
+    if(/相続|遺産|離婚|養育費|親権|慰謝料|裁判|訴えら|弁護士|法律相談|隣人トラブル|大家.*トラブル|退去.*費用|原状回復|敷金|貸したお金/.test(text)) return 'legal';
     if(/介護|認知症|要介護|ケアマネ|高齢|デイサービス|親の世話|介護保険/.test(text)) return 'elderly';
     if(/妊娠|出産|中絶|避妊|産後|妊婦|性感染症/.test(text)) return 'pregnancy';
     if(childContext && /不登校|いじめ|登校|学校生活|学校.*行け|学校に行け|行きたくない|休みがち|学習|先生|友人関係|友達関係/.test(text)) return 'school';
@@ -376,7 +376,7 @@
     if(!childContext && /障害|障がい|障害者|障がい者|ADHD|ASD|発達障害|発達障がい|身体障害|知的障害|精神障害/.test(text)
       && !out.some(function(k){return ['disability_pension','disability_handbook','disability_work','disability_service'].indexOf(k)!==-1;})) add('disability');
 
-    if(/うつ|鬱|眠れない|不安が強い|パニック|精神的|こころがつらい|心がつらい|気分が落ち込|幻聴|拒食|過食|摂食障害|統合失調|双極|躁うつ|適応障害|強迫|依存症|アルコール|お酒.*やめ|ギャンブル.*やめ|薬物|親もしんどい|保護者.*しんど|限界/.test(text)) add('mental');
+    if(/うつ|鬱|眠れない|眠れません|眠れず|不安が強い|パニック|精神的|こころがつらい|心がつらい|気分が落ち込|幻聴|拒食|過食|摂食障害|統合失調|双極|躁うつ|適応障害|強迫|依存症|アルコール|お酒.*やめ|ギャンブル.*やめ|薬物|親もしんどい|保護者.*しんど|育児.*つら|限界/.test(text)) add('mental');
 
     if(/お金|生活費|収入|貯金|滞納|払え|払えな|支払|食費|電気|ガス|水道|生活保護|仕事を辞め|失業|離職|無職|家賃|住まい|住宅|退去|住む場所|アパート|立ち退き|転居|食べるもの/.test(text)) add('life');
 
@@ -407,7 +407,7 @@
   function issueLabel(issue){
     var m={
       selfharm:'自傷・自殺に関する安全',abuse:'子どもの安全・虐待',dv:'DV・安全確保',
-      life:'生活費・住まい・仕事',child-development:'子どもの発達',school:'学校・不登校・学習',
+      life:'生活費・住まい・仕事','child-development':'子どもの発達',school:'学校・不登校・学習',
       mental:'こころの不調',hikikomori:'ひきこもり',debt:'借金・多重債務',
       consumer:'消費者トラブル',labor:'労働問題',legal:'法律問題',elderly:'高齢・介護',
       pregnancy:'妊娠・出産・性の相談',disability_pension:'障害年金',
@@ -421,7 +421,7 @@
     var priority=['selfharm','abuse','dv'];
     // Basic living needs come before non-safety specialist routes when money/housing is explicitly strained.
     if(issues.indexOf('life')!==-1) priority.push('life');
-    priority=priority.concat(['child-development','school','mental','hikikomori','elderly','pregnancy','disability_service','disability_handbook','disability_pension','disability_work','disability','debt','labor','consumer','legal']);
+    priority=priority.concat(['child-development','school','hikikomori','mental','pregnancy','labor','elderly','disability_service','disability_handbook','disability_pension','disability_work','disability','debt','consumer','legal']);
     return issues.slice().sort(function(a,b){return priority.indexOf(a)-priority.indexOf(b);});
   }
 
