@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#f6f1e8">
-<title>つなぐノート v0.6</title>
+<title>つなぐノート v0.7</title>
 <style>
 :root{--bg:#f6f1e8;--paper:#fffdf9;--ink:#26312f;--muted:#68706c;--line:#ddd8ce;--green:#315f51;--soft:#e4eee9;--amber:#fff1dc}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif}.wrap{max-width:720px;margin:auto;padding:0 16px 80px}.top{position:sticky;top:0;z-index:5;background:rgba(246,241,232,.94);backdrop-filter:blur(12px);padding:14px 0;border-bottom:1px solid var(--line)}.brand{font-weight:800}.brand small{display:block;font-size:11px;color:var(--muted);font-weight:500;margin-top:2px}.screen{display:none;padding-top:22px}.screen.active{display:block}.hero{padding:12px 2px}.eyebrow{font-size:12px;font-weight:800;color:var(--green);letter-spacing:.06em}.hero h1,.head h2{font-size:clamp(30px,8vw,44px);line-height:1.18;letter-spacing:-.04em;margin:10px 0 14px}.hero p,.head p{line-height:1.8;color:var(--muted)}.card{background:var(--paper);border:1px solid var(--line);border-radius:20px;padding:18px;margin:14px 0;box-shadow:0 8px 28px rgba(48,54,51,.06)}label{display:block;font-weight:750;margin:12px 0 8px}textarea,select,input{width:100%;border:1.5px solid #cbc5bb;border-radius:14px;background:#fff;padding:13px;font:inherit;line-height:1.6}textarea:focus,select:focus{outline:none;border-color:var(--green);box-shadow:0 0 0 3px rgba(49,95,81,.1)}.chips{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0 16px}.chip{border:1px solid var(--line);background:#fff;border-radius:999px;padding:9px 12px;font-size:13px}.chip.on,.choice.on{background:var(--soft);border-color:var(--green);color:var(--green);font-weight:700}.choice{width:100%;text-align:left;border:1px solid var(--line);background:#fff;border-radius:14px;padding:13px 14px;font:inherit;margin:6px 0;cursor:pointer}.primary,.ghost,.miniBtn{border:0;border-radius:13px;padding:13px 15px;font:inherit;font-weight:800;cursor:pointer}.primary{background:var(--green);color:#fff;width:100%}.ghost{background:transparent;border:1px solid var(--line);color:var(--green)}.miniBtn{background:var(--soft);color:var(--green)}.notice{background:var(--soft);border-radius:16px;padding:13px 14px;font-size:13px;line-height:1.65;margin:12px 0}.warning{background:var(--amber)}.badge{display:inline-block;background:var(--soft);color:var(--green);border-radius:999px;padding:7px 10px;font-size:12px;font-weight:800;margin:0 6px 6px 0}.section{font-size:12px;font-weight:800;color:var(--green);letter-spacing:.05em;margin-bottom:8px}.place h3{font-size:22px;margin:4px 0 8px}.muted{color:var(--muted);line-height:1.7}.row{display:flex;gap:8px;flex-wrap:wrap}.row>*{flex:1}.link{display:inline-flex;justify-content:center;align-items:center;text-decoration:none;background:var(--green);color:#fff;border-radius:13px;padding:12px 14px;font-weight:800}.link.alt{background:var(--soft);color:var(--green)}.item{border:1px solid var(--line);border-radius:14px;padding:12px;margin-top:9px}.item strong{display:block}.routeStep{border:1px solid var(--line);border-radius:16px;padding:14px;margin-top:10px;background:#fff}.routeStep .stepTag{display:inline-block;font-size:11px;font-weight:800;color:var(--green);background:var(--soft);border-radius:999px;padding:5px 8px;margin-bottom:7px}.routeStep h4{margin:0 0 7px;font-size:17px}.routeStep p{margin:0;color:var(--muted);font-size:13px;line-height:1.6}.routeStep a{display:inline-block;margin-top:9px;color:var(--green);font-weight:800;text-decoration:none}.item p{margin:5px 0 0;color:var(--muted);font-size:13px;line-height:1.55}.back{border:0;background:none;color:var(--green);font:inherit;font-weight:800;padding:0 0 12px}.bottom{display:flex;gap:8px;margin-top:14px}.bottom>*{flex:1}.historyItem{border:1px solid var(--line);border-radius:14px;padding:13px;margin-top:10px}.historyItem small{color:var(--muted)}.historyItem p{color:var(--muted);line-height:1.5;font-size:13px}.empty{color:var(--muted);text-align:center;padding:30px 10px}
@@ -17,7 +17,7 @@
 
   <section id="home" class="screen active">
     <div class="hero">
-      <div class="eyebrow">沖縄本島・宜野湾市以南｜v0.6 試作版</div>
+      <div class="eyebrow">沖縄本島・宜野湾市以南｜v0.7 試作版</div>
       <h1>どこに相談したらいいか<br>わからないときのノート。</h1>
       <p>制度名を知らなくても大丈夫。いま困っていることを、そのまま書いてください。</p>
     </div>
@@ -297,6 +297,74 @@
     ]
   };
 
+  var specialistDisabilityOptions = {
+    '_globalDevelopment':[
+      {name:'沖縄県発達障害者支援センター がじゅま～る',phone:'098-982-2113',why:'発達障害のある本人・家族への相談や、地域の支援者・関係機関と連携した支援体制づくりを担う県の専門機関です。',place:'沖縄市比屋根5-2-17',source:'https://www.pref.okinawa.jp/kyoiku/shogaifukushi/1024317/1023913.html',kind:'県の発達専門機関',for:'development'},
+    ],
+    '宜野湾市':[
+      {name:'宜野湾市障がい者基幹相談支援センター',phone:'098-893-4411',why:'障害種別を問わず、本人・家族の生活全般や福祉サービス、地域の相談支援機関との連携について相談できる市の中核窓口です。',place:'宜野湾市役所 障がい福祉課',source:'https://www.city.ginowan.lg.jp/material/files/group/22/gaidobook2024.pdf',kind:'市の基幹相談支援'},
+    ],
+    '浦添市':[
+      {name:'浦添市障がい者（児）基幹相談支援センター てだこの森',phone:'098-942-7601',why:'障がい児・者の生活全般、専門相談、権利擁護、地域生活への移行などを相談できる市の基幹相談支援センターです。',place:'浦添市牧港4-5-10 ピアラルうらそえ3階',source:'https://www.city.urasoe.lg.jp/doc/60d1a35e3d59ae1ac00c6a2a/',kind:'市の基幹相談支援'},
+      {name:'ピアサポートセンターほると',phone:'098-879-7565',why:'浦添市が障害者相談支援事業を委託している地域の相談支援事業所です。福祉サービス利用、社会資源、権利擁護などを相談できます。',place:'浦添市仲間1-10-7',source:'https://www.city.urasoe.lg.jp/doc/60d1a35e3d59ae1ac00c6a2a/',kind:'市の委託相談支援'},
+      {name:'相談支援事業所ゆんたく',phone:'098-870-4789',why:'浦添市が委託する相談支援事業所の一つで、障がい児・者と家族の相談や必要な支援へのつなぎを行います。',place:'浦添市経塚633 メディカルKプラザ3階',source:'https://www.city.urasoe.lg.jp/doc/60d1a35e3d59ae1ac00c6a2a/',kind:'市の委託相談支援'}
+    ],
+    '那覇市':[
+      {name:'さぽーとせんたーi（NPO法人わくわくの会）',phone:'098-987-1167',why:'那覇市の委託相談支援事業所です。発達障がいを含む障がいのある方や家族の生活相談・支援を行い、那覇市の発達障がい者サポート事業もNPO法人わくわくの会が担っています。',place:'那覇市三原2-6-1 2階',source:'https://www.city.naha.okinawa.jp/fukusi/syougaifukushi/1003223/1003225.html',kind:'NPO・市の委託相談支援'},
+      {name:'障がい者相談支援センターすこやか',phone:'098-884-3872',why:'一般社団法人那覇市身体障害者福祉協会が運営する、市の委託相談支援事業所です。障がいのある本人・家族の日常生活や就労など幅広い相談に対応します。',place:'那覇市古島2-14-4',source:'https://www.city.naha.okinawa.jp/fukusi/syougaifukushi/1003223/1003225.html',kind:'一般社団法人・市の委託相談支援'}
+    ],
+    '西原町':[
+      {name:'ライフサポート ロウル',phone:'098-963-9942',why:'障がいの種別を問わず、本人・家族からの相談や情報提供を行う地域の相談先として西原町が案内しています。',place:'西原町字翁長287 2-B',source:'https://www.town.nishihara.okinawa.jp/soshiki/7/1384.html',kind:'地域の相談支援'},
+      {name:'地域活動支援センター スマイリーはうす',phone:'098-944-0121',why:'障がいのある方の社会参加・自立生活を支援し、仕事や生活などの相談にも対応する地域活動支援センターです。',place:'西原町字兼久170-1',source:'https://www.town.nishihara.okinawa.jp/soshiki/7/1384.html',kind:'地域活動支援センター'}
+    ],
+    '南風原町':[
+      {name:'南風原町基幹相談支援センター',phone:'098-889-4416',why:'身体・知的・精神・発達障がいなど障害種別を問わず、本人・家族・関係機関からの相談に対応する町の中核相談機関です。',place:'南風原町役場 福祉課',source:'https://www.town.haebaru.lg.jp/soshiki/10/13024.html',kind:'町の基幹相談支援'},
+      {name:'南風原町社会福祉協議会 委託相談支援',phone:'098-889-3217',why:'南風原町から障がい者相談支援事業の委託を受け、手帳やサービス利用の有無を問わず幅広い相談に対応しています。',place:'南風原町字宮平697-10',source:'https://www.town.haebaru.lg.jp/soshiki/10/13050.html',kind:'社協・町の委託相談支援'}
+    ],
+    '与那原町':[
+      {name:'相談支援事業所じょいまーる',phone:'098-945-2357',why:'与那原町が、障がいのある児童に関する相談窓口として案内している相談支援事業所です。',place:'与那原町内',source:'https://www.town.yonabaru.okinawa.jp/soshiki/10/111.html',kind:'障がい児の相談支援'},
+      {name:'与那原町社会福祉協議会',phone:'098-945-3016',why:'知的障がい・身体障がいのある方に関する相談先として与那原町が案内しています。',place:'与那原町内',source:'https://www.town.yonabaru.okinawa.jp/soshiki/10/111.html',kind:'社協の相談支援'}
+    ],
+    '豊見城市':[
+      {name:'桜山荘 障がい者相談支援センター さくら',phone:'098-840-5904',why:'豊見城市の委託相談支援事業所・基幹相談支援の一つです。障がい児・者や家族の福祉サービス、生活、就労などを相談できます。',place:'豊見城市字平良188-23',source:'https://www.city.tomigusuku.lg.jp/iryo_kenko_fukushi/shogaishafukushi/4/4192.html',kind:'市の委託相談支援'},
+      {name:'指定相談支援事業所ひまわり',phone:'098-856-6639',why:'豊見城市の委託相談支援・基幹相談支援を担う地域の相談支援事業所です。',place:'豊見城市字渡橋名92-1',source:'https://www.city.tomigusuku.lg.jp/iryo_kenko_fukushi/shakaifukushi/10197.html',kind:'市の委託相談支援'}
+    ],
+    '八重瀬町':[
+      {name:'相談支援センター ハルハウス',phone:'090-8290-8886',why:'八重瀬町の障害者相談支援事業を受託し、障がいのある方や家族の生活、福祉サービス、就労などの相談に対応しています。',place:'八重瀬町内',source:'https://www.town.yaese.lg.jp/docs/2023042100017/',kind:'町の委託相談支援'},
+      {name:'相談支援事業所 沖身協',phone:'080-8390-1858',why:'八重瀬町の公式相談窓口一覧に、障害福祉に関する相談先として掲載されている相談支援事業所です。',place:'八重瀬町周辺',source:'https://www.town.yaese.lg.jp/docs/2025102400013/file_contents/kurashinobenrityou2025.pdf',kind:'地域の相談支援'}
+    ],
+    '南城市':[
+      {name:'相談支援事業所 野の花',phone:'098-880-0576',why:'南城市の委託相談支援事業所で、障がい児・者と家族の日常生活や福祉サービス利用手続きなどを相談できます。',place:'南城市大里字仲間1124-1',source:'https://www.city.nanjo.okinawa.jp/kurashi/kenkou_fukushi/1578995061/1584901478/',kind:'市の委託相談支援'},
+      {name:'相談支援事業所 アンクス',phone:'098-948-1440',why:'南城市が指定障害児相談支援事業所として掲載している地域の相談支援事業所です。',place:'南城市玉城前川349-1',source:'https://www.city.nanjo.okinawa.jp/kurashi/kenkou_fukushi/1578995061/1584900882/1710830713/',kind:'指定障害児相談支援'}
+    ],
+    '糸満市':[
+      {name:'相談支援センター たまん',phone:'098-840-8468',why:'糸満市が公開する相談支援事業所一覧に掲載されている地域の相談支援センターです。',place:'糸満市照屋1221-1 2階',source:'https://www.city.itoman.lg.jp/uploaded/attachment/21204.pdf',kind:'指定相談支援'},
+      {name:'相談支援事業所 こども未来テラス',phone:'098-852-3011',why:'糸満市が公開する相談支援事業所一覧に掲載されている、子どもの相談にも対応する相談支援事業所です。',place:'糸満市字阿波根751-7',source:'https://www.city.itoman.lg.jp/uploaded/attachment/21204.pdf',kind:'指定相談支援'},
+      {name:'相談支援事業所デイジー（NPO法人カンパニュラ）',phone:'080-7892-7798',why:'糸満市の相談支援事業所一覧に掲載されているNPO法人運営の相談支援事業所です。市資料では障害者（成人）のみ対応とされています。',place:'糸満市字糸満1005-1',source:'https://www.city.itoman.lg.jp/uploaded/attachment/21204.pdf',kind:'NPO・指定相談支援（成人）'}
+    ]
+  };
+
+  function isDevelopmentRelated(text,issues){
+    return /発達|発達障害|発達障がい|ADHD|ASD|自閉|療育|ことば|言葉|感覚過敏|多動/.test(text)
+      || (issues||[]).indexOf('child-development')!==-1;
+  }
+
+  function specialistOptionsFor(city,text,issues){
+    var out=[];
+    if(isDevelopmentRelated(text,issues)) out=out.concat(specialistDisabilityOptions._globalDevelopment||[]);
+    var relevant=(issues||[]).some(function(k){
+      return ['child-development','disability','disability_service','disability_handbook','disability_work'].indexOf(k)!==-1;
+    });
+    if(relevant && specialistDisabilityOptions[city]) out=out.concat(specialistDisabilityOptions[city]);
+    var seen={};
+    return out.filter(function(r){
+      var key=r.name+'|'+(r.phone||'');
+      if(seen[key])return false;
+      seen[key]=true;
+      return true;
+    }).slice(0,4);
+  }
+
   var prefectureRoutes = {
     school:{name:'沖縄県立総合教育センター 教育相談室',phone:'098-933-7573',why:'不登校、いじめ、学校生活などについて、県内の児童生徒・保護者等が相談できる教育相談窓口です。',place:'沖縄市与儀3-11-1',source:'https://www.pref.okinawa.jp/_res/projects/default_project/_page_/001/006/133/hutoukoutebiki.pdf'},
     medical:{name:'沖縄県発達障害者支援センター がじゅま〜る',phone:'098-982-2113',why:'発達障害に関する相談に応じ、必要な支援機関や地域資源につなぐ県の専門相談拠点です。診断そのものは医療機関で行います。',place:'沖縄県内の発達障害者支援拠点',source:'https://www.pref.okinawa.jp/kyoiku/shogaifukushi/1018751/1007711/1007712.html'}
@@ -552,8 +620,18 @@
       optionRoutes=schoolRouteOptions[city].slice(1).map(function(r){return {issue:'school',route:r,kind:r.kind||'市内の別の選択肢'};});
       optionRoutes.push({issue:'school',route:prefectureRoutes.school,kind:'県の相談先'});
     }
+    var specialistRoutes=specialistOptionsFor(city,concern,current.issues||[]).map(function(r){
+      return {issue:current.primaryIssue||'disability',route:r,kind:r.kind||'専門・地域の相談先'};
+    });
     var secondaries=uniqueSecondaryRoutes(current.issues||[],current.primaryIssue,city);
-    var combined=optionRoutes.concat(secondaries);
+    var combined=optionRoutes.concat(specialistRoutes).concat(secondaries);
+    var seenCombined={};
+    combined=combined.filter(function(x){
+      var key=x.route.name+'|'+(x.route.phone||'');
+      if(key===(route.name+'|'+(route.phone||'')) || seenCombined[key]) return false;
+      seenCombined[key]=true;
+      return true;
+    }).slice(0,7);
     if(combined.length){
       nextCard.style.display='block';
       nextRoot.innerHTML=combined.map(function(x,i){
