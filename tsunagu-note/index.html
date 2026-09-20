@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#f6f1e8">
-<title>つなぐノート v0.5</title>
+<title>つなぐノート v0.6</title>
 <style>
 :root{--bg:#f6f1e8;--paper:#fffdf9;--ink:#26312f;--muted:#68706c;--line:#ddd8ce;--green:#315f51;--soft:#e4eee9;--amber:#fff1dc}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif}.wrap{max-width:720px;margin:auto;padding:0 16px 80px}.top{position:sticky;top:0;z-index:5;background:rgba(246,241,232,.94);backdrop-filter:blur(12px);padding:14px 0;border-bottom:1px solid var(--line)}.brand{font-weight:800}.brand small{display:block;font-size:11px;color:var(--muted);font-weight:500;margin-top:2px}.screen{display:none;padding-top:22px}.screen.active{display:block}.hero{padding:12px 2px}.eyebrow{font-size:12px;font-weight:800;color:var(--green);letter-spacing:.06em}.hero h1,.head h2{font-size:clamp(30px,8vw,44px);line-height:1.18;letter-spacing:-.04em;margin:10px 0 14px}.hero p,.head p{line-height:1.8;color:var(--muted)}.card{background:var(--paper);border:1px solid var(--line);border-radius:20px;padding:18px;margin:14px 0;box-shadow:0 8px 28px rgba(48,54,51,.06)}label{display:block;font-weight:750;margin:12px 0 8px}textarea,select,input{width:100%;border:1.5px solid #cbc5bb;border-radius:14px;background:#fff;padding:13px;font:inherit;line-height:1.6}textarea:focus,select:focus{outline:none;border-color:var(--green);box-shadow:0 0 0 3px rgba(49,95,81,.1)}.chips{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0 16px}.chip{border:1px solid var(--line);background:#fff;border-radius:999px;padding:9px 12px;font-size:13px}.chip.on,.choice.on{background:var(--soft);border-color:var(--green);color:var(--green);font-weight:700}.choice{width:100%;text-align:left;border:1px solid var(--line);background:#fff;border-radius:14px;padding:13px 14px;font:inherit;margin:6px 0;cursor:pointer}.primary,.ghost,.miniBtn{border:0;border-radius:13px;padding:13px 15px;font:inherit;font-weight:800;cursor:pointer}.primary{background:var(--green);color:#fff;width:100%}.ghost{background:transparent;border:1px solid var(--line);color:var(--green)}.miniBtn{background:var(--soft);color:var(--green)}.notice{background:var(--soft);border-radius:16px;padding:13px 14px;font-size:13px;line-height:1.65;margin:12px 0}.warning{background:var(--amber)}.badge{display:inline-block;background:var(--soft);color:var(--green);border-radius:999px;padding:7px 10px;font-size:12px;font-weight:800;margin:0 6px 6px 0}.section{font-size:12px;font-weight:800;color:var(--green);letter-spacing:.05em;margin-bottom:8px}.place h3{font-size:22px;margin:4px 0 8px}.muted{color:var(--muted);line-height:1.7}.row{display:flex;gap:8px;flex-wrap:wrap}.row>*{flex:1}.link{display:inline-flex;justify-content:center;align-items:center;text-decoration:none;background:var(--green);color:#fff;border-radius:13px;padding:12px 14px;font-weight:800}.link.alt{background:var(--soft);color:var(--green)}.item{border:1px solid var(--line);border-radius:14px;padding:12px;margin-top:9px}.item strong{display:block}.routeStep{border:1px solid var(--line);border-radius:16px;padding:14px;margin-top:10px;background:#fff}.routeStep .stepTag{display:inline-block;font-size:11px;font-weight:800;color:var(--green);background:var(--soft);border-radius:999px;padding:5px 8px;margin-bottom:7px}.routeStep h4{margin:0 0 7px;font-size:17px}.routeStep p{margin:0;color:var(--muted);font-size:13px;line-height:1.6}.routeStep a{display:inline-block;margin-top:9px;color:var(--green);font-weight:800;text-decoration:none}.item p{margin:5px 0 0;color:var(--muted);font-size:13px;line-height:1.55}.back{border:0;background:none;color:var(--green);font:inherit;font-weight:800;padding:0 0 12px}.bottom{display:flex;gap:8px;margin-top:14px}.bottom>*{flex:1}.historyItem{border:1px solid var(--line);border-radius:14px;padding:13px;margin-top:10px}.historyItem small{color:var(--muted)}.historyItem p{color:var(--muted);line-height:1.5;font-size:13px}.empty{color:var(--muted);text-align:center;padding:30px 10px}
@@ -17,7 +17,7 @@
 
   <section id="home" class="screen active">
     <div class="hero">
-      <div class="eyebrow">沖縄本島・宜野湾市以南｜v0.5 試作版</div>
+      <div class="eyebrow">沖縄本島・宜野湾市以南｜v0.6 試作版</div>
       <h1>どこに相談したらいいか<br>わからないときのノート。</h1>
       <p>制度名を知らなくても大丈夫。いま困っていることを、そのまま書いてください。</p>
     </div>
@@ -252,6 +252,48 @@
       {name:'宜野湾市 若葉教室',phone:'098-893-8859',why:'不登校など学校に行けない子どもが心の元気を取り戻すための支援教室です。通級・利用を検討したい場合の候補です。',place:'宜野湾市立教育研究所・若葉教室',source:'https://www.city.ginowan.lg.jp/soshiki/kyoiku/2/3/1/1/1568.html',kind:'通える場・支援教室を検討'},
       {name:'宜野湾市 青少年サポートセンター',phone:'098-892-4732',why:'18歳以下の幼児・児童・生徒の不登校等、教育に関する相談先として市の相談窓口一覧に掲載されています。',place:'はごろも学習センター等',source:'https://www.city.ginowan.lg.jp/material/files/group/19/r6siryou.pdf',kind:'教育相談の別の入口'},
       {name:'宜野湾市こども家庭センター 児童家庭係',phone:'098-893-4643',why:'不登校だけでなく、家庭全体の困りごとや保護者の負担も含めて相談したい場合の市の窓口です。',place:'宜野湾市役所 こども家庭課',source:'https://www.city.ginowan.lg.jp/soshiki/kodomo/3/jidoukateikakari/index.html',kind:'家庭全体も相談したい'}
+    ],
+    '浦添市':[
+      {name:'浦添市 教育相談室「くくむい」',phone:'098-876-1296',why:'不登校等の教育上の悩みについて、来所・電話・訪問相談を受け、学校や関係機関と調整しながら支援を考える市の入口です。',place:'浦添市仲間1-1-2 あかひらステーションビル3階',source:'https://www.city.urasoe.lg.jp/doc/2026041700042/',kind:'まず相談したい'},
+      {name:'在籍校の教育相談担当・SC・SSW等',phone:'',why:'浦添市は各学校に教育相談支援員、校内自立支援員、スクールカウンセラー、スクールソーシャルワーカー等を配置しています。学校内での支援を相談したい場合の入口です。',place:'在籍する市立小中学校',source:'https://www.city.urasoe.lg.jp/doc/2026041700042/',kind:'学校内の支援を相談'},
+      {name:'浦添市こども家庭センター こども家庭課',phone:'098-876-1707',why:'不登校だけでなく、子育てや家庭の困りごとを含めて相談したい場合の市の総合窓口です。',place:'浦添市役所 本庁2階',source:'https://www.city.urasoe.lg.jp/doc/65c06a516e33864cca685164/',kind:'家庭全体も相談したい'}
+    ],
+    '那覇市':[
+      {name:'那覇市教育委員会 教育相談課',phone:'098-941-7868',why:'不登校、非行、情緒・行動、学業など、児童生徒の教育上の悩みについて来所相談を受ける市の窓口です。',place:'那覇市松山2-22-1 津波避難ビル2階',source:'https://www.city.naha.okinawa.jp/child/madoguti/1002893.html',kind:'まず相談したい'},
+      {name:'青少年ダイヤル「なは」',phone:'098-941-7867',why:'不登校など教育上の悩みを電話で相談できます。子ども本人からの相談も受け付けています。',place:'電話相談',source:'https://www.city.naha.okinawa.jp/child/madoguti/1006039.html',kind:'まず電話で相談したい'},
+      {name:'那覇市教育相談課 自立支援教室・学習支援室',phone:'098-941-7868',why:'那覇市教育相談課は不登校支援として自立支援教室や学習支援室を運営しています。利用条件や現在の受入状況は教育相談課へ確認します。',place:'那覇市教育相談課',source:'https://www.city.naha.okinawa.jp/admin/cityhall/1003944/1003946/1004018/1004026.html',kind:'学校外の学び・居場所を相談'}
+    ],
+    '西原町':[
+      {name:'西原町 教育相談室',phone:'098-944-3603',why:'不登校・非行傾向・いじめなど教育問題全般について、児童生徒や保護者への支援・助言を行う町の相談室です。',place:'西原町中央公民館内',source:'https://www.town.nishihara.okinawa.jp/site/kosodate-sabu/1833.html',kind:'まず相談したい'},
+      {name:'西原町こども家庭センター',phone:'098-945-5311',why:'不登校だけでなく、子どもの発達や子育て、家庭の困りごとを含めて相談したい場合の町の総合窓口です。',place:'西原町役場 こども課',source:'https://www.town.nishihara.okinawa.jp/site/nabi/7735.html',kind:'家庭全体も相談したい'}
+    ],
+    '南風原町':[
+      {name:'南風原町 教育相談支援センター',phone:'098-889-0501',why:'不登校に関する本人・保護者からの電話・来所相談に対応し、不登校児童生徒の学びの場・居場所としての機能もあります。',place:'ちむぐくる館',source:'https://www.town.haebaru.lg.jp/soshiki/18/16404.html',kind:'まず相談／居場所も検討'},
+      {name:'南風原町教育委員会 学校教育課',phone:'098-889-6181',why:'不登校を含む教育全般、子どもの発達、教育支援センターの利用相談について対応する町の窓口です。',place:'南風原町役場4階',source:'https://www.town.haebaru.lg.jp/soshiki/18/16404.html',kind:'教育委員会に相談'},
+      {name:'こども家庭センターはえばる',phone:'098-889-4524',why:'学校だけでなく、子育てや家庭全体の困りごとを含めて相談したい場合の町の総合窓口です。',place:'南風原町役場2階 こども課',source:'https://www.town.haebaru.lg.jp/soshiki/11/18691.html',kind:'家庭全体も相談したい'}
+    ],
+    '与那原町':[
+      {name:'与那原町教育委員会 学校教育課',phone:'098-945-2361',why:'子どもの学校教育や教育上の悩みについて相談する町の教育委員会窓口です。',place:'与那原町役場',source:'https://www.town.yonabaru.okinawa.jp/soshiki/2/64.html',kind:'まず相談したい'},
+      {name:'与那原町こども家庭センター（母子保健機能）',phone:'098-945-6633',why:'子どもの発育・発達、子育てや家庭の悩みも含めて相談したい場合の町の窓口です。',place:'与那原町役場 健康保険課',source:'https://www.town.yonabaru.okinawa.jp/soshiki/11/9057.html',kind:'発達・家庭も相談したい'}
+    ],
+    '豊見城市':[
+      {name:'豊見城市教育委員会 教育指導課',phone:'098-850-3543',why:'豊見城市の公式案内で、小中学生の不登校に関する相談先として案内されている市の教育委員会窓口です。',place:'豊見城市役所',source:'https://www.city.tomigusuku.lg.jp/iryo_kenko_fukushi/shakaifukushi/9882.html',kind:'まず相談したい'},
+      {name:'豊見城市こども家庭センター 家庭児童相談室',phone:'098-840-5633',why:'18歳未満の子どもの育児・養育・発達など、家庭全体の困りごとを含めて相談できます。',place:'豊見城市役所 子育て支援課',source:'https://www.city.tomigusuku.lg.jp/iryo_kenko_fukushi/shakaifukushi/9882.html',kind:'家庭全体も相談したい'}
+    ],
+    '八重瀬町':[
+      {name:'八重瀬町 教育相談室（東風平地区）',phone:'098-998-5704',why:'不登校になっている児童生徒・保護者が相談できる、東風平地区の教育相談室です。',place:'八重瀬町中央公民館内',source:'https://www.town.yaese.lg.jp/docs/2025102400013/file_contents/kurashinobenrityou2025.pdf',kind:'東風平地区で相談'},
+      {name:'八重瀬町 教育相談室（具志頭地区）',phone:'098-998-7018',why:'不登校になっている児童生徒・保護者が相談できる、具志頭地区の教育相談室です。',place:'中央公民館具志頭分館内',source:'https://www.town.yaese.lg.jp/docs/2025102400013/file_contents/kurashinobenrityou2025.pdf',kind:'具志頭地区で相談'},
+      {name:'八重瀬町教育委員会 学校教育課',phone:'098-998-7571',why:'不登校を含む教育相談の町の窓口です。どちらの教育相談室がよいか分からない場合の入口にもなります。',place:'八重瀬町役場3階',source:'https://www.town.yaese.lg.jp/docs/2025102400013/file_contents/kurashinobenrityou2025.pdf',kind:'どこに相談するか迷う'},
+      {name:'八重瀬町こども家庭センター',phone:'098-998-7163',why:'子どものこと・家庭のことを含めて相談したい場合の町の総合窓口です。',place:'八重瀬町役場1階 児童家庭課',source:'https://www.town.yaese.lg.jp/docs/2025121100017/',kind:'家庭全体も相談したい'}
+    ],
+    '南城市':[
+      {name:'南城市教育委員会 教育指導課 教育相談',phone:'098-917-5364',why:'児童生徒・保護者の教育全般について、電話・窓口で相談できる市の教育相談です。',place:'南城市役所',source:'https://www.edu.city.nanjo.okinawa.jp/education/consultation/',kind:'まず相談したい'},
+      {name:'南城市こども家庭センター こども相談課',phone:'098-917-5212',why:'子どもの養育や家庭での心配ごとを、社会福祉士・精神保健福祉士等に相談できます。',place:'南城市役所',source:'https://www.city.nanjo.okinawa.jp/kosodate/kosodate/1758509059/',kind:'家庭全体も相談したい'}
+    ],
+    '糸満市':[
+      {name:'糸満市青少年センター 教育相談',phone:'098-995-1957',why:'家庭、学校、いじめ、進路、不登校、友人関係、子育てなどについて、本人・保護者・関係者から電話・面会・訪問で相談を受ける市の窓口です。',place:'糸満市字糸満1410-10',source:'https://www.city.itoman.lg.jp/soshiki/34/1299.html',kind:'まず相談したい'},
+      {name:'糸満市こども家庭センター',phone:'098-840-8191',why:'子どもの不登校・ひきこもり、家庭の悩みや経済的不安なども含めて相談し、必要な支援につなぐ市の窓口です。',place:'糸満市役所2階 子育て応援課',source:'https://www.city.itoman.lg.jp/site/kosodate/29022.html',kind:'家庭全体も相談したい'},
+      {name:'糸満市教育委員会 学校教育課',phone:'098-840-8165',why:'市立小中学校の教育や生徒指導・進路指導等を所管する教育委員会窓口です。学校との調整を含めて相談したい場合の候補です。',place:'糸満市役所',source:'https://www.city.itoman.lg.jp/soshiki/5/35774.html',kind:'教育委員会に相談'}
     ]
   };
 
