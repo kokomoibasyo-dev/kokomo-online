@@ -596,6 +596,7 @@
 
   function routeCategory(route,kind){
     var k=(kind||'')+' '+(route.name||'');
+    if(/基幹相談支援|市役所|町役場|教育委員会|こども家庭センター/.test(k)) return 'public';
     if(/NPO|一般社団法人|社協|委託相談支援|市の委託|町の委託|指定相談支援|相談支援事業所|相談支援センター|地域活動支援センター/.test(k)) return 'community';
     if(/がじゅま|県の発達専門|発達専門|総合教育センター|精神保健福祉センター|ひきこもり専門|年金機構|法テラス|労働相談|消費者ホットライン|DV相談|児童相談所/.test(k)) return 'specialist';
     if(/支援教室|若葉教室|自立支援教室|学習支援室|教育相談室|青少年サポートセンター/.test(k)) return 'support';
