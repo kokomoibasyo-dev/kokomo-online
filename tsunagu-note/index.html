@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#f6f1e8">
-<title>つなぐノート v0.4</title>
+<title>つなぐノート v0.5</title>
 <style>
 :root{--bg:#f6f1e8;--paper:#fffdf9;--ink:#26312f;--muted:#68706c;--line:#ddd8ce;--green:#315f51;--soft:#e4eee9;--amber:#fff1dc}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif}.wrap{max-width:720px;margin:auto;padding:0 16px 80px}.top{position:sticky;top:0;z-index:5;background:rgba(246,241,232,.94);backdrop-filter:blur(12px);padding:14px 0;border-bottom:1px solid var(--line)}.brand{font-weight:800}.brand small{display:block;font-size:11px;color:var(--muted);font-weight:500;margin-top:2px}.screen{display:none;padding-top:22px}.screen.active{display:block}.hero{padding:12px 2px}.eyebrow{font-size:12px;font-weight:800;color:var(--green);letter-spacing:.06em}.hero h1,.head h2{font-size:clamp(30px,8vw,44px);line-height:1.18;letter-spacing:-.04em;margin:10px 0 14px}.hero p,.head p{line-height:1.8;color:var(--muted)}.card{background:var(--paper);border:1px solid var(--line);border-radius:20px;padding:18px;margin:14px 0;box-shadow:0 8px 28px rgba(48,54,51,.06)}label{display:block;font-weight:750;margin:12px 0 8px}textarea,select,input{width:100%;border:1.5px solid #cbc5bb;border-radius:14px;background:#fff;padding:13px;font:inherit;line-height:1.6}textarea:focus,select:focus{outline:none;border-color:var(--green);box-shadow:0 0 0 3px rgba(49,95,81,.1)}.chips{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0 16px}.chip{border:1px solid var(--line);background:#fff;border-radius:999px;padding:9px 12px;font-size:13px}.chip.on,.choice.on{background:var(--soft);border-color:var(--green);color:var(--green);font-weight:700}.choice{width:100%;text-align:left;border:1px solid var(--line);background:#fff;border-radius:14px;padding:13px 14px;font:inherit;margin:6px 0;cursor:pointer}.primary,.ghost,.miniBtn{border:0;border-radius:13px;padding:13px 15px;font:inherit;font-weight:800;cursor:pointer}.primary{background:var(--green);color:#fff;width:100%}.ghost{background:transparent;border:1px solid var(--line);color:var(--green)}.miniBtn{background:var(--soft);color:var(--green)}.notice{background:var(--soft);border-radius:16px;padding:13px 14px;font-size:13px;line-height:1.65;margin:12px 0}.warning{background:var(--amber)}.badge{display:inline-block;background:var(--soft);color:var(--green);border-radius:999px;padding:7px 10px;font-size:12px;font-weight:800;margin:0 6px 6px 0}.section{font-size:12px;font-weight:800;color:var(--green);letter-spacing:.05em;margin-bottom:8px}.place h3{font-size:22px;margin:4px 0 8px}.muted{color:var(--muted);line-height:1.7}.row{display:flex;gap:8px;flex-wrap:wrap}.row>*{flex:1}.link{display:inline-flex;justify-content:center;align-items:center;text-decoration:none;background:var(--green);color:#fff;border-radius:13px;padding:12px 14px;font-weight:800}.link.alt{background:var(--soft);color:var(--green)}.item{border:1px solid var(--line);border-radius:14px;padding:12px;margin-top:9px}.item strong{display:block}.routeStep{border:1px solid var(--line);border-radius:16px;padding:14px;margin-top:10px;background:#fff}.routeStep .stepTag{display:inline-block;font-size:11px;font-weight:800;color:var(--green);background:var(--soft);border-radius:999px;padding:5px 8px;margin-bottom:7px}.routeStep h4{margin:0 0 7px;font-size:17px}.routeStep p{margin:0;color:var(--muted);font-size:13px;line-height:1.6}.routeStep a{display:inline-block;margin-top:9px;color:var(--green);font-weight:800;text-decoration:none}.item p{margin:5px 0 0;color:var(--muted);font-size:13px;line-height:1.55}.back{border:0;background:none;color:var(--green);font:inherit;font-weight:800;padding:0 0 12px}.bottom{display:flex;gap:8px;margin-top:14px}.bottom>*{flex:1}.historyItem{border:1px solid var(--line);border-radius:14px;padding:13px;margin-top:10px}.historyItem small{color:var(--muted)}.historyItem p{color:var(--muted);line-height:1.5;font-size:13px}.empty{color:var(--muted);text-align:center;padding:30px 10px}
@@ -17,7 +17,7 @@
 
   <section id="home" class="screen active">
     <div class="hero">
-      <div class="eyebrow">沖縄本島・宜野湾市以南｜v0.4 試作版</div>
+      <div class="eyebrow">沖縄本島・宜野湾市以南｜v0.5 試作版</div>
       <h1>どこに相談したらいいか<br>わからないときのノート。</h1>
       <p>制度名を知らなくても大丈夫。いま困っていることを、そのまま書いてください。</p>
     </div>
@@ -246,6 +246,15 @@
     '糸満市':{name:'糸満市 社会福祉課 障害福祉係',phone:'098-840-8130',why:'障害児通所支援などの福祉サービスについて相談・申請先を確認できます。',place:'糸満市役所',source:'https://www.pref.okinawa.jp/kyoiku/jido/1007997/1007695.html'}
   };
 
+  var schoolRouteOptions = {
+    '宜野湾市':[
+      {name:'宜野湾市 青少年教育相談指導室',phone:'098-893-5073',why:'「学校へ行かない」「いじめ」など、子どもの学校生活や教育上の悩みを相談する市の入口です。',place:'宜野湾市内',source:'https://www.city.ginowan.lg.jp/soshiki/kyoiku/2/3/1/1/1568.html',kind:'まず相談したい'},
+      {name:'宜野湾市 若葉教室',phone:'098-893-8859',why:'不登校など学校に行けない子どもが心の元気を取り戻すための支援教室です。通級・利用を検討したい場合の候補です。',place:'宜野湾市立教育研究所・若葉教室',source:'https://www.city.ginowan.lg.jp/soshiki/kyoiku/2/3/1/1/1568.html',kind:'通える場・支援教室を検討'},
+      {name:'宜野湾市 青少年サポートセンター',phone:'098-892-4732',why:'18歳以下の幼児・児童・生徒の不登校等、教育に関する相談先として市の相談窓口一覧に掲載されています。',place:'はごろも学習センター等',source:'https://www.city.ginowan.lg.jp/material/files/group/19/r6siryou.pdf',kind:'教育相談の別の入口'},
+      {name:'宜野湾市こども家庭センター 児童家庭係',phone:'098-893-4643',why:'不登校だけでなく、家庭全体の困りごとや保護者の負担も含めて相談したい場合の市の窓口です。',place:'宜野湾市役所 こども家庭課',source:'https://www.city.ginowan.lg.jp/soshiki/kodomo/3/jidoukateikakari/index.html',kind:'家庭全体も相談したい'}
+    ]
+  };
+
   var prefectureRoutes = {
     school:{name:'沖縄県立総合教育センター 教育相談室',phone:'098-933-7573',why:'不登校、いじめ、学校生活などについて、県内の児童生徒・保護者等が相談できる教育相談窓口です。',place:'沖縄市与儀3-11-1',source:'https://www.pref.okinawa.jp/_res/projects/default_project/_page_/001/006/133/hutoukoutebiki.pdf'},
     medical:{name:'沖縄県発達障害者支援センター がじゅま〜る',phone:'098-982-2113',why:'発達障害に関する相談に応じ、必要な支援機関や地域資源につなぐ県の専門相談拠点です。診断そのものは医療機関で行います。',place:'沖縄県内の発達障害者支援拠点',source:'https://www.pref.okinawa.jp/kyoiku/shogaifukushi/1018751/1007711/1007712.html'}
@@ -388,7 +397,7 @@
     if(issue==='abuse') return specialRoutes.abuse;
     if(issue==='dv') return specialRoutes.dv;
     if(issue==='child-development') return childDevRoutes[city];
-    if(issue==='school') return prefectureRoutes.school;
+    if(issue==='school') return (schoolRouteOptions[city]&&schoolRouteOptions[city][0]) || prefectureRoutes.school;
     if(issue==='hikikomori') return specialRoutes.hikikomori;
     if(issue==='mental') return specialRoutes.mental;
     if(issue==='debt') return specialRoutes.debt;
@@ -496,13 +505,21 @@
 
     var nextCard=document.getElementById('nextRoutesCard');
     var nextRoot=document.getElementById('nextRoutes');
+    var optionRoutes=[];
+    if(current.primaryIssue==='school' && schoolRouteOptions[city]){
+      optionRoutes=schoolRouteOptions[city].slice(1).map(function(r){return {issue:'school',route:r,kind:r.kind||'市内の別の選択肢'};});
+      optionRoutes.push({issue:'school',route:prefectureRoutes.school,kind:'県の相談先'});
+    }
     var secondaries=uniqueSecondaryRoutes(current.issues||[],current.primaryIssue,city);
-    if(secondaries.length){
+    var combined=optionRoutes.concat(secondaries);
+    if(combined.length){
       nextCard.style.display='block';
-      nextRoot.innerHTML=secondaries.map(function(x,i){
+      nextRoot.innerHTML=combined.map(function(x,i){
         var r=x.route;
         var tel=r.phone ? '<a href="'+(r.tel||('tel:'+r.phone.replace(/-/g,'')))+'">☎ '+r.phone+'</a>' : '';
-        return '<div class="routeStep"><span class="stepTag">'+(i===0?'次に':'同時に相談可')+'</span><h4>'+issueLabel(x.issue)+'｜'+r.name+'</h4><p>'+r.why+'</p>'+tel+'</div>';
+        var tag=x.kind || (i===0?'次に':'同時に相談可');
+        var title=(x.issue==='school' && x.kind) ? r.name : issueLabel(x.issue)+'｜'+r.name;
+        return '<div class="routeStep"><span class="stepTag">'+tag+'</span><h4>'+title+'</h4><p>'+r.why+'</p>'+tel+' <a href="'+r.source+'" target="_blank" rel="noopener">公式情報</a></div>';
       }).join('');
     } else {
       nextCard.style.display='none';
@@ -646,7 +663,7 @@
     current.special='child-development';
     current.primaryIssue='child-development';
     if(followNeed==='school'){
-      current.route=prefectureRoutes.school;
+      current.route=(schoolRouteOptions[current.city]&&schoolRouteOptions[current.city][0]) || prefectureRoutes.school;
       current.primaryIssue='school';
       if(current.issues.indexOf('school')===-1) current.issues.unshift('school');
     }
