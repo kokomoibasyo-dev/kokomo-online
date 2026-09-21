@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>あなたもこれでギリシャ人。</title>
+<style>
+:root{--bg:#f5efe2;--paper:#fffaf0;--ink:#1f2c37;--blue:#1d4d6f;--gold:#b48a3c;--line:#d9c9a8;--muted:#6f6a60}
+*{box-sizing:border-box}body{margin:0;font-family:ui-serif,"Hiragino Mincho ProN","Yu Mincho",serif;background:linear-gradient(180deg,#e9e0cf,#f7f3eb);color:var(--ink)}
+.wrap{max-width:880px;margin:auto;padding:24px}.hero,.card{background:rgba(255,250,240,.94);border:1px solid var(--line);border-radius:24px;box-shadow:0 16px 45px rgba(60,45,25,.12)}
+.hero{padding:34px 28px;margin-top:18px;text-align:center;position:relative;overflow:hidden}.hero:before{content:"Ω";position:absolute;font-size:220px;right:-35px;top:-55px;color:rgba(29,77,111,.06)}
+.kicker{letter-spacing:.14em;color:var(--gold);font-weight:700}.hero h1{font-size:clamp(32px,7vw,58px);line-height:1.05;margin:10px 0 12px}.hero p{color:var(--muted);margin:0 auto 24px;max-width:620px;line-height:1.8}
+.form{display:grid;grid-template-columns:1fr 1fr;gap:10px;max-width:720px;margin:auto}.form input{width:100%;padding:16px 18px;border:1px solid var(--line);border-radius:14px;background:#fff;font-size:16px}.gender{grid-column:1/-1;display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.gender label{border:1px solid var(--line);border-radius:14px;padding:12px 10px;background:#fff;cursor:pointer;font-size:14px}.gender input{display:none}.gender label:has(input:checked){background:#edf3f6;border-color:var(--blue);box-shadow:inset 0 0 0 1px var(--blue)}.form button{grid-column:1/-1}.form button,.again{border:none;border-radius:14px;padding:15px 20px;background:var(--blue);color:white;font-weight:700;font-size:16px;cursor:pointer}.form button:active,.again:active{transform:translateY(1px)}
+.note{font-size:12px;color:#7e7467;margin-top:12px}.result{display:none;margin-top:18px;gap:18px}.result.show{display:grid}.card{padding:24px}.eyebrow{color:var(--gold);font-size:13px;font-weight:800;letter-spacing:.08em}.kanji-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-top:14px}.kanji-item{border:1px solid var(--line);border-radius:16px;padding:16px;background:white}.kanji-char{font-size:36px;color:var(--blue);font-weight:700}.kanji-meaning{font-size:14px;line-height:1.7;color:#514b43}.theme{font-size:22px;line-height:1.6;margin:10px 0 0}
+.namebox{text-align:center;padding:34px 22px}.greek{font-size:20px;color:var(--gold);margin-bottom:6px}.jpname{font-size:clamp(30px,6vw,50px);font-weight:800}.meaningline{color:var(--muted);margin-top:10px}.profile{display:grid;grid-template-columns:220px 1fr;gap:24px;align-items:start}.portrait{width:100%;aspect-ratio:4/5;border-radius:18px;background:#ece4d5;border:1px solid var(--line);overflow:hidden}.portrait svg{width:100%;height:100%}.bio h3{margin:4px 0 8px;font-size:24px}.bio p{line-height:1.9;margin:0 0 12px}.facts{display:grid;grid-template-columns:1fr 1fr;gap:10px}.fact{border-top:1px solid var(--line);padding-top:10px;font-size:14px}.label{color:var(--gold);font-size:12px;font-weight:800}.footerrow{display:flex;justify-content:center;margin:18px 0 28px}.disclaimer{font-size:12px;color:#756d62;line-height:1.8;text-align:center;padding:0 8px 24px}
+@media(max-width:680px){.wrap{padding:14px}.hero{padding:28px 18px}.form{grid-template-columns:1fr}.profile{grid-template-columns:1fr}.portrait{max-width:280px;margin:auto}.facts{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<section class="hero">
+<div class="kicker">ANCIENT NAME MACHINE</div>
+<h1>あなたもこれで<br>ギリシャ人。</h1>
+<p>あなたの名前の漢字を読み解き、その意味を古代ギリシャ風の人名と物語に変換します。名前を入れるだけ。だいたい2,000年くらい遡ります。</p>
+<div class="form">
+<input id="name" placeholder="名前（例：大地）" maxlength="12" />
+<input id="reading" placeholder="読み・任意（例：だいち）" maxlength="20" />
+<div class="gender" aria-label="古代ギリシャでの姿">
+<label><input type="radio" name="gender" value="male" checked>男性として生きる</label>
+<label><input type="radio" name="gender" value="female">女性として生きる</label>
+<label><input type="radio" name="gender" value="oracle">神託にまかせる</label>
+</div>
+<button id="go" type="button">ギリシャへ行く</button>
+</div>
+<div class="note">※ 姓名判断ではありません。漢字の一般的な意味とギリシャ語人名の語源をもとにした遊びです。</div>
+</section>
+
+<section id="result" class="result">
+<div class="card">
+<div class="eyebrow">STEP 1｜あなたの名前を読み解く</div>
+<div id="kanjiGrid" class="kanji-grid"></div>
+<div id="theme" class="theme"></div>
+</div>
+
+<div class="card namebox">
+<div class="eyebrow">STEP 2｜古代ギリシャへ変換</div>
+<div id="greekScript" class="greek"></div>
+<div id="greekName" class="jpname"></div>
+<div id="meaningLine" class="meaningline"></div>
+</div>
+
+<div class="card">
+<div class="eyebrow">STEP 3｜もし、あなたが古代ギリシャに生きていたら</div>
+<div class="profile">
+<div id="portrait" class="portrait"></div>
+<div class="bio">
+<h3 id="title"></h3>
+<p id="story"></p>
+<div class="facts">
+<div class="fact"><div class="label">職業</div><div id="job"></div></div>
+<div class="fact"><div class="label">得意技</div><div id="skill"></div></div>
+<div class="fact"><div class="label">人々からの呼び名</div><div id="alias"></div></div>
+<div class="fact"><div class="label">最期の逸話</div><div id="ending"></div></div>
+</div>
+</div>
+</div>
+</div>
+<div class="footerrow"><button class="again" id="again" type="button">別の名前もギリシャ人にする</button></div>
+<div class="disclaimer">実在の人物・運命を示すものではありません。ギリシャ名は、実在する古代・近現代ギリシャ系人名の語源を参考にした「意味寄せ」と、遊びとしてのギリシャ風音変換を組み合わせています。</div>
+</section>
+</div>
+<script>
+(function(){
+const kanji = {
+'大':['大きい・おおらか','megas'],'地':['大地・土地・足元','ge'],'海':['海・広がり・航海','thalassa'],'空':['空・天空・ひらけた場所','ouranos'],'星':['星・輝き・道しるべ','aster'],'光':['光・明るさ・照らすもの','phos'],'陽':['太陽・明るさ・あたたかさ','helios'],'日':['太陽・日・明るさ','helios'],'月':['月・静かな光','selene'],'風':['風・動き・自由さ','anemos'],'森':['森・木々・深さ','drys'],'林':['木立・集まり・緑','drys'],'川':['川・流れ・つながり','potamos'],'泉':['泉・湧き出るもの','pege'],'花':['花・美しさ・開くもの','anthos'],'葉':['葉・生命・成長','phyllon'],'雪':['雪・清らかさ・白さ','chion'],'雨':['雨・恵み・うるおい','hyetos'],'山':['山・高さ・揺るがなさ','oros'],'岳':['高い山・頂','oros'],
+'英':['秀でる・優れる・才知','aristos'],'秀':['秀でる・優れる','aristos'],'優':['優れる・やさしさ','aristos'],'孝':['敬う・大切にする・徳','eusebes'],'敬':['敬意・尊ぶこと','eusebes'],'徳':['徳・善さ・品位','agathos'],'善':['善さ・よいこと','agathos'],'良':['よい・望ましい','agathos'],'智':['知恵・思慮','sophia'],'知':['知る・知恵','sophia'],'慧':['賢さ・洞察','sophia'],'賢':['賢さ・判断力','sophia'],'勇':['勇気・勇敢さ','andreia'],'武':['強さ・武勇','andreia'],'剛':['強さ・堅固さ','kratos'],'力':['力・強さ','kratos'],'勝':['勝利・成し遂げる','nike'],'克':['打ち勝つ・乗り越える','nike'],'希':['希望・願い','elpis'],'望':['希望・見通す','elpis'],'夢':['夢・願い・想像','oneiros'],'愛':['愛・慈しみ','agape'],'友':['友情・仲間','philia'],'和':['調和・平穏','eirene'],'平':['平和・穏やかさ','eirene'],'真':['真実・まこと','aletheia'],'誠':['誠実・真心','aletheia'],'正':['正しさ・公正','dike'],'義':['正義・筋を通す','dike'],'明':['明るさ・明晰さ','phos'],'亮':['明るい・澄んでいる','phos'],'輝':['輝き・光','phos'],'翔':['飛ぶ・高く進む','ouranos'],'翼':['翼・飛翔','ouranos'],'陸':['陸地・地面','ge'],'洋':['大海・広がり','thalassa'],'潮':['潮・海の動き','thalassa'],'波':['波・変化・海','thalassa'],'樹':['木・根を張る','drys'],'桜':['花・春・咲く','anthos'],'葵':['植物・花','anthos'],'蓮':['花・清らかさ','anthos'],'蒼':['青・深い青','kyanos'],'青':['青・空や海の色','kyanos'],'白':['白・清らかさ','leukos'],'紅':['赤・鮮やかさ','erythros'],'心':['心・魂・思い','psyche'],'悠':['ゆったり・遠くまで続く','makros'],'遥':['遠く・はるか','makros'],'直':['まっすぐ・率直','orthos'],'信':['信頼・信じること','pistis'],'礼':['礼節・敬意','eusebes'],'仁':['思いやり・慈しみ','agape'],'幸':['幸福・よい巡り','eutychia'],'福':['幸い・恵まれること','eutychia'],
+'美':['美しさ・調和・華やかさ','anthos'],'麗':['美しさ・気品','anthos'],'華':['華やかさ・花開くこと','anthos'],'香':['香り・魅力・花の気配','anthos'],'菜':['植物・みずみずしさ・成長','anthos'],'桃':['花・実り・春の生命','anthos'],'梅':['花・忍耐・春を告げるもの','anthos'],'蘭':['花・気品・美しさ','anthos'],'杏':['花・実り・生命','anthos'],
+'春':['春・始まり・花開くこと','anthos'],'夏':['夏・太陽・生命力','helios'],'秋':['実り・成熟・豊かさ','eutychia'],'冬':['静けさ・雪・澄んだ季節','chion'],'朝':['朝・始まり・光','phos'],'夕':['夕暮れ・静けさ・月への移ろい','selene'],
+'晴':['晴れやかさ・明るさ','phos'],'晶':['輝き・澄んだ光','phos'],'景':['光・眺め・広がり','phos'],'照':['照らす・明るくする','phos'],'昭':['明るい・あきらか','phos'],'晃':['光り輝く・明るい','phos'],'旭':['朝日・昇る光','helios'],
+'健':['健やかさ・強さ','kratos'],'康':['健やかさ・安らぎ','eutychia'],'壮':['力強さ・盛んさ','kratos'],'雄':['力強さ・勇ましさ','andreia'],'毅':['強い意志・揺るがなさ','kratos'],'忍':['耐える力・意志の強さ','kratos'],
+'成':['成し遂げる・育つ','nike'],'達':['到達する・成し遂げる','nike'],'功':['成し遂げたこと・功績','nike'],'勲':['功績・名誉','nike'],'誉':['ほまれ・よい評価','nike'],'栄':['栄える・輝く','nike'],
+'実':['実り・真実・確かさ','aletheia'],'果':['実り・成し遂げること','nike'],'稔':['実る・豊かさ','eutychia'],'豊':['豊かさ・満ちること','eutychia'],'穂':['穀物の実り・成長','ge'],
+'恵':['恵み・思いやり','eutychia'],'恩':['恩恵・人への思い','agape'],'慈':['慈しみ・思いやり','agape'],'温':['あたたかさ・穏やかさ','agape'],'優':['優れる・やさしさ','aristos'],'柔':['しなやかさ・穏やかさ','eirene'],
+'喜':['喜び・よろこばしいこと','eutychia'],'慶':['よろこび・祝い','eutychia'],'楽':['楽しさ・安らぎ','eutychia'],'笑':['笑顔・喜び','eutychia'],
+'清':['清らかさ・澄んでいること','leukos'],'澄':['澄む・透明さ・清らかさ','leukos'],'純':['まじりけのなさ・清らかさ','leukos'],'潔':['清らかさ・潔さ','leukos'],
+'雅':['上品さ・調和・洗練','agathos'],'佳':['美しい・よいこと','agathos'],'嘉':['よい・めでたい・喜ばしい','agathos'],'尚':['尊ぶ・高める','eusebes'],'尊':['尊ぶ・敬う','eusebes'],
+'宏':['広い・大きな広がり','makros'],'弘':['広げる・大きくする','makros'],'広':['広い・ひろがり','makros'],'遼':['はるか・遠くまで続く','makros'],'遠':['遠く・広い見通し','makros'],
+'浩':['水の広がり・豊かさ','thalassa'],'湊':['水辺・人や船が集まる場所','thalassa'],'渚':['波打ち際・海辺','thalassa'],'汐':['潮・海の満ち引き','thalassa'],'航':['航海・海を進むこと','thalassa'],
+'拓':['切り開く・土地を広げる','ge'],'耕':['耕す・大地に働きかける','ge'],'稜':['山の稜線・高み','oros'],'峰':['山の頂・高み','oros'],'嶺':['山の峰・高み','oros'],
+'芽':['芽生え・始まり・成長','phyllon'],'苗':['若い植物・成長','phyllon'],'萌':['芽生える・始まる','phyllon'],'若':['若さ・成長・新しさ','phyllon'],
+'結':['結ぶ・つながり','philia'],'絆':['つながり・結びつき','philia'],'朋':['友・仲間','philia'],'仲':['人と人のあいだ・つながり','philia'],
+'想':['思う・心に描く','psyche'],'念':['心に思う・大切にする','psyche'],'志':['志・心に決めること','psyche'],'意':['意思・思い','psyche'],'情':['心・感情・思いやり','psyche'],
+'理':['理・筋道・理解','sophia'],'哲':['知恵・深く考える','sophia'],'学':['学ぶ・知を求める','sophia'],'聡':['賢い・よく理解する','sophia'],'敏':['すばやく気づく・聡さ','sophia'],
+'進':['前へ進む・到達する','nike'],'歩':['歩む・少しずつ進む','nike'],'駿':['すぐれる・速やかに進む','aristos'],'俊':['すぐれる・才知','aristos'],'卓':['すぐれる・際立つ','aristos'],
+'聖':['尊い・清らか','eusebes'],'祐':['助け・守り・恵み','eutychia'],'祈':['祈り・願い','elpis'],'願':['願い・希望','elpis'],'叶':['願いがかなう・実現','elpis'],
+'新':['新しい・始まり','elpis'],'初':['始まり・最初','elpis'],'創':['創る・新しく始める','elpis'],'開':['開く・可能性をひらく','elpis'],
+'凛':['凛とした・清らかな強さ','leukos'],'玲':['澄んだ音・美しい響き','leukos'],'珠':['宝珠・美しさ・大切なもの','agathos'],'宝':['大切なもの・価値','agathos'],
+'千':['多く・豊かさ','makros'],'万':['多く・広がり','makros'],'百':['多く・豊かさ','makros'],
+'一':['ひとつ・始まり・まっすぐさ','orthos'],'真':['真実・まこと','aletheia'],'直':['まっすぐ・率直','orthos'],'央':['中心・まんなか','orthos'],
+'太':['大きい・豊か・おおらか','aristos'],'郎':['若者・朗らかな人のイメージ','phos'],'子':['子ども・生命・受け継がれるもの','phyllon'],
+'翔':['飛ぶ・高く進む','ouranos'],'飛':['飛ぶ・高みへ向かう','ouranos'],'天':['天・空・高み','ouranos'],'宙':['空・宇宙・広がり','ouranos'],
+'龍':['力・躍動・大きな存在','kratos'],'竜':['力・躍動・大きな存在','kratos'],'虎':['勇ましさ・強さ','andreia'],
+'瑞':['めでたい兆し・恵み','eutychia'],'祥':['めでたい・よい兆し','eutychia'],'吉':['よいこと・幸い','eutychia']
+};
+const maleNames = {
+ge:{jp:'ゲオルギオス',gr:'Γεώργιος',meaning:'大地に働きかける者'},thalassa:{jp:'タラッシオス',gr:'Θαλάσσιος',meaning:'海に属する者'},ouranos:{jp:'ウラニオス',gr:'Οὐράνιος',meaning:'天空に属する者'},aster:{jp:'アステリオス',gr:'Ἀστέριος',meaning:'星のような者'},phos:{jp:'フォティオス',gr:'Φώτιος',meaning:'光をもつ者'},helios:{jp:'ヘリオドロス',gr:'Ἡλιόδωρος',meaning:'太陽の贈りもの'},selene:{jp:'セレネ',gr:'Σελήνη',meaning:'月'},anemos:{jp:'アネミオス',gr:'Ἀνέμιος',meaning:'風の者'},drys:{jp:'ドリュアス',gr:'Δρυάς',meaning:'樹木に結ばれた者'},potamos:{jp:'ポタミオス',gr:'Ποτάμιος',meaning:'川に属する者'},pege:{jp:'ペガシオス',gr:'Πηγάσιος',meaning:'泉に結ばれた者'},anthos:{jp:'アンティオス',gr:'Ἄνθιος',meaning:'花咲く者'},phyllon:{jp:'フィリオス',gr:'Φύλλιος',meaning:'葉と成長に結ばれた者'},chion:{jp:'キオニオス',gr:'Χιόνιος',meaning:'雪の者'},hyetos:{jp:'ヒュエティオス',gr:'Ὑέτιος',meaning:'雨をもたらす者'},oros:{jp:'オレイオス',gr:'Ὄρειος',meaning:'山に属する者'},aristos:{jp:'アリステイデス',gr:'Ἀριστείδης',meaning:'卓越・最良に結ばれた者'},eusebes:{jp:'エウセビオス',gr:'Εὐσέβιος',meaning:'敬いと徳をもつ者'},agathos:{jp:'アガトン',gr:'Ἀγάθων',meaning:'善き者'},sophia:{jp:'ソフォクレス',gr:'Σοφοκλῆς',meaning:'知恵に結ばれた者'},andreia:{jp:'アンドレアス',gr:'Ἀνδρέας',meaning:'勇気ある者'},kratos:{jp:'クラティノス',gr:'Κρατῖνος',meaning:'力強き者'},nike:{jp:'ニケフォロス',gr:'Νικηφόρος',meaning:'勝利を運ぶ者'},elpis:{jp:'エルピディオス',gr:'Ἐλπίδιος',meaning:'希望を抱く者'},oneiros:{jp:'オネイリオス',gr:'Ὀνείριος',meaning:'夢に生きる者'},agape:{jp:'アガピオス',gr:'Ἀγάπιος',meaning:'愛に結ばれた者'},philia:{jp:'フィリッポス',gr:'Φίλιππος',meaning:'愛する心をもつ者'},eirene:{jp:'エイレナイオス',gr:'Εἰρηναῖος',meaning:'平和をもたらす者'},aletheia:{jp:'アレティオス',gr:'Ἀλήθιος',meaning:'真実に結ばれた者'},dike:{jp:'ディカイオス',gr:'Δίκαιος',meaning:'公正なる者'},kyanos:{jp:'キュアニオス',gr:'Κυάνιος',meaning:'深い青の者'},leukos:{jp:'レウキオス',gr:'Λεύκιος',meaning:'白く澄んだ者'},erythros:{jp:'エリュトリオス',gr:'Ἐρύθριος',meaning:'赤く鮮やかな者'},psyche:{jp:'プシュキオス',gr:'Ψύχιος',meaning:'心と魂の者'},makros:{jp:'マカリオス',gr:'Μακάριος',meaning:'遠くを見つめる幸いな者'},orthos:{jp:'オルティオス',gr:'Ὄρθιος',meaning:'まっすぐ立つ者'},pistis:{jp:'ピスティオス',gr:'Πίστιος',meaning:'信頼に結ばれた者'},eutychia:{jp:'エウテュキオス',gr:'Εὐτύχιος',meaning:'幸運に恵まれた者'}
+};
+const femaleNames = {
+ge:{jp:'ゲオルギア',gr:'Γεωργία',meaning:'大地に働きかける者'},thalassa:{jp:'タラッサ',gr:'Θάλασσα',meaning:'海に結ばれた者'},ouranos:{jp:'ウラニア',gr:'Οὐρανία',meaning:'天空に属する者'},aster:{jp:'アステリア',gr:'Ἀστερία',meaning:'星のような者'},phos:{jp:'フォティニ',gr:'Φωτεινή',meaning:'光をもつ者'},helios:{jp:'ヘリアナ',gr:'Ἡλιάνα',meaning:'太陽に結ばれた者'},selene:{jp:'セレネ',gr:'Σελήνη',meaning:'月'},anemos:{jp:'アネミア',gr:'Ἀνεμία',meaning:'風の者'},drys:{jp:'ドリュアス',gr:'Δρυάς',meaning:'樹木に結ばれた者'},potamos:{jp:'ポタミア',gr:'Ποταμία',meaning:'川に属する者'},pege:{jp:'ピギ',gr:'Πηγή',meaning:'泉'},anthos:{jp:'アンシア',gr:'Ἄνθεια',meaning:'花咲く者'},phyllon:{jp:'フィリア',gr:'Φυλλία',meaning:'葉と成長に結ばれた者'},chion:{jp:'キオニア',gr:'Χιονία',meaning:'雪の者'},hyetos:{jp:'ヒュエティア',gr:'Ὑετία',meaning:'雨に結ばれた者'},oros:{jp:'オレイア',gr:'Ὀρεία',meaning:'山に属する者'},aristos:{jp:'アリステア',gr:'Ἀριστέα',meaning:'卓越・最良に結ばれた者'},eusebes:{jp:'エウセビア',gr:'Εὐσεβία',meaning:'敬いと徳をもつ者'},agathos:{jp:'アガティ',gr:'Ἀγαθή',meaning:'善き者'},sophia:{jp:'ソフィア',gr:'Σοφία',meaning:'知恵'},andreia:{jp:'アンドレイア',gr:'Ἀνδρεία',meaning:'勇気ある者'},kratos:{jp:'クラティア',gr:'Κρατία',meaning:'力強き者'},nike:{jp:'ニケ',gr:'Νίκη',meaning:'勝利'},elpis:{jp:'エルピス',gr:'Ἐλπίς',meaning:'希望'},oneiros:{jp:'オネイリア',gr:'Ὀνειρία',meaning:'夢に生きる者'},agape:{jp:'アガピ',gr:'Ἀγάπη',meaning:'愛'},philia:{jp:'フィリア',gr:'Φιλία',meaning:'友情・親愛'},eirene:{jp:'エイレネ',gr:'Εἰρήνη',meaning:'平和'},aletheia:{jp:'アレテイア',gr:'Ἀλήθεια',meaning:'真実'},dike:{jp:'ディカイア',gr:'Δικαία',meaning:'公正なる者'},kyanos:{jp:'キュアニア',gr:'Κυανία',meaning:'深い青の者'},leukos:{jp:'レウキア',gr:'Λευκία',meaning:'白く澄んだ者'},erythros:{jp:'エリュトリア',gr:'Ἐρυθρία',meaning:'赤く鮮やかな者'},psyche:{jp:'プシュケ',gr:'Ψυχή',meaning:'心と魂'},makros:{jp:'マカリア',gr:'Μακαρία',meaning:'幸いな者'},orthos:{jp:'オルティア',gr:'Ὀρθία',meaning:'まっすぐ立つ者'},pistis:{jp:'ピスティス',gr:'Πίστις',meaning:'信頼'},eutychia:{jp:'エウテュキア',gr:'Εὐτυχία',meaning:'幸運'}
+};
+const maleJobs=['広場の世話人','港町の記録係','若者に文字を教える教師','旅人の相談役','市場の交渉人','小さな学堂の主','船乗りたちの案内人','神殿前の書記','葡萄畑と町を往復する伝令','村々をつなぐ調停人'];
+const femaleJobs=['詩や歌を伝える人','祭礼を支える神殿の奉仕者','織物工房のまとめ役','薬草に詳しい世話人','商家の帳簿を預かる管理役','若い女性たちに文字や詩を教える人','出産や子育てを支える助産の担い手','家庭や近隣の相談役','祭礼の歌を編む詩人','旅人や商人から物語を集める記録役'];
+const skills=['対話','人の話を最後まで聞くこと','難しい話をたとえ話にすること','知らない人同士をつなぐこと','地図を描くこと','議論の論点を整理すること','困っている人を見つけること','一晩寝かせて考えること'];
+const endings=['73歳。議論の途中で昼寝をし、そのまま静かに生涯を終えた。','81歳。最後まで町の子どもたちに昔話を聞かせていたという。','67歳。旅に出たまま戻らず、のちに別の島で先生をしていた記録が見つかった。','76歳。自宅の庭で友人たちと食卓を囲んだ翌朝、穏やかに息を引き取った。','70歳。最後の言葉は「その話、もう少し聞かせてくれ」だったと伝わる。'];
+function hash(s){let h=2166136261;for(const c of s){h^=c.codePointAt(0);h=Math.imul(h,16777619)}return h>>>0}
+function pick(arr,h,shift=0){return arr[(h+shift)%arr.length]}
+function greekify(reading,gender){const r=(reading||'').trim(); if(!r) return gender==='female'?{jp:'アノニマ',gr:'Ἀνωνύμη',meaning:'名もなき旅人'}:{jp:'アノニモス',gr:'Ἀνώνυμος',meaning:'名もなき旅人'}; const kana=r.replace(/[ぁ-ん]/g,ch=>String.fromCharCode(ch.charCodeAt(0)+0x60)); return gender==='female'?{jp:kana+'イア',gr:'—',meaning:'読みの響きから作ったギリシャ風名'}:{jp:kana+'イオス',gr:'—',meaning:'読みの響きから作ったギリシャ風名'} }
+function makePortrait(seed,gender){const h=hash(seed); const hair=['#3b3028','#75614f','#1e1d1c','#8a6f54'][h%4]; const robe=['#c8b27d','#95a9b1','#b99e89','#9ca28d'][(h>>3)%4]; const beard=(gender==='male'&&h%3===0); const hairPath=gender==='female'?'M57 116 Q55 33 120 37 Q188 35 184 119 Q180 171 158 183 L155 89 Q137 70 120 72 Q91 69 82 92 L79 184 Q58 163 57 116':'M61 103 Q70 34 120 43 Q176 38 181 104 Q151 76 120 74 Q88 73 61 103'; return '<svg viewBox="0 0 240 300" xmlns="http://www.w3.org/2000/svg"><rect width="240" height="300" fill="#e9dfcf"/><circle cx="120" cy="112" r="58" fill="#d8b08f"/><path d="'+hairPath+'" fill="'+hair+'"/><circle cx="98" cy="111" r="4" fill="#302921"/><circle cx="142" cy="111" r="4" fill="#302921"/><path d="M112 134 Q120 139 128 134" fill="none" stroke="#6c4939" stroke-width="3" stroke-linecap="round"/>'+(beard?'<path d="M83 141 Q120 190 157 141 Q152 211 120 223 Q87 208 83 141" fill="'+hair+'" opacity=".9"/>':'')+'<path d="M55 300 Q61 210 120 202 Q183 211 188 300" fill="'+robe+'"/><path d="M76 227 Q120 252 166 227" fill="none" stroke="#f1e7d4" stroke-width="8"/><circle cx="120" cy="112" r="78" fill="none" stroke="#b48a3c" stroke-width="2" opacity=".35"/><text x="120" y="282" text-anchor="middle" font-size="12" fill="#665b4d">ANCIENT PORTRAIT</text></svg>'}
+function generate(){
+ const name=document.getElementById('name').value.trim(); const reading=document.getElementById('reading').value.trim(); if(!name){alert('名前を入力してください');return}
+ const selected=document.querySelector('input[name="gender"]:checked').value; const oracle=selected==='oracle'; const gender=oracle?(hash(name+reading)%2===0?'male':'female'):selected;
+ const chars=[...name]; const found=chars.map(ch=>kanji[ch]?[ch,...kanji[ch]]:null).filter(Boolean); const unknown=chars.filter(ch=>!/^[ぁ-んァ-ヶー々]$/.test(ch)&&!kanji[ch]);
+ const grid=document.getElementById('kanjiGrid'); grid.innerHTML='';
+ if(found.length){
+   found.forEach(([ch,m])=>grid.insertAdjacentHTML('beforeend','<div class="kanji-item"><div class="kanji-char">'+ch+'</div><div class="kanji-meaning">'+m+'</div></div>'));
+   unknown.forEach(ch=>grid.insertAdjacentHTML('beforeend','<div class="kanji-item"><div class="kanji-char">'+ch+'</div><div class="kanji-meaning">この字はまだ個別変換の対象外です。ほかの漢字の意味を中心に名前全体を組み立てます。</div></div>'));
+ } else {
+   grid.innerHTML='<div class="kanji-item"><div class="kanji-char">'+name+'</div><div class="kanji-meaning">漢字の意味を十分に拾えなかったため、この場合だけ読みの響きを補助的に使います。</div></div>';
+ }
+ const keys=[]; found.forEach(x=>{if(!keys.includes(x[2]))keys.push(x[2])});
+ const nameTable=gender==='female'?femaleNames:maleNames; const chosen=keys.slice(0,2).map(k=>nameTable[k]||maleNames[k]).filter(Boolean); if(!chosen.length) chosen.push(greekify(reading||name,gender));
+ const gname=chosen.map(x=>x.jp).join('・'); const gscript=chosen.map(x=>x.gr).join(' '); const desc=chosen.map(x=>x.meaning).join(' × ');
+ const themeText=found.length ? 'この名前から見えるテーマは、<strong>「'+found.map(x=>x[1].split('・')[0]).slice(0,3).join('、')+'」</strong>。漢字がもつ意味を中心に、古代ギリシャの人名へ組み替えます。' : '漢字の意味だけでは十分に変換できなかったため、今回は読みの響きも補助的に使います。';
+ document.getElementById('theme').innerHTML=themeText; document.getElementById('greekScript').textContent=gscript; document.getElementById('greekName').textContent=gname; document.getElementById('meaningLine').textContent=desc;
+ const h=hash(name+reading+gender); const job=pick(gender==='female'?femaleJobs:maleJobs,h); const skill=pick(skills,h,3); const aliasBase=found[0]?.[1].split('・')[0]||'遠い国から来た'; const alias='「'+aliasBase+'の'+['語り手','旅人','仲介者','記録者','学び手'][h%5]+'」';
+ const birth=380+(h%95); const town=pick(['エーゲ海沿いの小さな港町','アッティカ郊外の丘の町','ペロポネソス半島の農村','イオニア地方の商人町','クレタ島の海辺の集落'],h,7);
+ const femaleContext=gender==='female'?'当時の女性には政治や公的活動に多くの制約があったが、その中で自分なりの役割を広げ、':'';
+ const story='紀元前'+birth+'年ごろ、'+town+'に生まれる。幼い頃から'+(found[0]?.[1].split('・')[0]||'人の名前の響き')+'に惹かれ、'+femaleContext+'成人後は'+job+'として暮らした。人々の話を急いで結論づけず、別々の立場にいる者どうしの間に座ることを好んだという。やがて町では'+alias+'と呼ばれるようになった。'+(oracle?' 神託は、あなたを'+(gender==='female'?'女性':'男性')+'としてこの時代へ送り出した。':'');
+ document.getElementById('title').textContent=gname+' の生涯'; document.getElementById('story').textContent=story; document.getElementById('job').textContent=job; document.getElementById('skill').textContent=skill; document.getElementById('alias').textContent=alias; document.getElementById('ending').textContent=pick(endings,h,11); document.getElementById('portrait').innerHTML=makePortrait(name+gname,gender);
+ document.getElementById('result').classList.add('show'); setTimeout(()=>document.getElementById('result').scrollIntoView({behavior:'smooth',block:'start'}),20);
+}
+document.getElementById('go').onclick=generate;
+document.getElementById('name').onkeydown=function(e){if(e.key==='Enter')generate()};
+document.getElementById('reading').onkeydown=function(e){if(e.key==='Enter')generate()};
+document.getElementById('again').onclick=function(){window.scrollTo({top:0,behavior:'smooth'});setTimeout(()=>document.getElementById('name').focus(),250)};
+})();
+</script>
+</body>
+</html>
