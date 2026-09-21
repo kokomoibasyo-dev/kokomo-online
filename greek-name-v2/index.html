@@ -23,8 +23,8 @@
 <h1>あなたもこれで<br>ギリシャ人。</h1>
 <p>あなたの名前の漢字を読み解き、その意味を古代ギリシャ風の人名と物語に変換します。名前を入れるだけ。だいたい2,000年くらい遡ります。</p>
 <div class="form">
-<input id="name" placeholder="名前（例：英孝）" maxlength="12" />
-<input id="reading" placeholder="読み・任意（例：ひでたか）" maxlength="20" />
+<input id="name" placeholder="名前（例：大地）" maxlength="12" />
+<input id="reading" placeholder="読み・任意（例：だいち）" maxlength="20" />
 <div class="gender" aria-label="古代ギリシャでの姿">
 <label><input type="radio" name="gender" value="male" checked>男性として生きる</label>
 <label><input type="radio" name="gender" value="female">女性として生きる</label>
@@ -73,7 +73,34 @@
 (function(){
 const kanji = {
 '大':['大きい・おおらか','megas'],'地':['大地・土地・足元','ge'],'海':['海・広がり・航海','thalassa'],'空':['空・天空・ひらけた場所','ouranos'],'星':['星・輝き・道しるべ','aster'],'光':['光・明るさ・照らすもの','phos'],'陽':['太陽・明るさ・あたたかさ','helios'],'日':['太陽・日・明るさ','helios'],'月':['月・静かな光','selene'],'風':['風・動き・自由さ','anemos'],'森':['森・木々・深さ','drys'],'林':['木立・集まり・緑','drys'],'川':['川・流れ・つながり','potamos'],'泉':['泉・湧き出るもの','pege'],'花':['花・美しさ・開くもの','anthos'],'葉':['葉・生命・成長','phyllon'],'雪':['雪・清らかさ・白さ','chion'],'雨':['雨・恵み・うるおい','hyetos'],'山':['山・高さ・揺るがなさ','oros'],'岳':['高い山・頂','oros'],
-'英':['秀でる・優れる・才知','aristos'],'秀':['秀でる・優れる','aristos'],'優':['優れる・やさしさ','aristos'],'孝':['敬う・大切にする・徳','eusebes'],'敬':['敬意・尊ぶこと','eusebes'],'徳':['徳・善さ・品位','agathos'],'善':['善さ・よいこと','agathos'],'良':['よい・望ましい','agathos'],'智':['知恵・思慮','sophia'],'知':['知る・知恵','sophia'],'慧':['賢さ・洞察','sophia'],'賢':['賢さ・判断力','sophia'],'勇':['勇気・勇敢さ','andreia'],'武':['強さ・武勇','andreia'],'剛':['強さ・堅固さ','kratos'],'力':['力・強さ','kratos'],'勝':['勝利・成し遂げる','nike'],'克':['打ち勝つ・乗り越える','nike'],'希':['希望・願い','elpis'],'望':['希望・見通す','elpis'],'夢':['夢・願い・想像','oneiros'],'愛':['愛・慈しみ','agape'],'友':['友情・仲間','philia'],'和':['調和・平穏','eirene'],'平':['平和・穏やかさ','eirene'],'真':['真実・まこと','aletheia'],'誠':['誠実・真心','aletheia'],'正':['正しさ・公正','dike'],'義':['正義・筋を通す','dike'],'明':['明るさ・明晰さ','phos'],'亮':['明るい・澄んでいる','phos'],'輝':['輝き・光','phos'],'翔':['飛ぶ・高く進む','ouranos'],'翼':['翼・飛翔','ouranos'],'陸':['陸地・地面','ge'],'洋':['大海・広がり','thalassa'],'潮':['潮・海の動き','thalassa'],'波':['波・変化・海','thalassa'],'樹':['木・根を張る','drys'],'桜':['花・春・咲く','anthos'],'葵':['植物・花','anthos'],'蓮':['花・清らかさ','anthos'],'蒼':['青・深い青','kyanos'],'青':['青・空や海の色','kyanos'],'白':['白・清らかさ','leukos'],'紅':['赤・鮮やかさ','erythros'],'心':['心・魂・思い','psyche'],'悠':['ゆったり・遠くまで続く','makros'],'遥':['遠く・はるか','makros'],'直':['まっすぐ・率直','orthos'],'信':['信頼・信じること','pistis'],'礼':['礼節・敬意','eusebes'],'仁':['思いやり・慈しみ','agape'],'幸':['幸福・よい巡り','eutychia'],'福':['幸い・恵まれること','eutychia']
+'英':['秀でる・優れる・才知','aristos'],'秀':['秀でる・優れる','aristos'],'優':['優れる・やさしさ','aristos'],'孝':['敬う・大切にする・徳','eusebes'],'敬':['敬意・尊ぶこと','eusebes'],'徳':['徳・善さ・品位','agathos'],'善':['善さ・よいこと','agathos'],'良':['よい・望ましい','agathos'],'智':['知恵・思慮','sophia'],'知':['知る・知恵','sophia'],'慧':['賢さ・洞察','sophia'],'賢':['賢さ・判断力','sophia'],'勇':['勇気・勇敢さ','andreia'],'武':['強さ・武勇','andreia'],'剛':['強さ・堅固さ','kratos'],'力':['力・強さ','kratos'],'勝':['勝利・成し遂げる','nike'],'克':['打ち勝つ・乗り越える','nike'],'希':['希望・願い','elpis'],'望':['希望・見通す','elpis'],'夢':['夢・願い・想像','oneiros'],'愛':['愛・慈しみ','agape'],'友':['友情・仲間','philia'],'和':['調和・平穏','eirene'],'平':['平和・穏やかさ','eirene'],'真':['真実・まこと','aletheia'],'誠':['誠実・真心','aletheia'],'正':['正しさ・公正','dike'],'義':['正義・筋を通す','dike'],'明':['明るさ・明晰さ','phos'],'亮':['明るい・澄んでいる','phos'],'輝':['輝き・光','phos'],'翔':['飛ぶ・高く進む','ouranos'],'翼':['翼・飛翔','ouranos'],'陸':['陸地・地面','ge'],'洋':['大海・広がり','thalassa'],'潮':['潮・海の動き','thalassa'],'波':['波・変化・海','thalassa'],'樹':['木・根を張る','drys'],'桜':['花・春・咲く','anthos'],'葵':['植物・花','anthos'],'蓮':['花・清らかさ','anthos'],'蒼':['青・深い青','kyanos'],'青':['青・空や海の色','kyanos'],'白':['白・清らかさ','leukos'],'紅':['赤・鮮やかさ','erythros'],'心':['心・魂・思い','psyche'],'悠':['ゆったり・遠くまで続く','makros'],'遥':['遠く・はるか','makros'],'直':['まっすぐ・率直','orthos'],'信':['信頼・信じること','pistis'],'礼':['礼節・敬意','eusebes'],'仁':['思いやり・慈しみ','agape'],'幸':['幸福・よい巡り','eutychia'],'福':['幸い・恵まれること','eutychia'],
+'美':['美しさ・調和・華やかさ','anthos'],'麗':['美しさ・気品','anthos'],'華':['華やかさ・花開くこと','anthos'],'香':['香り・魅力・花の気配','anthos'],'菜':['植物・みずみずしさ・成長','anthos'],'桃':['花・実り・春の生命','anthos'],'梅':['花・忍耐・春を告げるもの','anthos'],'蘭':['花・気品・美しさ','anthos'],'杏':['花・実り・生命','anthos'],
+'春':['春・始まり・花開くこと','anthos'],'夏':['夏・太陽・生命力','helios'],'秋':['実り・成熟・豊かさ','eutychia'],'冬':['静けさ・雪・澄んだ季節','chion'],'朝':['朝・始まり・光','phos'],'夕':['夕暮れ・静けさ・月への移ろい','selene'],
+'晴':['晴れやかさ・明るさ','phos'],'晶':['輝き・澄んだ光','phos'],'景':['光・眺め・広がり','phos'],'照':['照らす・明るくする','phos'],'昭':['明るい・あきらか','phos'],'晃':['光り輝く・明るい','phos'],'旭':['朝日・昇る光','helios'],
+'健':['健やかさ・強さ','kratos'],'康':['健やかさ・安らぎ','eutychia'],'壮':['力強さ・盛んさ','kratos'],'雄':['力強さ・勇ましさ','andreia'],'毅':['強い意志・揺るがなさ','kratos'],'忍':['耐える力・意志の強さ','kratos'],
+'成':['成し遂げる・育つ','nike'],'達':['到達する・成し遂げる','nike'],'功':['成し遂げたこと・功績','nike'],'勲':['功績・名誉','nike'],'誉':['ほまれ・よい評価','nike'],'栄':['栄える・輝く','nike'],
+'実':['実り・真実・確かさ','aletheia'],'果':['実り・成し遂げること','nike'],'稔':['実る・豊かさ','eutychia'],'豊':['豊かさ・満ちること','eutychia'],'穂':['穀物の実り・成長','ge'],
+'恵':['恵み・思いやり','eutychia'],'恩':['恩恵・人への思い','agape'],'慈':['慈しみ・思いやり','agape'],'温':['あたたかさ・穏やかさ','agape'],'優':['優れる・やさしさ','aristos'],'柔':['しなやかさ・穏やかさ','eirene'],
+'喜':['喜び・よろこばしいこと','eutychia'],'慶':['よろこび・祝い','eutychia'],'楽':['楽しさ・安らぎ','eutychia'],'笑':['笑顔・喜び','eutychia'],
+'清':['清らかさ・澄んでいること','leukos'],'澄':['澄む・透明さ・清らかさ','leukos'],'純':['まじりけのなさ・清らかさ','leukos'],'潔':['清らかさ・潔さ','leukos'],
+'雅':['上品さ・調和・洗練','agathos'],'佳':['美しい・よいこと','agathos'],'嘉':['よい・めでたい・喜ばしい','agathos'],'尚':['尊ぶ・高める','eusebes'],'尊':['尊ぶ・敬う','eusebes'],
+'宏':['広い・大きな広がり','makros'],'弘':['広げる・大きくする','makros'],'広':['広い・ひろがり','makros'],'遼':['はるか・遠くまで続く','makros'],'遠':['遠く・広い見通し','makros'],
+'浩':['水の広がり・豊かさ','thalassa'],'湊':['水辺・人や船が集まる場所','thalassa'],'渚':['波打ち際・海辺','thalassa'],'汐':['潮・海の満ち引き','thalassa'],'航':['航海・海を進むこと','thalassa'],
+'拓':['切り開く・土地を広げる','ge'],'耕':['耕す・大地に働きかける','ge'],'稜':['山の稜線・高み','oros'],'峰':['山の頂・高み','oros'],'嶺':['山の峰・高み','oros'],
+'芽':['芽生え・始まり・成長','phyllon'],'苗':['若い植物・成長','phyllon'],'萌':['芽生える・始まる','phyllon'],'若':['若さ・成長・新しさ','phyllon'],
+'結':['結ぶ・つながり','philia'],'絆':['つながり・結びつき','philia'],'朋':['友・仲間','philia'],'仲':['人と人のあいだ・つながり','philia'],
+'想':['思う・心に描く','psyche'],'念':['心に思う・大切にする','psyche'],'志':['志・心に決めること','psyche'],'意':['意思・思い','psyche'],'情':['心・感情・思いやり','psyche'],
+'理':['理・筋道・理解','sophia'],'哲':['知恵・深く考える','sophia'],'学':['学ぶ・知を求める','sophia'],'聡':['賢い・よく理解する','sophia'],'敏':['すばやく気づく・聡さ','sophia'],
+'進':['前へ進む・到達する','nike'],'歩':['歩む・少しずつ進む','nike'],'駿':['すぐれる・速やかに進む','aristos'],'俊':['すぐれる・才知','aristos'],'卓':['すぐれる・際立つ','aristos'],
+'聖':['尊い・清らか','eusebes'],'祐':['助け・守り・恵み','eutychia'],'祈':['祈り・願い','elpis'],'願':['願い・希望','elpis'],'叶':['願いがかなう・実現','elpis'],
+'新':['新しい・始まり','elpis'],'初':['始まり・最初','elpis'],'創':['創る・新しく始める','elpis'],'開':['開く・可能性をひらく','elpis'],
+'凛':['凛とした・清らかな強さ','leukos'],'玲':['澄んだ音・美しい響き','leukos'],'珠':['宝珠・美しさ・大切なもの','agathos'],'宝':['大切なもの・価値','agathos'],
+'千':['多く・豊かさ','makros'],'万':['多く・広がり','makros'],'百':['多く・豊かさ','makros'],
+'一':['ひとつ・始まり・まっすぐさ','orthos'],'真':['真実・まこと','aletheia'],'直':['まっすぐ・率直','orthos'],'央':['中心・まんなか','orthos'],
+'太':['大きい・豊か・おおらか','aristos'],'郎':['若者・朗らかな人のイメージ','phos'],'子':['子ども・生命・受け継がれるもの','phyllon'],
+'翔':['飛ぶ・高く進む','ouranos'],'飛':['飛ぶ・高みへ向かう','ouranos'],'天':['天・空・高み','ouranos'],'宙':['空・宇宙・広がり','ouranos'],
+'龍':['力・躍動・大きな存在','kratos'],'竜':['力・躍動・大きな存在','kratos'],'虎':['勇ましさ・強さ','andreia'],
+'瑞':['めでたい兆し・恵み','eutychia'],'祥':['めでたい・よい兆し','eutychia'],'吉':['よいこと・幸い','eutychia']
 };
 const maleNames = {
 ge:{jp:'ゲオルギオス',gr:'Γεώργιος',meaning:'大地に働きかける者'},thalassa:{jp:'タラッシオス',gr:'Θαλάσσιος',meaning:'海に属する者'},ouranos:{jp:'ウラニオス',gr:'Οὐράνιος',meaning:'天空に属する者'},aster:{jp:'アステリオス',gr:'Ἀστέριος',meaning:'星のような者'},phos:{jp:'フォティオス',gr:'Φώτιος',meaning:'光をもつ者'},helios:{jp:'ヘリオドロス',gr:'Ἡλιόδωρος',meaning:'太陽の贈りもの'},selene:{jp:'セレネ',gr:'Σελήνη',meaning:'月'},anemos:{jp:'アネミオス',gr:'Ἀνέμιος',meaning:'風の者'},drys:{jp:'ドリュアス',gr:'Δρυάς',meaning:'樹木に結ばれた者'},potamos:{jp:'ポタミオス',gr:'Ποτάμιος',meaning:'川に属する者'},pege:{jp:'ペガシオス',gr:'Πηγάσιος',meaning:'泉に結ばれた者'},anthos:{jp:'アンティオス',gr:'Ἄνθιος',meaning:'花咲く者'},phyllon:{jp:'フィリオス',gr:'Φύλλιος',meaning:'葉と成長に結ばれた者'},chion:{jp:'キオニオス',gr:'Χιόνιος',meaning:'雪の者'},hyetos:{jp:'ヒュエティオス',gr:'Ὑέτιος',meaning:'雨をもたらす者'},oros:{jp:'オレイオス',gr:'Ὄρειος',meaning:'山に属する者'},aristos:{jp:'アリステイデス',gr:'Ἀριστείδης',meaning:'卓越・最良に結ばれた者'},eusebes:{jp:'エウセビオス',gr:'Εὐσέβιος',meaning:'敬いと徳をもつ者'},agathos:{jp:'アガトン',gr:'Ἀγάθων',meaning:'善き者'},sophia:{jp:'ソフォクレス',gr:'Σοφοκλῆς',meaning:'知恵に結ばれた者'},andreia:{jp:'アンドレアス',gr:'Ἀνδρέας',meaning:'勇気ある者'},kratos:{jp:'クラティノス',gr:'Κρατῖνος',meaning:'力強き者'},nike:{jp:'ニケフォロス',gr:'Νικηφόρος',meaning:'勝利を運ぶ者'},elpis:{jp:'エルピディオス',gr:'Ἐλπίδιος',meaning:'希望を抱く者'},oneiros:{jp:'オネイリオス',gr:'Ὀνείριος',meaning:'夢に生きる者'},agape:{jp:'アガピオス',gr:'Ἀγάπιος',meaning:'愛に結ばれた者'},philia:{jp:'フィリッポス',gr:'Φίλιππος',meaning:'愛する心をもつ者'},eirene:{jp:'エイレナイオス',gr:'Εἰρηναῖος',meaning:'平和をもたらす者'},aletheia:{jp:'アレティオス',gr:'Ἀλήθιος',meaning:'真実に結ばれた者'},dike:{jp:'ディカイオス',gr:'Δίκαιος',meaning:'公正なる者'},kyanos:{jp:'キュアニオス',gr:'Κυάνιος',meaning:'深い青の者'},leukos:{jp:'レウキオス',gr:'Λεύκιος',meaning:'白く澄んだ者'},erythros:{jp:'エリュトリオス',gr:'Ἐρύθριος',meaning:'赤く鮮やかな者'},psyche:{jp:'プシュキオス',gr:'Ψύχιος',meaning:'心と魂の者'},makros:{jp:'マカリオス',gr:'Μακάριος',meaning:'遠くを見つめる幸いな者'},orthos:{jp:'オルティオス',gr:'Ὄρθιος',meaning:'まっすぐ立つ者'},pistis:{jp:'ピスティオス',gr:'Πίστιος',meaning:'信頼に結ばれた者'},eutychia:{jp:'エウテュキオス',gr:'Εὐτύχιος',meaning:'幸運に恵まれた者'}
@@ -92,13 +119,18 @@ function makePortrait(seed,gender){const h=hash(seed); const hair=['#3b3028','#7
 function generate(){
  const name=document.getElementById('name').value.trim(); const reading=document.getElementById('reading').value.trim(); if(!name){alert('名前を入力してください');return}
  const selected=document.querySelector('input[name="gender"]:checked').value; const oracle=selected==='oracle'; const gender=oracle?(hash(name+reading)%2===0?'male':'female'):selected;
- const chars=[...name]; const found=chars.map(c=>kanji[c]?[c,...kanji[c]]:null).filter(Boolean);
+ const chars=[...name]; const found=chars.map(ch=>kanji[ch]?[ch,...kanji[ch]]:null).filter(Boolean); const unknown=chars.filter(ch=>!/^[ぁ-んァ-ヶー々]$/.test(ch)&&!kanji[ch]);
  const grid=document.getElementById('kanjiGrid'); grid.innerHTML='';
- if(found.length){found.forEach(([c,m])=>grid.insertAdjacentHTML('beforeend','<div class="kanji-item"><div class="kanji-char">'+c+'</div><div class="kanji-meaning">'+m+'</div></div>'))} else {grid.innerHTML='<div class="kanji-item"><div class="kanji-char">'+name+'</div><div class="kanji-meaning">辞書にない組み合わせでした。今回は読みの響きから古代ギリシャ風に変換します。</div></div>'}
+ if(found.length){
+   found.forEach(([ch,m])=>grid.insertAdjacentHTML('beforeend','<div class="kanji-item"><div class="kanji-char">'+ch+'</div><div class="kanji-meaning">'+m+'</div></div>'));
+   unknown.forEach(ch=>grid.insertAdjacentHTML('beforeend','<div class="kanji-item"><div class="kanji-char">'+ch+'</div><div class="kanji-meaning">この字はまだ個別変換の対象外です。ほかの漢字の意味を中心に名前全体を組み立てます。</div></div>'));
+ } else {
+   grid.innerHTML='<div class="kanji-item"><div class="kanji-char">'+name+'</div><div class="kanji-meaning">漢字の意味を十分に拾えなかったため、この場合だけ読みの響きを補助的に使います。</div></div>';
+ }
  const keys=[]; found.forEach(x=>{if(!keys.includes(x[2]))keys.push(x[2])});
  const nameTable=gender==='female'?femaleNames:maleNames; const chosen=keys.slice(0,2).map(k=>nameTable[k]||maleNames[k]).filter(Boolean); if(!chosen.length) chosen.push(greekify(reading||name,gender));
  const gname=chosen.map(x=>x.jp).join('・'); const gscript=chosen.map(x=>x.gr).join(' '); const desc=chosen.map(x=>x.meaning).join(' × ');
- const themeText=found.length ? 'この名前から見えるテーマは、<strong>「'+found.map(x=>x[1].split('・')[0]).slice(0,3).join('、')+'」</strong>。その意味を古代ギリシャ風に組み替えます。' : '今回は音の響きを入口に、古代ギリシャ風の人物へ変換します。';
+ const themeText=found.length ? 'この名前から見えるテーマは、<strong>「'+found.map(x=>x[1].split('・')[0]).slice(0,3).join('、')+'」</strong>。漢字がもつ意味を中心に、古代ギリシャの人名へ組み替えます。' : '漢字の意味だけでは十分に変換できなかったため、今回は読みの響きも補助的に使います。';
  document.getElementById('theme').innerHTML=themeText; document.getElementById('greekScript').textContent=gscript; document.getElementById('greekName').textContent=gname; document.getElementById('meaningLine').textContent=desc;
  const h=hash(name+reading+gender); const job=pick(gender==='female'?femaleJobs:maleJobs,h); const skill=pick(skills,h,3); const aliasBase=found[0]?.[1].split('・')[0]||'遠い国から来た'; const alias='「'+aliasBase+'の'+['語り手','旅人','仲介者','記録者','学び手'][h%5]+'」';
  const birth=380+(h%95); const town=pick(['エーゲ海沿いの小さな港町','アッティカ郊外の丘の町','ペロポネソス半島の農村','イオニア地方の商人町','クレタ島の海辺の集落'],h,7);
