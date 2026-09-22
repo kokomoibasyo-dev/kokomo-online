@@ -1,4 +1,4 @@
-name: Inspect greek-name-v4 kanji data
+name: Inspect greek-name-v4 semantic logic
 on:
   push:
     branches: [main]
@@ -11,27 +11,30 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Extract context around 珠
+      - name: Extract semantic logic context
         run: |
           python - <<'PY'
           from pathlib import Path
-          p = Path("greek-name-v4/index.html")
-          s = p.read_text(encoding="utf-8")
-          parts=[]
-          start=0
-          n=0
-          while True:
-              i=s.find("珠", start)
-              if i<0: break
-              n += 1
-              parts.append(f"--- occurrence {n} at {i} ---\n"+s[max(0,i-1800):i+2600])
-              start=i+1
-          Path("greek-name-v4/debug_kanji_context.txt").write_text("\n\n".join(parts) if parts else "NO_OCCURRENCE", encoding="utf-8")
+          p=Path("greek-name-v4/index.html")
+          s=p.read_text(encoding="utf-8")
+          needles=["珠","民","漢字","意味","大地","kanji","meaning","radical","theme","semantic","name"]
+          out=[f"length={len(s)}"]
+          for needle in needles:
+              out.append(f"\n### {needle} count={s.count(needle)}")
+              start=0
+              shown=0
+              while shown<8:
+                  i=s.find(needle,start)
+                  if i<0: break
+                  out.append(f"--- at {i} ---\n"+s[max(0,i-1200):i+2200])
+                  start=i+len(needle)
+                  shown+=1
+          Path("greek-name-v4/debug_kanji_context.txt").write_text("\n".join(out),encoding="utf-8")
           PY
       - name: Commit diagnostic
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add greek-name-v4/debug_kanji_context.txt
-          git commit -m "chore: inspect kanji context" || exit 0
+          git commit -m "chore: inspect semantic logic" || exit 0
           git push
