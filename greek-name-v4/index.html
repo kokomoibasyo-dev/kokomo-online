@@ -30,7 +30,7 @@ function generate(){const name=document.querySelector('#name').value.trim();if(!
    c.height=1920;
    const ctx=c.getContext('2d');
 
-   const gold='#a47727', paper='#fff8ea', ink='#211d18', soft='#6f6252';
+   const gold='#a47727', paper='#fff8ea', ink='#211d18', soft='#6f6252', line='#d8c49a';
    ctx.clearRect(0,0,c.width,c.height);
    ctx.fillStyle=paper;
    ctx.fillRect(0,0,c.width,c.height);
@@ -40,10 +40,10 @@ function generate(){const name=document.querySelector('#name').value.trim();if(!
 
    ctx.textAlign='center';
    ctx.fillStyle=gold;
-   ctx.font='bold 38px serif';
-   ctx.fillText('名に、物語を',540,88);
+   ctx.font='bold 34px serif';
+   ctx.fillText('❧  名に、物語を  ❧',540,82);
 
-   // illustration
+   // 元イラストの縦横比を保ち、過度に拡大しない
    const img=new Image();
    await new Promise((resolve,reject)=>{img.onload=resolve;img.onerror=reject;img.src=SPRITE});
    const analyzed=analyze(currentName);
@@ -52,14 +52,16 @@ function generate(){const name=document.querySelector('#name').value.trim();if(!
    const idx=order.indexOf(analyzed.t)*2+(gv==='female'?1:0);
    const sx=(idx%4)*180, sy=Math.floor(idx/4)*270;
 
-   const artW=620, artH=930, artX=(1080-artW)/2, artY=130;
+   const artW=360, artH=540, artX=(1080-artW)/2, artY=118;
    ctx.save();
    ctx.beginPath();
    ctx.rect(artX,artY,artW,artH);
    ctx.clip();
+   ctx.imageSmoothingEnabled=true;
+   ctx.imageSmoothingQuality='high';
    ctx.drawImage(img,sx,sy,180,270,artX,artY,artW,artH);
    ctx.restore();
-   ctx.strokeStyle='#d8c49a';
+   ctx.strokeStyle=line;
    ctx.lineWidth=2;
    ctx.strokeRect(artX,artY,artW,artH);
 
@@ -72,82 +74,95 @@ function generate(){const name=document.querySelector('#name').value.trim();if(!
    const skillText=document.getElementById('skill').textContent;
    const aliasText=document.getElementById('alias').textContent;
 
+   ctx.fillStyle=gold;
+   ctx.font='25px Georgia, serif';
+   ctx.fillText(greekScript,540,704);
+
    ctx.fillStyle=ink;
-   ctx.font='bold 64px serif';
-   ctx.fillText(greekName,540,1145);
+   ctx.font='bold 58px serif';
+   ctx.fillText(greekName,540,770);
 
    ctx.fillStyle=soft;
-   ctx.font='32px serif';
-   ctx.fillText(epithet,540,1205);
+   ctx.font='30px serif';
+   ctx.fillText(epithet,540,824);
+
+   ctx.fillStyle=gold;
+   ctx.font='bold 19px -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Yu Gothic", sans-serif';
+   ctx.fillText('日本名との対応',540,874);
 
    ctx.fillStyle=ink;
-   ctx.font='28px serif';
-   ctx.fillText(currentName+' → '+greekScript,540,1255);
+   ctx.font='26px -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Yu Gothic", sans-serif';
+   const jpLabel=reading?currentName+'（'+reading+'） → '+greekName:currentName+' → '+greekName;
+   ctx.fillText(jpLabel,540,914);
 
-   ctx.strokeStyle='#d8c49a';
+   ctx.strokeStyle=line;
    ctx.lineWidth=2;
    ctx.beginPath();
-   ctx.moveTo(150,1290);
-   ctx.lineTo(930,1290);
+   ctx.moveTo(132,958);
+   ctx.lineTo(948,958);
    ctx.stroke();
 
-   function wrapText(text,x,y,maxWidth,lineHeight,maxLines){
+   function wrapText(text,x,y,maxWidth,lineHeight,maxLines,align='left'){
      const chars=[...text];
-     let line='', lines=[];
+     let lineText='', lines=[];
      for(const ch of chars){
-       const test=line+ch;
-       if(ctx.measureText(test).width>maxWidth && line){
-         lines.push(line);
-         line=ch;
+       const test=lineText+ch;
+       if(ctx.measureText(test).width>maxWidth && lineText){
+         lines.push(lineText);
+         lineText=ch;
          if(lines.length>=maxLines) break;
        }else{
-         line=test;
+         lineText=test;
        }
      }
-     if(line && lines.length<maxLines) lines.push(line);
+     if(lineText && lines.length<maxLines) lines.push(lineText);
      if(lines.length===maxLines && chars.join('').length>lines.join('').length){
        lines[maxLines-1]=lines[maxLines-1].replace(/.$/,'…');
      }
+     ctx.textAlign=align;
      lines.forEach((ln,i)=>ctx.fillText(ln,x,y+i*lineHeight));
      return y+lines.length*lineHeight;
    }
 
    ctx.textAlign='left';
    ctx.fillStyle='#3f3a34';
-   ctx.font='26px -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Yu Gothic", sans-serif';
-   let nextY=wrapText(storyText,120,1350,840,42,6);
+   ctx.font='25px -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Yu Gothic", sans-serif';
+   let nextY=wrapText(storyText,120,1018,840,39,7);
 
-   nextY+=28;
-   ctx.strokeStyle='#d8c49a';
+   nextY+=24;
+   ctx.strokeStyle=line;
    ctx.beginPath();
    ctx.moveTo(120,nextY);
    ctx.lineTo(960,nextY);
    ctx.stroke();
-   nextY+=40;
+   nextY+=34;
 
    function fact(label,value,x,y,w){
+     const boxH=118;
      ctx.fillStyle='#f8efd9';
-     ctx.fillRect(x,y,w,112);
+     ctx.fillRect(x,y,w,boxH);
      ctx.strokeStyle='#e0cfaa';
-     ctx.strokeRect(x,y,w,112);
+     ctx.strokeRect(x,y,w,boxH);
+     ctx.textAlign='left';
      ctx.fillStyle=gold;
-     ctx.font='bold 20px -apple-system, BlinkMacSystemFont, "Hiragino Sans", sans-serif';
-     ctx.fillText(label,x+18,y+32);
+     ctx.font='bold 18px -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Yu Gothic", sans-serif';
+     ctx.fillText(label,x+18,y+30);
      ctx.fillStyle=ink;
-     ctx.font='24px -apple-system, BlinkMacSystemFont, "Hiragino Sans", sans-serif';
-     const val=[...value].slice(0,22).join('')+(value.length>22?'…':'');
-     ctx.fillText(val,x+18,y+72);
+     ctx.font='22px -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Yu Gothic", sans-serif';
+     wrapText(value,x+18,y+66,w-36,28,2,'left');
    }
 
-   fact('都市国家',cityText,120,nextY,400);
-   fact('役割',roleText,560,nextY,400);
-   fact('得意なこと',skillText,120,nextY+132,400);
-   fact('人々からの呼び名',aliasText,560,nextY+132,400);
+   // 物語が長くても下部4項目が必ず画像内に収まる位置に固定
+   const factsTop=Math.min(Math.max(nextY,1335),1502);
+   fact('都市国家',cityText,120,factsTop,400);
+   fact('役割',roleText,560,factsTop,400);
+   fact('得意なこと',skillText,120,factsTop+136,400);
+   fact('人々からの呼び名',aliasText,560,factsTop+136,400);
 
    ctx.textAlign='center';
    ctx.fillStyle='#8f816d';
    ctx.font='18px sans-serif';
-   ctx.fillText('※漢字の意味をもとにした、架空の古代ギリシャ風プロフィールです。',540,1850);
+   ctx.fillText('※漢字の意味をもとにした、架空の古代ギリシャ風プロフィールです。',540,1834);
 
    const blob=await new Promise((resolve,reject)=>
       c.toBlob(b=>b?resolve(b):reject(new Error('blob failed')),'image/png')
@@ -176,4 +191,4 @@ function generate(){const name=document.querySelector('#name').value.trim();if(!
    btn.disabled=false;
    btn.textContent=original;
  }
-};['name','reading'].forEach(id=>document.getElementById(id).addEventListener('keydown',e=>{if(e.key==='Enter')generate()}))})();</script></body></html>
+}['name','reading'].forEach(id=>document.getElementById(id).addEventListener('keydown',e=>{if(e.key==='Enter')generate()}))})();</script></body></html>
