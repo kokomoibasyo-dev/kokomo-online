@@ -1,4 +1,4 @@
-name: Fill remaining kanji from rendered Wiktionary text
+name: Complete all name-kanji dictionary entries
 on:
   push:
     branches: [main]
@@ -11,81 +11,114 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Fill from rendered extracts
+      - name: Complete remaining entries from KANJIDIC2
         run: |
           python - <<'PY'
           from pathlib import Path
-          import json,re,urllib.parse,urllib.request,time
+          import json,re,urllib.request,urllib.parse,time
+          from concurrent.futures import ThreadPoolExecutor, as_completed
+
           app=Path("greek-name-v4")
           d=json.loads((app/"kanji-dictionary.json").read_text(encoding="utf-8"))
           stats=json.loads((app/"kanji-dictionary-stats.json").read_text(encoding="utf-8"))
           missing=list(stats.get("unregistered",[]))
-          headers={"User-Agent":"kokomo-greek-name-dictionary/1.0"}
 
-          def parse_extract(txt):
-              vals=[]
-              txt=txt or ""
-              # Direct semantic phrase from etymology/character explanation.
-              for pat in [
-                  r"「([^」\n]{1,30})」を意味する",
-                  r"「([^」\n]{1,30})」を表す",
-                  r"([^。\n]{1,25})を意味する漢語",
-              ]:
-                  for m in re.finditer(pat,txt):
-                      x=m.group(1).strip(" 、。「」")
-                      if x and x not in vals and len(x)<=30: vals.append(x)
-              # Explicit character-meaning section when present.
-              m=re.search(r"(?:^|\n)字義\s*\n(.*?)(?=\n(?:日本語|中国語|朝鮮語|コード等|字源|熟語)\s*\n|\Z)",txt,re.S)
-              if m:
-                  for line in m.group(1).splitlines():
-                      x=re.sub(r"^\s*\d+[.．)]?\s*","",line).strip(" ・。")
-                      if 1<=len(x)<=60 and x not in vals: vals.append(x)
-              # Expanded kun readings are a safe lexical fallback.
-              if not vals:
-                  for m in re.finditer(r"訓読み\s*[:：]?\s*([^\n]+)",txt):
-                      x=m.group(1)
-                      x=re.sub(r"表内|表外|常用漢字表内|常用漢字表外|古訓.*","",x)
-                      for part in re.split(r"[、,／/ ]+",x):
-                          part=re.sub(r"\([^)]*\)|\[[^]]*\]","",part)
-                          part=part.replace("-","").strip(" ・")
-                          if re.fullmatch(r"[ぁ-ゖー]+",part) and 1<len(part)<=12 and part not in vals:
-                              vals.append(part)
-                      if vals: break
-              return vals[:3]
+          with urllib.request.urlopen("https://raw.githubusercontent.com/jkindrix/japanese-language-data/main/data/core/kanji.json",timeout=180) as r:
+              kd=json.load(r)
+
+          chars=kd.get("characters",[]) if isinstance(kd,dict) else kd
+          bychar={}
+          for e in chars:
+              if isinstance(e,dict) and e.get("literal"):
+                  bychar[e["literal"]]=e
+
+          def extract_kd(ch):
+              e=bychar.get(ch) or {}
+              rm=e.get("readingMeaning") or {}
+              groups=rm.get("groups") or []
+              eng=[]
+              kun=[]
+              for g in groups:
+                  for m in g.get("meanings") or []:
+                      if (m.get("lang") in (None,"en")) and m.get("value"):
+                          v=m["value"].strip()
+                          if v and v not in eng: eng.append(v)
+                  for rr in g.get("readings") or []:
+                      if rr.get("type")=="ja_kun" and rr.get("value"):
+                          v=rr["value"].replace(".","").replace("-","").strip()
+                          if re.fullmatch(r"[ぁ-ゖー]+",v) and v not in kun:
+                              kun.append(v)
+              return eng[:4],kun[:4]
+
+          # Free machine translation is used only as a display fallback for KANJIDIC English glosses.
+          cache={}
+          def translate(text):
+              if text in cache:return cache[text]
+              q=urllib.parse.urlencode({"client":"gtx","sl":"en","tl":"ja","dt":"t","q":text})
+              url="https://translate.googleapis.com/translate_a/single?"+q
+              req=urllib.request.Request(url,headers={"User-Agent":"Mozilla/5.0"})
+              try:
+                  with urllib.request.urlopen(req,timeout=20) as r:
+                      obj=json.load(r)
+                  out="".join(x[0] for x in obj[0] if x and x[0]).strip()
+                  cache[text]=out
+                  return out
+              except Exception:
+                  cache[text]=""
+                  return ""
+
+          # Collect unique gloss strings for missing chars.
+          lookup={}
+          phrases=set()
+          for ch in missing:
+              eng,kun=extract_kd(ch)
+              lookup[ch]=(eng,kun)
+              if eng:
+                  phrases.add("; ".join(eng[:3]))
+
+          translated={}
+          with ThreadPoolExecutor(max_workers=8) as ex:
+              futs={ex.submit(translate,p):p for p in phrases}
+              for fut in as_completed(futs):
+                  p=futs[fut]
+                  try: translated[p]=fut.result()
+                  except Exception: translated[p]=""
 
           added=0
-          for i in range(0,len(missing),20):
-              batch=missing[i:i+20]
-              params={
-                "action":"query","format":"json","formatversion":"2",
-                "prop":"extracts","explaintext":"1","exsectionformat":"plain",
-                "titles":"|".join(batch)
-              }
-              req=urllib.request.Request("https://ja.wiktionary.org/w/api.php?"+urllib.parse.urlencode(params),headers=headers)
-              try:
-                  with urllib.request.urlopen(req,timeout=90) as r: obj=json.load(r)
-              except Exception:
-                  time.sleep(.5); continue
-              for page in obj.get("query",{}).get("pages",[]):
-                  ch=page.get("title","")
-                  vals=parse_extract(page.get("extract",""))
-                  if vals:
-                      d[ch]={"meanings":vals,"source":"Japanese Wiktionary rendered text"}
-                      added+=1
-              time.sleep(.1)
+          for ch in missing:
+              eng,kun=lookup.get(ch,([],[]))
+              phrase="; ".join(eng[:3]) if eng else ""
+              ja=translated.get(phrase,"").strip()
+              vals=[]
+              if ja:
+                  # Split translated compact gloss into up to three senses.
+                  for x in re.split(r"[;；、，,/]+",ja):
+                      x=x.strip(" ・。")
+                      if 1<=len(x)<=40 and x not in vals: vals.append(x)
+                      if len(vals)>=3: break
+              # Add lexical kun readings when useful; these are especially good for native-Japanese senses.
+              for x in kun:
+                  if x not in vals and len(vals)<3: vals.append(x)
+              if vals:
+                  d[ch]={
+                    "meanings":vals[:3],
+                    "source":"KANJIDIC2 + Japanese display translation",
+                    "source_meanings_en":eng[:3]
+                  }
+                  added+=1
 
           still=[c for c in missing if c not in d]
           stats["registered"]=len(d)
           stats["coverage"]=round(len(d)/max(1,stats.get("name_kanji_unique",3000))*100,1)
-          stats["rendered_extract_added"]=added
+          stats["kanjidic_fallback_added"]=added
           stats["unregistered"]=still
           (app/"kanji-dictionary.json").write_text(json.dumps(d,ensure_ascii=False,separators=(",",":")),encoding="utf-8")
           (app/"kanji-dictionary-stats.json").write_text(json.dumps(stats,ensure_ascii=False,indent=2),encoding="utf-8")
           PY
-      - name: Commit dictionary
+      - name: Commit complete dictionary
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add greek-name-v4/kanji-dictionary.json greek-name-v4/kanji-dictionary-stats.json
-          git commit -m "Fill remaining kanji from rendered Wiktionary text"
+          git commit -m "Complete all available name-kanji dictionary entries"
           git push
