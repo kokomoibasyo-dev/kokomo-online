@@ -1,0 +1,16 @@
+name: Fix Greek Export Layout
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - .github/workflows/fix-greek-export-layout.yml
+permissions:
+  contents: write
+jobs:
+  fix:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: python .github/scripts/fix-greek-export-layout.py
+      - run: git config user.name github-actions && git config user.email actions@github.com && git add greek-name-v4/index.html && git commit -m "Fix Greek saved-image layout" && git push
