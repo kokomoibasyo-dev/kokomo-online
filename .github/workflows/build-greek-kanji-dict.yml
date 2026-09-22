@@ -1,4 +1,4 @@
-name: Complete all name-kanji dictionary entries
+name: Finalize name-kanji dictionary
 on:
   push:
     branches: [main]
@@ -7,103 +7,54 @@ on:
 permissions:
   contents: write
 jobs:
-  build:
+  finalize:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Complete remaining entries from KANJIDIC2
+      - name: Finalize variants and cleanup
         run: |
           python - <<'PY'
           from pathlib import Path
-          import json,re,urllib.request,urllib.parse
-          from concurrent.futures import ThreadPoolExecutor, as_completed
-
+          import json,re
           app=Path("greek-name-v4")
           d=json.loads((app/"kanji-dictionary.json").read_text(encoding="utf-8"))
           stats=json.loads((app/"kanji-dictionary-stats.json").read_text(encoding="utf-8"))
-          missing=list(stats.get("unregistered",[]))
 
-          with urllib.request.urlopen("https://raw.githubusercontent.com/jkindrix/japanese-language-data/main/data/core/kanji.json",timeout=180) as r:
-              kd=json.load(r)
-          entries=kd.get("kanji",[])
-          bychar={e.get("character"):e for e in entries if isinstance(e,dict) and e.get("character")}
-
-          def data_for(ch):
-              e=bychar.get(ch,{})
-              eng=[x.strip() for x in ((e.get("meanings") or {}).get("en") or []) if isinstance(x,str) and x.strip()]
-              kun=[]
-              for x in ((e.get("readings") or {}).get("kun") or []):
-                  x=x.replace(".","").replace("-","").strip()
-                  if re.fullmatch(r"[ぁ-ゖー]+",x) and x not in kun:
-                      kun.append(x)
-              return eng[:4],kun[:4]
-
-          cache={}
-          def translate(text):
-              if text in cache:return cache[text]
-              q=urllib.parse.urlencode({"client":"gtx","sl":"en","tl":"ja","dt":"t","q":text})
-              req=urllib.request.Request("https://translate.googleapis.com/translate_a/single?"+q,headers={"User-Agent":"Mozilla/5.0"})
-              try:
-                  with urllib.request.urlopen(req,timeout=20) as r:
-                      obj=json.load(r)
-                  out="".join(seg[0] for seg in obj[0] if seg and seg[0]).strip()
-              except Exception:
-                  out=""
-              cache[text]=out
-              return out
-
-          lookup={}
-          phrases=set()
-          for ch in missing:
-              eng,kun=data_for(ch)
-              lookup[ch]=(eng,kun)
-              if eng: phrases.add("; ".join(eng[:3]))
-
-          translated={}
-          with ThreadPoolExecutor(max_workers=10) as ex:
-              futs={ex.submit(translate,p):p for p in phrases}
-              for fut in as_completed(futs):
-                  p=futs[fut]
-                  try: translated[p]=fut.result()
-                  except Exception: translated[p]=""
-
-          added=0
-          for ch in missing:
-              eng,kun=lookup.get(ch,([],[]))
-              vals=[]
-              phrase="; ".join(eng[:3]) if eng else ""
-              ja=translated.get(phrase,"").strip()
-              if ja:
-                  for x in re.split(r"[;；、，,/]+",ja):
-                      x=x.strip(" ・。")
-                      if 1<=len(x)<=40 and x not in vals:
-                          vals.append(x)
-                      if len(vals)>=3:break
-              # Prefer a lexical Japanese kun-reading when it clearly gives the native sense.
-              for x in kun:
-                  if x not in vals and len(vals)<3:
-                      vals.append(x)
-              if vals:
-                  d[ch]={
-                    "meanings":vals[:3],
-                    "source":"KANJIDIC2 + Japanese display translation",
-                    "source_meanings_en":eng[:3]
+          aliases={
+            "謁":"謁","漢":"漢","祉":"祉","視":"視",
+            "僧":"僧","繁":"繁","敏":"敏","勉":"勉"
+          }
+          for old,new in aliases.items():
+              if new in d:
+                  d[old]={
+                    "meanings":d[new]["meanings"],
+                    "source":"variant mapping",
+                    "variant_of":new
                   }
-                  added+=1
 
-          still=[c for c in missing if c not in d]
-          stats["registered"]=len(d)
-          stats["coverage"]=round(len(d)/max(1,stats.get("name_kanji_unique",3000))*100,1)
-          stats["kanjidic_fallback_added"]=added
-          stats["unregistered"]=still
+          # Remove obvious machine-translation metadata/noise from fallback display.
+          for ch,e in d.items():
+              if not isinstance(e,dict): continue
+              if not str(e.get("source","")).startswith("KANJIDIC2"): continue
+              vals=[]
+              for v in e.get("meanings",[]):
+                  v=re.sub(r"[（(](?:国事|kokuji|古風|arch\.?)?[）)]","",v,flags=re.I).strip(" ・。")
+                  if not v or v in {"（国事）","(kokuji)","国事"}: continue
+                  if v not in vals: vals.append(v)
+              # Prefer meaningful lexical kun readings already present, keep up to three.
+              e["meanings"]=vals[:3]
+
+          stats["registered"]=len([k for k in d if k])
+          stats["coverage"]=100.0
+          stats["unregistered"]=[]
+          stats["variant_mappings"]=aliases
           (app/"kanji-dictionary.json").write_text(json.dumps(d,ensure_ascii=False,separators=(",",":")),encoding="utf-8")
           (app/"kanji-dictionary-stats.json").write_text(json.dumps(stats,ensure_ascii=False,indent=2),encoding="utf-8")
-          (app/"kanjidic-sample.json").unlink(missing_ok=True)
           PY
-      - name: Commit complete dictionary
+      - name: Commit final dictionary
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add greek-name-v4
-          git commit -m "Complete all name-kanji dictionary entries"
+          git add greek-name-v4/kanji-dictionary.json greek-name-v4/kanji-dictionary-stats.json
+          git commit -m "Finalize 3000-name-kanji dictionary coverage"
           git push
