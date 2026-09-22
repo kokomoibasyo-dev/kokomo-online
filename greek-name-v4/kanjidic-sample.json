@@ -1,0 +1,201 @@
+{
+  "root_type": "<class 'dict'>",
+  "root_keys": [
+    "metadata",
+    "kanji"
+  ],
+  "list_key": "kanji",
+  "first": {
+    "character": "亜",
+    "unicode": "4e9c",
+    "jis208": "1-16-01",
+    "stroke_count": 7,
+    "stroke_count_variants": [],
+    "grade": 8,
+    "jlpt_old": 1,
+    "jlpt_waller": "N1",
+    "frequency": 1509,
+    "radical": {
+      "classical": 7,
+      "nelson": 1
+    },
+    "radical_components": [
+      "｜",
+      "一",
+      "口"
+    ],
+    "meanings": {
+      "en": [
+        "Asia",
+        "rank next",
+        "come after",
+        "-ous"
+      ],
+      "fr": [
+        "Asie",
+        "suivant",
+        "sub-",
+        "sous-"
+      ],
+      "es": [
+        "pref. para indicar",
+        "venir después de",
+        "Asia"
+      ],
+      "pt": [
+        "Ásia",
+        "próxima",
+        "o que vem depois",
+        "-ous"
+      ]
+    },
+    "readings": {
+      "on": [
+        "ア"
+      ],
+      "kun": [
+        "つ.ぐ"
+      ]
+    },
+    "readings_cjk": {
+      "pinyin": [
+        "ya4"
+      ],
+      "korean_romanized": [
+        "a"
+      ],
+      "korean_hangul": [
+        "아"
+      ],
+      "vietnamese": [
+        "A",
+        "Á"
+      ]
+    },
+    "nanori": [
+      "や",
+      "つぎ",
+      "つぐ"
+    ],
+    "variants": [
+      {
+        "type": "jis208",
+        "value": "1-48-19"
+      }
+    ],
+    "dic_refs": {
+      "nelson_c": "43",
+      "nelson_n": "81",
+      "halpern_njecd": "3540",
+      "halpern_kkld_2ed": "2966",
+      "heisig": "1809",
+      "heisig6": "1950",
+      "gakken": "1331",
+      "oneill_kk": "1788",
+      "moro": "272",
+      "henshall": "997",
+      "kodansha_compact": "35"
+    },
+    "query_codes": {
+      "skip": "4-7-1",
+      "sh_desc": "0a7.14",
+      "four_corner": "1010.6",
+      "deroo": "3273"
+    }
+  },
+  "穏": {
+    "character": "穏",
+    "unicode": "7a4f",
+    "jis208": "1-18-26",
+    "stroke_count": 16,
+    "stroke_count_variants": [],
+    "grade": 8,
+    "jlpt_old": 1,
+    "jlpt_waller": "N1",
+    "frequency": 1535,
+    "radical": {
+      "classical": 115,
+      "nelson": null
+    },
+    "radical_components": [
+      "ヨ",
+      "禾",
+      "心",
+      "爪"
+    ],
+    "meanings": {
+      "en": [
+        "calm",
+        "quiet",
+        "moderation"
+      ],
+      "fr": [
+        "paisible",
+        "calme",
+        "modéré"
+      ],
+      "es": [
+        "tranquilo",
+        "en calma",
+        "silencioso",
+        "moderación",
+        "calmado",
+        "amable"
+      ],
+      "pt": [
+        "calma",
+        "tranquilidade",
+        "moderação"
+      ]
+    },
+    "readings": {
+      "on": [
+        "オン"
+      ],
+      "kun": [
+        "おだ.やか"
+      ]
+    },
+    "readings_cjk": {
+      "pinyin": [
+        "wen3"
+      ],
+      "korean_romanized": [
+        "on"
+      ],
+      "korean_hangul": [
+        "온"
+      ],
+      "vietnamese": [
+        "Ổn",
+        "Ủn"
+      ]
+    },
+    "nanori": [],
+    "variants": [
+      {
+        "type": "jis208",
+        "value": "1-67-51"
+      }
+    ],
+    "dic_refs": {
+      "nelson_c": "3305",
+      "nelson_n": "4175",
+      "halpern_njecd": "1235",
+      "halpern_kkld_2ed": "1141",
+      "heisig": "1147",
+      "heisig6": "1230",
+      "gakken": "1631",
+      "oneill_kk": "1792",
+      "moro": "25280P",
+      "henshall": "1043",
+      "kodansha_compact": "1447"
+    },
+    "query_codes": {
+      "skip": "1-5-11",
+      "sh_desc": "5d11.4",
+      "four_corner": "2293.7",
+      "deroo": "2258"
+    }
+  }
+}
