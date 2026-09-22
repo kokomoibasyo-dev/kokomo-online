@@ -17,4 +17,57 @@ function meaningDetail(ch,meaning,theme){
 function unknownDetail(ch){
  return '<div class="kanjiMeaningCard"><div class="kanjiBig">'+ch+'</div><div class="kanjiBody"><strong>意味はまだ辞書に未登録</strong><p>この字は、字形や部首から意味を推測せず、一般的・辞書的な字義を確認できるまでは断定しません。</p><p>名前の意味では、まず漢字そのものが一般に持つ意味を優先します。</p><p class="bridge">この字の意味を、ギリシャの物語の根拠には使いません。</p></div></div>';
 }
-function generate(){const name=document.querySelector('#name').value.trim();if(!name)return alert('名前を入力してください');const reading=document.querySelector('#reading').value.trim();let gender=document.querySelector('input[name=gender]:checked').value;if(gender==='oracle')gender=h(name+reading)%2?'male':'female';const a=analyze(name),t=a.t,T=themes[t],x=h(name+reading+gender),nm=gender==='female'?T.f:T.m;meaningTitle.textContent=`「${name}」という名前を、漢字から読む`;const mg=document.getElementById('kanjiMeaningGrid');mg.innerHTML=[...name].map(ch=>{const e=getKanjiEntry(ch);return e?meaningDetail(ch,e.meaning,e.theme):unknownDetail(ch)}).join('');meaningText.innerHTML=a.xs.length?`<b>${name}</b>という名前には、${a.xs.map(v=>'「'+v[1].split('・')[0]+'」').join('と')}が重なっています。今回はその中から <b>${T.jp}</b> を中心テーマに選び、${T.sub} の方向へ物語を広げます。ここでは字形や部首からの連想より、漢字が一般に持つ辞書的な意味を優先しています。`:`<b>${name}</b>に使われている漢字は、現在の意味辞書では未登録です。意味を作ったり、部首から推測したりはしません。ギリシャ部分だけは、字義とは切り分けて名前の響きから遊びとして生成します。`;greekScript.textContent=nm[1];greekName.textContent=nm[0];epithet.textContent=`「${T.sub.split('・').join('と')}を宿す者」`;city.textContent=pick(cities,x);role.textContent=pick(roles[t],x,2);skill.textContent=pick(skills,x,5);alias.textContent=`「${pick(['静かな','黄金の','遠くを見る','人を結ぶ','問いを持つ','風を読む'],x,7)}${T.jp}の人」`;const year=350+x%110;story.textContent=`紀元前${year}年ごろ、${city.textContent}に生まれる。名前に刻まれた「${a.xs.map(v=>v[1].split('・')[0]).slice(0,3).join('・')||'希望'}」を大切にしながら、${role.textContent}として暮らした。人々は、答えを急ぐよりも相手の話を聞き、必要なときに一歩前へ出るその姿を覚えていたという。これは史実ではなく、あなたの名から生まれた架空の一生である。`;const idx=order.indexOf(t)*2+(gender==='female'?1:0);setArt(idx);result.classList.add('show');setTimeout(()=>result.scrollIntoView({behavior:'smooth'}),20)}go.onclick=generate;again.onclick=()=>window.scrollTo({top:0,behavior:'smooth'});save.onclick=()=>{const c=canvas,ctx=c.getContext('2d');ctx.fillStyle='#fff8ea';ctx.fillRect(0,0,c.width,c.height);ctx.fillStyle='#a47727';ctx.textAlign='center';ctx.font='bold 34px serif';ctx.fillText('名に、物語を',540,68);ctx.strokeStyle='#a47727';ctx.lineWidth=4;ctx.strokeRect(32,30,1016,1560);const img=new Image();img.onload=()=>{const idx=order.indexOf(analyze(name.value.trim()).t)*2+((document.querySelector('input[name=gender]:checked').value==='female')?1:0);const sx=(idx%4)*180,sy=Math.floor(idx/4)*270;ctx.drawImage(img,sx,sy,180,270,135,120,810,1215);ctx.fillStyle='#fff8ea';ctx.fillRect(80,1260,920,290);ctx.fillStyle='#111';ctx.font='bold 70px serif';ctx.fillText(greekName.textContent,540,1355);ctx.font='34px serif';ctx.fillText(epithet.textContent,540,1415);ctx.font='26px serif';ctx.fillText(name.value+' → '+greekScript.textContent,540,1475);const a=document.createElement('a');a.download='greek-certificate-'+name.value+'.png';a.href=c.toDataURL('image/png');a.click()};img.src=SPRITE};['name','reading'].forEach(id=>document.getElementById(id).addEventListener('keydown',e=>{if(e.key==='Enter')generate()}))})();</script></body></html>
+function generate(){const name=document.querySelector('#name').value.trim();if(!name)return alert('名前を入力してください');const reading=document.querySelector('#reading').value.trim();let gender=document.querySelector('input[name=gender]:checked').value;if(gender==='oracle')gender=h(name+reading)%2?'male':'female';const a=analyze(name),t=a.t,T=themes[t],x=h(name+reading+gender),nm=gender==='female'?T.f:T.m;meaningTitle.textContent=`「${name}」という名前を、漢字から読む`;const mg=document.getElementById('kanjiMeaningGrid');mg.innerHTML=[...name].map(ch=>{const e=getKanjiEntry(ch);return e?meaningDetail(ch,e.meaning,e.theme):unknownDetail(ch)}).join('');meaningText.innerHTML=a.xs.length?`<b>${name}</b>という名前には、${a.xs.map(v=>'「'+v[1].split('・')[0]+'」').join('と')}が重なっています。今回はその中から <b>${T.jp}</b> を中心テーマに選び、${T.sub} の方向へ物語を広げます。ここでは字形や部首からの連想より、漢字が一般に持つ辞書的な意味を優先しています。`:`<b>${name}</b>に使われている漢字は、現在の意味辞書では未登録です。意味を作ったり、部首から推測したりはしません。ギリシャ部分だけは、字義とは切り分けて名前の響きから遊びとして生成します。`;greekScript.textContent=nm[1];greekName.textContent=nm[0];epithet.textContent=`「${T.sub.split('・').join('と')}を宿す者」`;city.textContent=pick(cities,x);role.textContent=pick(roles[t],x,2);skill.textContent=pick(skills,x,5);alias.textContent=`「${pick(['静かな','黄金の','遠くを見る','人を結ぶ','問いを持つ','風を読む'],x,7)}${T.jp}の人」`;const year=350+x%110;story.textContent=`紀元前${year}年ごろ、${city.textContent}に生まれる。名前に刻まれた「${a.xs.map(v=>v[1].split('・')[0]).slice(0,3).join('・')||'希望'}」を大切にしながら、${role.textContent}として暮らした。人々は、答えを急ぐよりも相手の話を聞き、必要なときに一歩前へ出るその姿を覚えていたという。これは史実ではなく、あなたの名から生まれた架空の一生である。`;const idx=order.indexOf(t)*2+(gender==='female'?1:0);setArt(idx);result.classList.add('show');setTimeout(()=>result.scrollIntoView({behavior:'smooth'}),20)}go.onclick=generate;again.onclick=()=>window.scrollTo({top:0,behavior:'smooth'});document.getElementById('save').onclick=async()=>{
+ const btn=document.getElementById('save');
+ const original=btn.textContent;
+ btn.disabled=true;
+ btn.textContent='画像を作成中…';
+ try{
+   const currentName=document.getElementById('name').value.trim()||'name';
+   const c=document.getElementById('canvas');
+   const ctx=c.getContext('2d');
+   ctx.clearRect(0,0,c.width,c.height);
+   ctx.fillStyle='#fff8ea';ctx.fillRect(0,0,c.width,c.height);
+   ctx.fillStyle='#a47727';ctx.textAlign='center';ctx.font='bold 34px serif';
+   ctx.fillText('名に、物語を',540,68);
+   ctx.strokeStyle='#a47727';ctx.lineWidth=4;ctx.strokeRect(32,30,1016,1560);
+
+   const img=new Image();
+   await new Promise((resolve,reject)=>{img.onload=resolve;img.onerror=reject;img.src=SPRITE;});
+
+   const analyzed=analyze(currentName);
+   const gv=(document.querySelector('input[name=gender]:checked')||{}).value||'male';
+   const idx=order.indexOf(analyzed.t)*2+(gv==='female'?1:0);
+   const sx=(idx%4)*180,sy=Math.floor(idx/4)*270;
+   ctx.drawImage(img,sx,sy,180,270,135,120,810,1215);
+
+   ctx.fillStyle='#fff8ea';ctx.fillRect(80,1260,920,290);
+   ctx.fillStyle='#111';ctx.font='bold 70px serif';
+   ctx.fillText(document.getElementById('greekName').textContent,540,1355);
+   ctx.font='34px serif';
+   ctx.fillText(document.getElementById('epithet').textContent,540,1415);
+   ctx.font='26px serif';
+   ctx.fillText(currentName+' → '+document.getElementById('greekScript').textContent,540,1475);
+
+   const blob=await new Promise((resolve,reject)=>c.toBlob(b=>b?resolve(b):reject(new Error('blob failed')),'image/png'));
+   const filename='greek-certificate-'+currentName+'.png';
+   const file=new File([blob],filename,{type:'image/png'});
+
+   if(navigator.share&&navigator.canShare&&navigator.canShare({files:[file]})){
+      btn.textContent='共有画面を開きます…';
+      await navigator.share({files:[file],title:'名に、物語を'});
+   }else{
+      const url=URL.createObjectURL(blob);
+      const a=document.createElement('a');
+      a.href=url;a.download=filename;a.rel='noopener';
+      document.body.appendChild(a);a.click();a.remove();
+      setTimeout(()=>URL.revokeObjectURL(url),60000);
+   }
+ }catch(err){
+   console.error(err);
+   alert('画像の保存に失敗しました。もう一度お試しください。');
+ }finally{
+   btn.disabled=false;
+   btn.textContent=original;
+ }
+};['name','reading'].forEach(id=>document.getElementById(id).addEventListener('keydown',e=>{if(e.key==='Enter')generate()}))})();</script></body></html>
