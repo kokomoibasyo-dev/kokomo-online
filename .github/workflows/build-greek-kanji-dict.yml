@@ -1,4 +1,4 @@
-name: Fill remaining kanji from Wiktionary structure
+name: Fill remaining kanji from rendered Wiktionary text
 on:
   push:
     branches: [main]
@@ -11,100 +11,73 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Fill from etymology and kun readings
+      - name: Fill from rendered extracts
         run: |
           python - <<'PY'
           from pathlib import Path
-          import json,re,urllib.parse,urllib.request,time,html
+          import json,re,urllib.parse,urllib.request,time
           app=Path("greek-name-v4")
           d=json.loads((app/"kanji-dictionary.json").read_text(encoding="utf-8"))
           stats=json.loads((app/"kanji-dictionary-stats.json").read_text(encoding="utf-8"))
           missing=list(stats.get("unregistered",[]))
+          headers={"User-Agent":"kokomo-greek-name-dictionary/1.0"}
 
-          def plain(s):
-              s=re.sub(r"<ref[^>]*>.*?</ref>","",s,flags=re.S)
-              s=re.sub(r"<ref[^>]*/>","",s)
-              s=re.sub(r"<!--.*?-->","",s,flags=re.S)
-              s=re.sub(r"\[\[([^\]|]+)\|([^\]]+)\]\]",r"\2",s)
-              s=re.sub(r"\[\[([^\]]+)\]\]",r"\1",s)
-              # Keep useful last argument from common link/mention templates.
-              s=re.sub(r"\{\{(?:m|l|ruby)\|[^|{}]+\|([^|{}]+)(?:\|[^{}]*)?\}\}",r"\1",s)
-              s=re.sub(r"\{\{おくりがな2?\|([^|{}]+)\|([^|{}]+).*?\}\}",r"\1\2",s)
-              for _ in range(6):
-                  ns=re.sub(r"\{\{[^{}]*\}\}","",s)
-                  if ns==s: break
-                  s=ns
-              s=s.replace("'''","").replace("''","")
-              s=re.sub(r"<[^>]+>","",s)
-              s=re.sub(r"\s+"," ",s).strip(" 。;；:")
-              return html.unescape(s)
-
-          def section(wt,title):
-              pat=rf"(?ms)^===+\s*{re.escape(title)}\s*===+\s*$\n(.*?)(?=^={{2,6}}\s*[^=\n]+\s*={{2,6}}\s*$|\Z)"
-              m=re.search(pat,wt)
-              return m.group(1) if m else ""
-
-          def extract(wt):
+          def parse_extract(txt):
               vals=[]
-              # 1. explicit semantic statements in etymology.
-              src=plain(section(wt,"字源"))
-              for m in re.finditer(r"「([^」]{1,30})」を意味",src):
-                  x=m.group(1).replace("-","").strip()
-                  if x and x not in vals: vals.append(x)
-              for m in re.finditer(r"([^。]{1,30})を表す字",src):
-                  x=m.group(1).strip("、「」 ")
-                  if x and x not in vals and len(x)<=30: vals.append(x)
-
-              # 2. Japanese section kun readings often directly encode lexical meaning.
-              jm=re.search(r"(?ms)^==\s*日本語\s*==\s*$\n(.*?)(?=^==\s*[^=\n]+\s*==\s*$|\Z)",wt)
-              jsec=jm.group(1) if jm else ""
-              for line in jsec.splitlines():
-                  if "訓読み" not in line and not re.search(r"\|\s*訓\s*=",line): continue
-                  x=plain(line)
-                  x=re.sub(r"^.*?訓読み\s*[:：]?\s*","",x)
-                  for part in re.split(r"[、,／/ ]+",x):
-                      part=re.sub(r"表内|表外|常用|訓読み|古訓","",part)
-                      part=part.replace("-","").strip("（）()[] ")
-                      if not part or len(part)>14: continue
-                      if re.fullmatch(r"[ぁ-ゖー]+",part) and part not in vals:
-                          vals.append(part)
-                  if vals: break
-
-              # 3. definitions in 造語成分, when present.
+              txt=txt or ""
+              # Direct semantic phrase from etymology/character explanation.
+              for pat in [
+                  r"「([^」\n]{1,30})」を意味する",
+                  r"「([^」\n]{1,30})」を表す",
+                  r"([^。\n]{1,25})を意味する漢語",
+              ]:
+                  for m in re.finditer(pat,txt):
+                      x=m.group(1).strip(" 、。「」")
+                      if x and x not in vals and len(x)<=30: vals.append(x)
+              # Explicit character-meaning section when present.
+              m=re.search(r"(?:^|\n)字義\s*\n(.*?)(?=\n(?:日本語|中国語|朝鮮語|コード等|字源|熟語)\s*\n|\Z)",txt,re.S)
+              if m:
+                  for line in m.group(1).splitlines():
+                      x=re.sub(r"^\s*\d+[.．)]?\s*","",line).strip(" ・。")
+                      if 1<=len(x)<=60 and x not in vals: vals.append(x)
+              # Expanded kun readings are a safe lexical fallback.
               if not vals:
-                  z=section(wt,"造語成分")
-                  for line in z.splitlines():
-                      if not re.match(r"^\s*[#*]",line): continue
-                      x=plain(line)
-                      x=re.sub(r"^\d+[.)．]\s*","",x)
-                      if 2<=len(x)<=60 and x not in vals: vals.append(x)
-
+                  for m in re.finditer(r"訓読み\s*[:：]?\s*([^\n]+)",txt):
+                      x=m.group(1)
+                      x=re.sub(r"表内|表外|常用漢字表内|常用漢字表外|古訓.*","",x)
+                      for part in re.split(r"[、,／/ ]+",x):
+                          part=re.sub(r"\([^)]*\)|\[[^]]*\]","",part)
+                          part=part.replace("-","").strip(" ・")
+                          if re.fullmatch(r"[ぁ-ゖー]+",part) and 1<len(part)<=12 and part not in vals:
+                              vals.append(part)
+                      if vals: break
               return vals[:3]
 
-          headers={"User-Agent":"kokomo-greek-name-dictionary/1.0"}
           added=0
-          for i in range(0,len(missing),40):
-              batch=missing[i:i+40]
-              params={"action":"query","format":"json","formatversion":"2","prop":"revisions","rvprop":"content","rvslots":"main","titles":"|".join(batch)}
+          for i in range(0,len(missing),20):
+              batch=missing[i:i+20]
+              params={
+                "action":"query","format":"json","formatversion":"2",
+                "prop":"extracts","explaintext":"1","exsectionformat":"plain",
+                "titles":"|".join(batch)
+              }
               req=urllib.request.Request("https://ja.wiktionary.org/w/api.php?"+urllib.parse.urlencode(params),headers=headers)
               try:
                   with urllib.request.urlopen(req,timeout=90) as r: obj=json.load(r)
               except Exception:
-                  continue
+                  time.sleep(.5); continue
               for page in obj.get("query",{}).get("pages",[]):
-                  ch=page.get("title",""); revs=page.get("revisions") or []
-                  if not revs: continue
-                  wt=((revs[0].get("slots") or {}).get("main") or {}).get("content","")
-                  vals=extract(wt)
+                  ch=page.get("title","")
+                  vals=parse_extract(page.get("extract",""))
                   if vals:
-                      d[ch]={"meanings":vals,"source":"Japanese Wiktionary 字源・訓読み"}
+                      d[ch]={"meanings":vals,"source":"Japanese Wiktionary rendered text"}
                       added+=1
               time.sleep(.1)
 
           still=[c for c in missing if c not in d]
           stats["registered"]=len(d)
           stats["coverage"]=round(len(d)/max(1,stats.get("name_kanji_unique",3000))*100,1)
-          stats["etymology_kun_added"]=added
+          stats["rendered_extract_added"]=added
           stats["unregistered"]=still
           (app/"kanji-dictionary.json").write_text(json.dumps(d,ensure_ascii=False,separators=(",",":")),encoding="utf-8")
           (app/"kanji-dictionary-stats.json").write_text(json.dumps(stats,ensure_ascii=False,indent=2),encoding="utf-8")
@@ -114,5 +87,5 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add greek-name-v4/kanji-dictionary.json greek-name-v4/kanji-dictionary-stats.json
-          git commit -m "Expand name-kanji meanings from etymology and kun readings"
+          git commit -m "Fill remaining kanji from rendered Wiktionary text"
           git push
