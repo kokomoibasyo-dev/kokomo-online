@@ -1,4 +1,4 @@
-name: Inspect Japanese kanji dictionary source
+name: Complete kanji dictionary for greek-name-v4
 on:
   push:
     branches: [main]
@@ -7,32 +7,92 @@ on:
 permissions:
   contents: write
 jobs:
-  inspect:
+  build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Inspect Wiktionary-derived hanzi data
+      - name: Complete name-kanji dictionary
         run: |
           python - <<'PY'
-          import json, urllib.request
           from pathlib import Path
-          url="https://raw.githubusercontent.com/michel-ZH/yomichan-dictionaries/master/japanese/kanji/wiktionary/hanziData.json"
-          with urllib.request.urlopen(url,timeout=180) as r:
-              data=json.load(r)
-          out={"type":str(type(data)),"len":len(data)}
-          if isinstance(data,dict):
-              out["keys"]=list(data)[:20]
-              out["珠"]=data.get("珠")
-          elif isinstance(data,list):
-              out["first"]=data[:3]
-              hits=[x for x in data if isinstance(x,dict) and (x.get("kanji")=="珠" or x.get("character")=="珠" or x.get("word")=="珠")]
-              out["珠"]=hits[:3]
-          Path("greek-name-v4/source-inspect.json").write_text(json.dumps(out,ensure_ascii=False,indent=2),encoding="utf-8")
+          import csv, io, json, re, urllib.request
+
+          app=Path("greek-name-v4")
+          current=json.loads((app/"kanji-dictionary.json").read_text(encoding="utf-8"))
+
+          with urllib.request.urlopen("https://raw.githubusercontent.com/mimneko/kanji-data/main/%E5%AD%90%E3%81%AE%E5%90%8D%E3%81%AB%E4%BD%BF%E3%81%88%E3%82%8B%E6%BC%A2%E5%AD%97.csv",timeout=120) as r:
+              txt=r.read().decode("utf-8-sig")
+          rows=list(csv.DictReader(io.StringIO(txt)))
+          target=[]
+          seen=set()
+          for row in rows:
+              ch=(row.get("漢字") or "").strip()
+              if len(ch)==1 and ch not in seen:
+                  seen.add(ch); target.append(ch)
+
+          with urllib.request.urlopen("https://raw.githubusercontent.com/michel-ZH/yomichan-dictionaries/master/japanese/kanji/wiktionary/hanziData.json",timeout=180) as r:
+              hanzi=json.load(r)
+
+          trans=str.maketrans({
+              "寶":"宝","眞":"真","體":"体","學":"学","國":"国","會":"会","廣":"広","樂":"楽",
+              "氣":"気","櫻":"桜","龍":"竜","龜":"亀","邊":"辺","邉":"辺","澤":"沢","惠":"恵"
+          })
+
+          def clean_line(x):
+              x=x.translate(trans)
+              x=re.sub(r"^[【\[（(].*?[】\]）)]\s*","",x)
+              x=re.sub(r"^→\s*","",x)
+              x=re.sub(r"\s+"," ",x).strip(" ・。;；")
+              return x
+
+          def from_hanzi(ch):
+              raw=hanzi.get(ch)
+              if not isinstance(raw,str): return []
+              if "＝＝＝＝＝＝日語＝＝＝＝＝＝" not in raw: return []
+              sec=raw.split("＝＝＝＝＝＝日語＝＝＝＝＝＝",1)[1]
+              sec=sec.split("＝＝＝＝＝＝朝鮮語＝＝＝＝＝＝",1)[0]
+              if "ーーーーーー釋義ーーーーーー" not in sec: return []
+              sec=sec.split("ーーーーーー釋義ーーーーーー",1)[1]
+              sec=sec.split("ーーーーーー組詞ーーーーーー",1)[0]
+              vals=[]
+              for line in sec.splitlines():
+                  line=clean_line(line)
+                  if not line: continue
+                  if line.startswith(("音讀","訓讀","常用漢字","名乘音","難讀音")): continue
+                  if "http://" in line or "https://" in line: continue
+                  # Prefer short lexical glosses over long explanations.
+                  if len(line)>80: continue
+                  if line not in vals: vals.append(line)
+              # Put the shortest useful senses first.
+              vals=sorted(vals,key=lambda x:(len(x)>28,len(x)))
+              return vals[:3]
+
+          out={}
+          fallback=0
+          for ch in target:
+              if ch in current:
+                  out[ch]=current[ch]
+              else:
+                  vals=from_hanzi(ch)
+                  if vals:
+                      out[ch]={"meanings":vals,"source":"Japanese Wiktionary (kanji section)"}
+                      fallback+=1
+
+          (app/"kanji-dictionary.json").write_text(json.dumps(out,ensure_ascii=False,separators=(",",":")),encoding="utf-8")
+          stats={
+              "name_kanji_unique":len(target),
+              "registered":len(out),
+              "coverage":round(len(out)/max(1,len(target))*100,1),
+              "wiktionary_fallback_added":fallback,
+              "unregistered":[c for c in target if c not in out]
+          }
+          (app/"kanji-dictionary-stats.json").write_text(json.dumps(stats,ensure_ascii=False,indent=2),encoding="utf-8")
+          (app/"source-inspect.json").unlink(missing_ok=True)
           PY
-      - name: Commit inspection
+      - name: Commit completed dictionary
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add greek-name-v4/source-inspect.json
-          git commit -m "chore: inspect Japanese kanji source"
+          git add greek-name-v4
+          git commit -m "Complete broad name-kanji dictionary coverage"
           git push
