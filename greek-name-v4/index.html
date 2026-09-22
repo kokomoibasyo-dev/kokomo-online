@@ -50,16 +50,31 @@ function generate(){const name=document.querySelector('#name').value.trim();if(!
    let gv=(document.querySelector('input[name=gender]:checked')||{}).value||'male';
    if(gv==='oracle') gv=h(currentName+reading)%2?'male':'female';
    const idx=order.indexOf(analyzed.t)*2+(gv==='female'?1:0);
-   const sx=(idx%4)*180, sy=Math.floor(idx/4)*270;
 
-   const artW=360, artH=540, artX=(1080-artW)/2, artY=118;
+   // スプライトの実寸から1コマの大きさを算出する。
+   // 固定180x270で切ると、画像更新時に隣のコマが混ざるため固定値を使わない。
+   const cols=4;
+   const totalFrames=order.length*2;
+   const rows=Math.ceil(totalFrames/cols);
+   const frameW=img.naturalWidth/cols;
+   const frameH=img.naturalHeight/rows;
+   const sx=(idx%cols)*frameW;
+   const sy=Math.floor(idx/cols)*frameH;
+
+   // 元の縦横比を保ったまま、保存画像内に contain で収める
+   const artMaxW=380, artMaxH=520;
+   const artScale=Math.min(artMaxW/frameW,artMaxH/frameH);
+   const artW=Math.round(frameW*artScale);
+   const artH=Math.round(frameH*artScale);
+   const artX=Math.round((1080-artW)/2);
+   const artY=118;
    ctx.save();
    ctx.beginPath();
    ctx.rect(artX,artY,artW,artH);
    ctx.clip();
    ctx.imageSmoothingEnabled=true;
    ctx.imageSmoothingQuality='high';
-   ctx.drawImage(img,sx,sy,180,270,artX,artY,artW,artH);
+   ctx.drawImage(img,sx,sy,frameW,frameH,artX,artY,artW,artH);
    ctx.restore();
    ctx.strokeStyle=line;
    ctx.lineWidth=2;
