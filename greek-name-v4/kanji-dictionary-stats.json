@@ -1,14 +1,13 @@
 {
   "name_kanji_unique": 3000,
-  "registered": 2100,
-  "coverage": 70.0,
+  "registered": 2103,
+  "coverage": 70.1,
   "wiktionary_fallback_added": 8,
   "unregistered": [
     "穏",
     "箇",
     "悔",
     "楷",
-    "劾",
     "涯",
     "閣",
     "掛",
@@ -162,7 +161,6 @@
     "賠",
     "薄",
     "漠",
-    "伐",
     "抜",
     "半",
     "氾",
@@ -189,7 +187,6 @@
     "漂",
     "描",
     "頻",
-    "付",
     "扶",
     "府",
     "怖",
@@ -906,5 +903,6 @@
     "錄"
   ],
   "wiktionary_page_added": 583,
-  "etymology_kun_added": 244
+  "etymology_kun_added": 244,
+  "rendered_extract_added": 3
 }
