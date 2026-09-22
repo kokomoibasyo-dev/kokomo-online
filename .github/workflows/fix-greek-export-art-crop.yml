@@ -1,0 +1,21 @@
+name: Fix Greek Export Art Crop
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - .github/workflows/fix-greek-export-art-crop.yml
+permissions:
+  contents: write
+jobs:
+  fix:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: python .github/scripts/fix-greek-export-art-crop.py
+      - run: |
+          git config user.name github-actions
+          git config user.email actions@github.com
+          git add greek-name-v4/index.html
+          git diff --cached --quiet || git commit -m "Fix Greek export illustration crop"
+          git push
