@@ -15,45 +15,30 @@ jobs:
         run: |
           python - <<'PY'
           from pathlib import Path
-          import re
           p=Path("greek-name-v4/index.html")
           s=p.read_text(encoding="utf-8")
-
           old="'心':['心・魂・思い','sacred']};const themes="
           new="'心':['心・魂・思い','sacred'],'珠':['真珠・美しい玉・宝','art'],'玉':['美しい玉・大切なもの・輝き','art'],'宝':['宝・大切なもの・価値','sacred']};const themes="
           assert old in s
           s=s.replace(old,new,1)
-
           old_analyze="function analyze(name){const xs=[...name].map(c=>D[c]?[c,...D[c]]:null).filter(Boolean);const score=Object.fromEntries(order.map(k=>[k,0]));xs.forEach(x=>score[x[2]]++);let t=order.sort((a,b)=>score[b]-score[a])[0];if(!xs.length)t='people';return{xs,t}}"
           new_analyze="function analyze(name){const chars=[...name];const xs=chars.map(c=>D[c]?[c,...D[c]]:null).filter(Boolean);const unknown=chars.filter(c=>!D[c]);const score=Object.fromEntries(order.map(k=>[k,0]));xs.forEach(x=>score[x[2]]++);const t=xs.length?[...order].sort((a,b)=>score[b]-score[a])[0]:order[h(name)%order.length];return{xs,unknown,t}}"
           assert old_analyze in s
           s=s.replace(old_analyze,new_analyze,1)
-
-          anchor="""function meaningDetail(ch,meaning,theme){
- const first=meaning.split('・')[0];
- const second=meaning.split('・').slice(1).join('・');
- const natural=second?('「'+first+'」を中心に、'+second+'という広がりも持つ字です。'):('「'+first+'」という意味を持つ字です。');
- return '<div class="kanjiMeaningCard"><div class="kanjiBig">'+ch+'</div><div class="kanjiBody"><strong>'+meaning+'</strong><p>'+natural+'</p><p>'+themeMeaningCopy[theme]+'</p><p class="bridge">この字の意味を、古代ギリシャでは「'+themes[theme].jp+'」の物語へつなげます。</p></div></div>';
-}
-"""
+          anchor="function meaningDetail(ch,meaning,theme){\n const first=meaning.split('・')[0];\n const second=meaning.split('・').slice(1).join('・');\n const natural=second?('「'+first+'」を中心に、'+second+'という広がりも持つ字です。'):('「'+first+'」という意味を持つ字です。');\n return '<div class=\"kanjiMeaningCard\"><div class=\"kanjiBig\">'+ch+'</div><div class=\"kanjiBody\"><strong>'+meaning+'</strong><p>'+natural+'</p><p>'+themeMeaningCopy[theme]+'</p><p class=\"bridge\">この字の意味を、古代ギリシャでは「'+themes[theme].jp+'」の物語へつなげます。</p></div></div>';\n}\n"
           assert anchor in s
-          addition=anchor+"""function unknownDetail(ch){
- return '<div class="kanjiMeaningCard"><div class="kanjiBig">'+ch+'</div><div class="kanjiBody"><strong>意味はまだ辞書に未登録</strong><p>この字は、字形や部首から意味を推測せず、一般的・辞書的な字義を確認できるまでは断定しません。</p><p>名前の意味では、まず漢字そのものが一般に持つ意味を優先します。</p><p class="bridge">この字の意味を、ギリシャの物語の根拠には使いません。</p></div></div>';
-}
-"""
-          s=s.replace(anchor,addition,1)
-
+          unknown="function unknownDetail(ch){\n return '<div class=\"kanjiMeaningCard\"><div class=\"kanjiBig\">'+ch+'</div><div class=\"kanjiBody\"><strong>意味はまだ辞書に未登録</strong><p>この字は、字形や部首から意味を推測せず、一般的・辞書的な字義を確認できるまでは断定しません。</p><p>名前の意味では、まず漢字そのものが一般に持つ意味を優先します。</p><p class=\"bridge\">この字の意味を、ギリシャの物語の根拠には使いません。</p></div></div>';\n}\n"
+          s=s.replace(anchor,anchor+unknown,1)
           old_mg="const mg=document.getElementById('kanjiMeaningGrid');mg.innerHTML=(a.xs.length?a.xs:[[name,'名前全体の響き・物語',t]]).map(v=>meaningDetail(v[0],v[1],v[2])).join('');"
           new_mg="const mg=document.getElementById('kanjiMeaningGrid');mg.innerHTML=[...name].map(ch=>D[ch]?meaningDetail(ch,D[ch][0],D[ch][1]):unknownDetail(ch)).join('');"
           assert old_mg in s
           s=s.replace(old_mg,new_mg,1)
-
           start=s.index("meaningText.innerHTML=")
           end=s.index(";greekScript.textContent=",start)
           bt=chr(96)
-          new_summary="meaningText.innerHTML=a.xs.length?"+bt+"<b>"+chr(36)+"{name}</b>という名前には、"+chr(36)+"{a.xs.map(v=>'「'+v[1].split('・')[0]+'」').join('と')}が重なっています。今回はその中から <b>"+chr(36)+"{T.jp}</b> を中心テーマに選び、"+chr(36)+"{T.sub} の方向へ物語を広げます。ここでは字形や部首からの連想より、漢字が一般に持つ辞書的な意味を優先しています。"+bt+":"+bt+"<b>"+chr(36)+"{name}</b>に使われている漢字は、現在の意味辞書では未登録です。意味を作ったり、部首から推測したりはしません。ギリシャ部分だけは、字義とは切り分けて名前の響きから遊びとして生成します。"+bt
-          s=s[:start]+new_summary+s[end:]
-
+          dl=chr(36)
+          summary="meaningText.innerHTML=a.xs.length?"+bt+"<b>"+dl+"{name}</b>という名前には、"+dl+"{a.xs.map(v=>'「'+v[1].split('・')[0]+'」').join('と')}が重なっています。今回はその中から <b>"+dl+"{T.jp}</b> を中心テーマに選び、"+dl+"{T.sub} の方向へ物語を広げます。ここでは字形や部首からの連想より、漢字が一般に持つ辞書的な意味を優先しています。"+bt+":"+bt+"<b>"+dl+"{name}</b>に使われている漢字は、現在の意味辞書では未登録です。意味を作ったり、部首から推測したりはしません。ギリシャ部分だけは、字義とは切り分けて名前の響きから遊びとして生成します。"+bt
+          s=s[:start]+summary+s[end:]
           p.write_text(s,encoding="utf-8")
           Path("greek-name-v4/debug_kanji_context.txt").unlink(missing_ok=True)
           PY
