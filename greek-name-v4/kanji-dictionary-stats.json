@@ -1,20 +1,21 @@
 {
   "name_kanji_unique": 3000,
-  "registered": 2992,
-  "coverage": 99.7,
+  "registered": 3000,
+  "coverage": 100.0,
   "wiktionary_fallback_added": 8,
-  "unregistered": [
-    "謁",
-    "漢",
-    "祉",
-    "視",
-    "僧",
-    "繁",
-    "敏",
-    "勉"
-  ],
+  "unregistered": [],
   "wiktionary_page_added": 583,
   "etymology_kun_added": 244,
   "rendered_extract_added": 3,
-  "kanjidic_fallback_added": 889
+  "kanjidic_fallback_added": 889,
+  "variant_mappings": {
+    "謁": "謁",
+    "漢": "漢",
+    "祉": "祉",
+    "視": "視",
+    "僧": "僧",
+    "繁": "繁",
+    "敏": "敏",
+    "勉": "勉"
+  }
 }
