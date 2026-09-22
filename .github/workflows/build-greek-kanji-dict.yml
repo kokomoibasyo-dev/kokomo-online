@@ -1,0 +1,169 @@
+name: Build kanji dictionary for greek-name-v4
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/build-greek-kanji-dict.yml"
+permissions:
+  contents: write
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build dictionary and patch app
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import json, gzip, urllib.request, re, html
+
+          app = Path("greek-name-v4")
+          app.mkdir(exist_ok=True)
+
+          def fetch_json(url):
+              with urllib.request.urlopen(url, timeout=120) as r:
+                  return json.load(r)
+
+          def collect_cjk(obj, out):
+              if isinstance(obj, dict):
+                  for k,v in obj.items():
+                      collect_cjk(k,out); collect_cjk(v,out)
+              elif isinstance(obj, list):
+                  for v in obj: collect_cjk(v,out)
+              elif isinstance(obj, str):
+                  for ch in obj:
+                      o=ord(ch)
+                      if (0x3400<=o<=0x4DBF) or (0x4E00<=o<=0x9FFF) or (0xF900<=o<=0xFAFF):
+                          out.add(ch)
+
+          joyo = fetch_json("https://raw.githubusercontent.com/jkindrix/japanese-language-data/main/data/core/kanji-joyo.json")
+          jin = fetch_json("https://raw.githubusercontent.com/jkindrix/japanese-language-data/main/data/core/kanji-jinmeiyo.json")
+          allowed=set()
+          collect_cjk(joyo, allowed); collect_cjk(jin, allowed)
+
+          # Keep the app's already-curated common name kanji too.
+          curated = {
+            "大":"大きい・おおらか・広がり","地":"大地・土地・足元","海":"海・広がり・航海",
+            "空":"空・大空・広がり","星":"星・光る天体・目印","光":"光・明るさ・照らすもの",
+            "陽":"太陽・日の光・明るさ","月":"月・月の光・月日","風":"風・空気の動き・風情",
+            "森":"森・木々が茂る場所","花":"花・咲くもの・美しさ","英":"すぐれる・秀でる・才知",
+            "孝":"親を敬う・大切にする","智":"知恵・賢さ・判断","知":"知る・理解する・知識",
+            "賢":"かしこい・判断力・知恵","勇":"勇気・いさましさ","武":"武・強さ・勇ましさ",
+            "勝":"勝つ・まさる・成し遂げる","希":"まれ・望み・願い","望":"望む・願う・見渡す",
+            "愛":"愛する・慈しむ・大切にする","仁":"思いやり・慈しみ・人への情け","和":"なごむ・調和・平穏",
+            "平":"平ら・穏やか・平和","結":"結ぶ・つなぐ・まとまる","絆":"きずな・つながり",
+            "友":"友・仲間・親しい人","真":"まこと・本当・偽りがない","誠":"まこと・誠実・真心",
+            "正":"正しい・まっすぐ・公正","義":"正しい道・道理・正義","明":"明るい・はっきりする・光",
+            "輝":"かがやく・光を放つ","翔":"飛ぶ・空高く進む","翼":"つばさ・飛ぶための羽",
+            "洋":"大海・広い海・西洋","航":"船で進む・航海・旅立ち","湊":"みなと・船や人が集まる所",
+            "浩":"広大・水が豊か・広い","拓":"ひらく・切り開く","耕":"たがやす・育てる",
+            "実":"み・実り・中身・確かさ","豊":"ゆたか・満ち足りる","穂":"穀物の穂・実り",
+            "恵":"めぐみ・恩恵・思いやり","春":"春・季節の始まり・芽吹き","晴":"晴れる・明るい空",
+            "健":"すこやか・丈夫・元気","剛":"つよい・かたい・強固","毅":"意志が強い・くじけない",
+            "志":"こころざし・目標・思い","理":"道理・筋道・理解","哲":"道理に明るい・深く考える",
+            "学":"学ぶ・知る・習う","創":"つくる・始める・生み出す","美":"美しい・よい・整う",
+            "華":"花・華やか・栄える","雅":"みやび・上品・洗練","祈":"祈る・願う",
+            "聖":"神聖・尊い・すぐれた","信":"信じる・信用・誠実","願":"願う・望み・願い",
+            "心":"こころ・気持ち・精神","珠":"真珠・美しい玉・宝","玉":"美しい玉・宝石・大切なもの",
+            "宝":"宝・大切なもの・価値あるもの"
+          }
+          allowed.update(curated)
+
+          url="https://kaikki.org/jawiktionary/raw-wiktextract-data.jsonl.gz"
+          data={}
+          with urllib.request.urlopen(url, timeout=180) as resp, gzip.GzipFile(fileobj=resp) as gz:
+              for raw in gz:
+                  try: obj=json.loads(raw)
+                  except Exception: continue
+                  w=obj.get("word","")
+                  if w not in allowed or obj.get("lang_code")!="ja":
+                      continue
+                  glosses=[]
+                  for s in obj.get("senses",[]) or []:
+                      for g in s.get("glosses",[]) or []:
+                          g=re.sub(r"\s+"," ",str(g)).strip(" 。")
+                          if 1 <= len(g) <= 90 and g not in glosses:
+                              glosses.append(g)
+                  if glosses:
+                      data.setdefault(w,[])
+                      for g in glosses:
+                          if g not in data[w]: data[w].append(g)
+
+          out={}
+          for ch in sorted(allowed):
+              if ch in curated:
+                  meanings=[x for x in curated[ch].split("・") if x]
+                  out[ch]={"meanings":meanings,"source":"curated+Wiktionary" if ch in data else "curated"}
+              elif ch in data:
+                  # Keep concise dictionary senses only.
+                  vals=[]
+                  for g in data[ch]:
+                      if g not in vals:
+                          vals.append(g)
+                      if len(vals)>=3: break
+                  out[ch]={"meanings":vals,"source":"Japanese Wiktionary"}
+
+          (app/"kanji-dictionary.json").write_text(json.dumps(out,ensure_ascii=False,separators=(",",":")),encoding="utf-8")
+          stats={"target_characters":len(allowed),"registered":len(out),"coverage":round(len(out)/max(1,len(allowed))*100,1)}
+          (app/"kanji-dictionary-stats.json").write_text(json.dumps(stats,ensure_ascii=False,indent=2),encoding="utf-8")
+          (app/"KANJI_DICTIONARY_NOTICE.md").write_text(
+              "# Kanji dictionary data\n\n"
+              "General Japanese definitions are derived from the Japanese-language edition of Wiktionary via Wiktextract/Kaikki.org. "
+              "Wiktionary text is available under Creative Commons Attribution-ShareAlike terms; see the source project for details. "
+              "The Joyo/Jinmeiyo selection is derived from jkindrix/japanese-language-data (KANJIDIC2 lineage, CC BY-SA). "
+              "Short curated name-friendly glosses for common characters are local modifications.\n",
+              encoding="utf-8"
+          )
+
+          p=app/"index.html"
+          s=p.read_text(encoding="utf-8")
+
+          # Add attribution near existing disclaimer.
+          old='※姓名判断ではありません。漢字の意味とギリシャ語人名をもとにした遊びです。'
+          new=old+' 辞書語義は日本語版Wiktionary等の公開辞書を参照しています。'
+          if old in s and new not in s:
+              s=s.replace(old,new,1)
+
+          # Add external dictionary loader just after IIFE start.
+          marker="<script>(()=>{const SPRITE="
+          if marker in s and "let EXT_D={};" not in s:
+              s=s.replace(marker,"<script>(()=>{let EXT_D={};fetch('kanji-dictionary.json').then(r=>r.json()).then(d=>{EXT_D=d}).catch(()=>{});const SPRITE=",1)
+
+          # Replace analyze with dictionary-aware implementation.
+          m=re.search(r"function analyze\(name\)\{.*?return\{xs,unknown,t\}\}",s)
+          if not m:
+              m=re.search(r"function analyze\(name\)\{.*?return\{xs,t\}\}",s)
+          if m:
+              repl=("function classifyTheme(txt){const z=txt||'';"
+                    "if(/勇|強|勝|武|守|毅|健/.test(z))return'hero';"
+                    "if(/知|学|理|賢|哲|智|考|明晰/.test(z))return'sage';"
+                    "if(/和|愛|仁|結|友|絆|平|慈|協/.test(z))return'harmony';"
+                    "if(/海|水|船|航|空|風|翼|翔|港|洋/.test(z))return'sea';"
+                    "if(/花|美|華|雅|輝|創|詩|芸|珠|玉|宝石/.test(z))return'art';"
+                    "if(/祈|聖|神|信|願|魂|月|星|心/.test(z))return'sacred';"
+                    "if(/地|山|森|木|春|実|穂|豊|耕|陽|土|自然|生命/.test(z))return'nature';"
+                    "return'people'}"
+                    "function getKanjiEntry(c){if(D[c])return{meaning:D[c][0],theme:D[c][1],source:'curated'};"
+                    "const e=EXT_D[c];if(!e||!e.meanings||!e.meanings.length)return null;"
+                    "const meaning=e.meanings.slice(0,3).join('・');return{meaning,theme:classifyTheme(meaning),source:e.source||'dictionary'}}"
+                    "function analyze(name){const chars=[...name];const xs=chars.map(c=>{const e=getKanjiEntry(c);return e?[c,e.meaning,e.theme]:null}).filter(Boolean);"
+                    "const unknown=chars.filter(c=>!getKanjiEntry(c));const score=Object.fromEntries(order.map(k=>[k,0]));xs.forEach(x=>score[x[2]]++);"
+                    "const t=xs.length?[...order].sort((a,b)=>score[b]-score[a])[0]:order[h(name)%order.length];return{xs,unknown,t}}")
+              s=s[:m.start()]+repl+s[m.end():]
+
+          # Make card rendering use external dictionary too.
+          old_expr="mg.innerHTML=[...name].map(ch=>D[ch]?meaningDetail(ch,D[ch][0],D[ch][1]):unknownDetail(ch)).join('');"
+          if old_expr in s:
+              new_expr="mg.innerHTML=[...name].map(ch=>{const e=getKanjiEntry(ch);return e?meaningDetail(ch,e.meaning,e.theme):unknownDetail(ch)}).join('');"
+              s=s.replace(old_expr,new_expr,1)
+
+          p.write_text(s,encoding="utf-8")
+          print(stats)
+          PY
+      - name: Commit generated dictionary
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add greek-name-v4
+          git commit -m "Add broad Japanese kanji dictionary to Greek name app"
+          git push
