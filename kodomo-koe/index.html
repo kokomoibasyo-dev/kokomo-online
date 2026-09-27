@@ -271,6 +271,8 @@ function renderIntro(){setHTML(`
   <p>こうした表現は、本人を理解するための大切な<strong>手がかり</strong>です。でも、</p>
   <div class="note"><strong>「黙ったから嫌なんだ」<br>「笑っているから大丈夫なんだ」</strong><br>と、大人が意味を決めることはできません。</div>
   <p class="emphasis">「どういうことなんだろう？」と想像し、本人と確かめていく。</p>
+  <div class="note"><strong>点ではなく、線と面でみる。</strong><br>
+  その瞬間の言葉や態度だけでなく、普段のその子らしさ、直近の出来事、これから起こる予定、人との関係、その場の環境などをつなげて考えると、見え方は変わります。</div>
   <p>このコンテンツでは、まず言葉や態度の背景にあり得ることを考え、そのあと「あなたならどう返す？」を選びます。</p>
   <div class="actions"><button class="primary" id="playBtn">7つの場面を体験する</button><button class="secondary" id="backHome">戻る</button></div>
   <p class="disclaimer">参考：こども家庭庁「第2版 こども・若者の意見の政策反映に向けたガイドライン」等。設問・選択肢・◎○△評価は公式のものではなく、資料を参考に「ここも」が啓発用に構成したものです。</p>
@@ -289,7 +291,7 @@ function renderQuestion(){
  <div class="card">
   <div class="scene-label">${item.theme.title}</div>
   <div class="scene">${item.q.scene}</div>
-  <div class="prompt">このとき、こどもはどんな気持ちや事情を抱えているかもしれませんか？<br><small style="font-weight:500;color:var(--muted)">気になるものをいくつでも選んでみよう。ここは採点しません。</small></div>
+  <div class="prompt">このとき、こどもはどんな気持ちや事情を抱えているかもしれませんか？<br><small style="font-weight:500;color:var(--muted)">その子の普段の様子や、直近の出来事、これからの予定なども思い浮かべながら、近そうなものを選んでみよう。ここは採点しません。</small></div>
   <div class="choices" id="bgChoices">${shuffle(item.q.backgrounds).map((x,i)=>`<label class="choice choice-check"><input type="checkbox" value="${escapeAttr(x)}"><span>${x}</span></label>`).join('')}</div>
   <div class="actions"><button class="primary" id="bgNext">選んで次へ</button></div>
  </div>`);
@@ -305,7 +307,10 @@ function renderBackgroundInsight(){
  setHTML(`<div class="progress-wrap"><div class="progress-head"><span>${state.idx+1} / 7</span><span>${item.theme.title}</span></div><div class="progress"><div style="width:${((state.idx+.3)/7)*100}%"></div></div></div>
  <div class="card">
   <div class="scene-label">${item.theme.title}</div><div class="scene">${item.q.scene}</div>
-  <div class="insight"><strong>どれも、あり得ます。ほかの理由かもしれません。</strong><p>この場面だけで、こどもの本当の気持ちを決めることはできません。大切なのは「きっと○○だ」と決めつけず、本人と確かめていくことです。</p></div>
+  <div class="insight"><strong>どれも「可能性」ではあります。でも、どれも同じくらいあり得るわけではありません。</strong>
+  <p>目の前のこの子なら、どれが近そうだろう。普段の様子、その子らしさ、直近の出来事、これから起こる予定、人との関係、その場の環境などをつなげて考えると、可能性の見え方は変わります。</p>
+  <p><strong>点ではなく、時間の流れを「線」で、関係や環境を「面」でみる。</strong><br>
+  そのうえで、大人だけで答えを決めず、本人と確かめていくことが大切です。</p></div>
   <h3>では、あなたならなんて返す？</h3>
   <div class="choices" id="replyChoices">${shuffle(item.q.choices).map((x,i)=>`<button class="choice" type="button" data-text="${escapeAttr(x.text)}">${x.text}</button>`).join('')}</div>
   <div class="actions"><button class="primary" id="replyNext" type="button" disabled>進む</button></div>
@@ -369,7 +374,7 @@ function renderClosing(){setHTML(`<div class="card hero">
  <div class="eyebrow">おわりに</div><h2>こどもの声は、いつも言葉になっているとは限りません。</h2>
  <div class="voice-list"><div class="voice-chip">話す</div><div class="voice-chip">書く</div><div class="voice-chip">選ぶ</div><div class="voice-chip">表情・行動</div></div>
  <p class="lead">ときには、まだ本人にも分からない。</p>
- <p class="emphasis">大切なのは、その意味を大人が決めることではなく、<br>「どういうことだろう？」と考え、本人と確かめていくこと。</p>
+ <p class="emphasis">大切なのは、その意味を大人が決めることではなく、<br>目の前の「点」だけでなく、その子の時間の流れや関係・環境まで見ながら、<br>「どういうことだろう？」と考え、本人と確かめていくこと。</p>
  <p class="lead">そこから、こどもの声を聴くことが始まります。</p>
  <div class="actions"><button class="primary" id="againBtn">もう一度やってみる</button><button class="secondary" id="refs2">参考資料を見る</button></div>
  <div class="footer-msg"><div class="big">こどもの声を聴くって？</div><div>― さまざまな、声のカタチ ―</div><div style="margin-top:12px;font-weight:800">ここも</div></div>
