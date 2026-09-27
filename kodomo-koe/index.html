@@ -30,7 +30,8 @@
     .meta{margin-top:18px;color:var(--muted);font-size:.88rem;display:flex;justify-content:center;gap:14px;flex-wrap:wrap}
     .primary,.secondary{border-radius:999px;padding:14px 24px;font-weight:800;border:0;min-height:50px}
     .primary{background:var(--navy);color:#fff;box-shadow:0 6px 18px rgba(23,50,77,.18)}
-    .primary:hover{background:#10283d}.secondary{background:var(--soft);color:var(--navy);border:1px solid #cfdae1}
+    .secondary{background:var(--soft);color:var(--navy);border:1px solid #cfdae1}
+    .primary:disabled{opacity:.38;box-shadow:none;cursor:default}
     .actions{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:28px}
     h2{font-size:1.65rem;color:var(--navy);margin:0 0 16px;line-height:1.4}
     h3{font-size:1.1rem;color:var(--navy);margin:24px 0 8px}
@@ -42,7 +43,11 @@
     .scene-label{display:inline-block;background:#edf4f2;color:var(--green);border-radius:999px;padding:7px 12px;font-weight:800;font-size:.82rem;margin-bottom:13px}
     .scene{font-size:clamp(1.28rem,4vw,1.7rem);font-weight:800;line-height:1.65;margin:6px 0 20px;color:#182a3a}
     .prompt{font-weight:800;color:var(--navy);font-size:1.03rem;margin-bottom:10px}
-    .choices{display:grid;gap:10px}.choice{width:100%;text-align:left;-webkit-appearance:none;appearance:none;padding:16px 17px;border-radius:15px;border:1px solid var(--line);background:#fff;color:var(--ink);line-height:1.55;transition:.15s}.choice:hover{border-color:#99aebb;background:#fafcfd}.choice.selected{border:2px solid var(--navy2);background:#eef5f8}.choice[disabled]{cursor:default;opacity:.76}
+    .choices{display:grid;gap:10px}.choice{width:100%;text-align:left;-webkit-appearance:none;appearance:none;padding:16px 17px;border-radius:15px;border:1px solid var(--line);background:#fff;color:var(--ink);line-height:1.55;transition:.15s}.choice.selected{border:2px solid var(--navy2);background:#eef5f8}.choice[disabled]{cursor:default;opacity:.76}
+    @media (hover:hover) and (pointer:fine){
+      .primary:hover{background:#10283d}
+      .choice:hover{border-color:#99aebb;background:#fafcfd}
+    }
     .choice-check{display:flex;gap:12px;align-items:flex-start}.choice-check input{margin-top:5px;transform:scale(1.2)}
     .insight{margin-top:18px;padding:18px;border-radius:16px;background:#f7f3ea;border:1px solid #eadfca}.insight strong{color:var(--navy)}
     .score{font-size:2rem;font-weight:900;color:var(--navy);margin:4px 0 6px}.mark{font-size:2.2rem;font-weight:900}.mark.good{color:var(--green)}.mark.mid{color:var(--warn)}.mark.try{color:var(--danger)}
@@ -235,7 +240,7 @@ function shuffle(a){const b=[...a];for(let i=b.length-1;i>0;i--){const j=Math.fl
 function markFor(score){return score===2?'◎':score===-2?'△':'○'}
 function markClass(mark){return mark==='◎'?'good':mark==='△'?'try':'mid'}
 
-const state={screen:'home', questions:[], idx:0, phase:'background', selectedBg:new Set(), results:[]};
+const state={screen:'home', questions:[], idx:0, phase:'background', selectedBg:new Set(), pendingReply:null, results:[]};
 const root=document.getElementById('screen');
 document.getElementById('refBtn').onclick=()=>renderReferences();
 
@@ -274,7 +279,7 @@ function renderIntro(){setHTML(`
 
 function startGame(){
  state.questions=THEMES.map(t=>({theme:t,q:BANK[t.id][Math.floor(Math.random()*BANK[t.id].length)]}));
- state.idx=0;state.results=[];state.phase='background';state.selectedBg=new Set();renderQuestion();
+ state.idx=0;state.results=[];state.phase='background';state.selectedBg=new Set();state.pendingReply=null;renderQuestion();
 }
 
 function renderQuestion(){
@@ -283,7 +288,7 @@ function renderQuestion(){
  <div class="card">
   <div class="scene-label">${item.theme.title}</div>
   <div class="scene">${item.q.scene}</div>
-  <div class="prompt">この言葉や態度の背景には、どんな気持ちや事情があるかもしれない？<br><small style="font-weight:500;color:var(--muted)">気になるものをいくつでも選んでみよう。ここは採点しません。</small></div>
+  <div class="prompt">このとき、こどもはどんな気持ちや事情を抱えているかもしれませんか？<br><small style="font-weight:500;color:var(--muted)">気になるものをいくつでも選んでみよう。ここは採点しません。</small></div>
   <div class="choices" id="bgChoices">${shuffle(item.q.backgrounds).map((x,i)=>`<label class="choice choice-check"><input type="checkbox" value="${escapeAttr(x)}"><span>${x}</span></label>`).join('')}</div>
   <div class="actions"><button class="primary" id="bgNext">選んで次へ</button></div>
  </div>`);
@@ -295,14 +300,25 @@ function renderQuestion(){
 
 function renderBackgroundInsight(){
  const item=state.questions[state.idx];
+ state.pendingReply=null;
  setHTML(`<div class="progress-wrap"><div class="progress-head"><span>${state.idx+1} / 7</span><span>${item.theme.title}</span></div><div class="progress"><div style="width:${((state.idx+.3)/7)*100}%"></div></div></div>
  <div class="card">
   <div class="scene-label">${item.theme.title}</div><div class="scene">${item.q.scene}</div>
-  <div class="insight"><strong>どれも、あり得ます。ほかの理由かもしれません。</strong><p>この言葉や態度だけで、本当の気持ちは分かりません。大切なのは「きっと○○だ」と決めず、本人と確かめていくことです。</p></div>
+  <div class="insight"><strong>どれも、あり得ます。ほかの理由かもしれません。</strong><p>この場面だけで、こどもの本当の気持ちを決めることはできません。大切なのは「きっと○○だ」と決めつけず、本人と確かめていくことです。</p></div>
   <h3>では、あなたならなんて返す？</h3>
-  <div class="choices" id="replyChoices">${shuffle(item.q.choices).map((x,i)=>`<button class="choice" data-text="${escapeAttr(x.text)}">${x.text}</button>`).join('')}</div>
+  <div class="choices" id="replyChoices">${shuffle(item.q.choices).map((x,i)=>`<button class="choice" type="button" data-text="${escapeAttr(x.text)}">${x.text}</button>`).join('')}</div>
+  <div class="actions"><button class="primary" id="replyNext" type="button" disabled>進む</button></div>
  </div>`);
- [...document.querySelectorAll('#replyChoices .choice')].forEach(btn=>btn.onclick=()=>chooseReply(btn.dataset.text));
+ const buttons=[...document.querySelectorAll('#replyChoices .choice')];
+ const next=document.getElementById('replyNext');
+ buttons.forEach(btn=>btn.onclick=()=>{
+   buttons.forEach(b=>b.classList.remove('selected'));
+   btn.classList.add('selected');
+   btn.blur();
+   state.pendingReply=btn.dataset.text;
+   next.disabled=false;
+ });
+ next.onclick=()=>{ if(state.pendingReply) chooseReply(state.pendingReply); };
 }
 
 function chooseReply(text){
@@ -317,7 +333,7 @@ function chooseReply(text){
   <div class="insight"><strong>振り返り</strong><p>${ans.feedback}</p><strong>ポイント</strong><p>${item.q.point}</p></div>
   <div class="actions"><button class="primary" id="nextQ">${state.idx===6?'結果を見る':'次の場面へ'}</button></div>
  </div>`);
- document.getElementById('nextQ').onclick=()=>{state.idx++;state.selectedBg=new Set();if(state.idx>=7)renderResults();else renderQuestion()};
+ document.getElementById('nextQ').onclick=()=>{state.idx++;state.selectedBg=new Set();state.pendingReply=null;if(state.idx>=7)renderResults();else renderQuestion()};
 }
 
 function renderResults(){
@@ -325,9 +341,9 @@ function renderResults(){
  setHTML(`<div class="card">
   <div class="eyebrow">7つの場面を振り返る</div>
   <h2>今回の「聴き方」</h2>
-  <p>総合点：<strong>${total} / 14点</strong></p>
-  <div class="note">この点数は「よい大人・悪い大人」を決めるものではありません。今日選んだ「聴き方」を振り返るための目安です。</div>
-  <div class="results-grid">${state.results.map(r=>`<div class="result-row"><div class="result-title">${r.theme.result}</div><div class="result-mark ${markClass(r.mark)}">${r.mark}</div></div>`).join('')}</div>
+  <p>合計点：<strong>${total>0?'+':''}${total}点</strong> <span style="color:var(--muted);font-size:.9rem">（7場面・各 −2〜＋2点）</span></p>
+  <div class="note">この点数は「よい大人・悪い大人」を決めるものではありません。7場面で選んだ返し方の点数を、そのまま合計したものです。</div>
+  <div class="results-grid">${state.results.map(r=>`<div class="result-row"><div class="result-title">${r.theme.result}</div><div style="display:flex;align-items:center;gap:10px"><span style="color:var(--muted);font-size:.9rem">${r.answer.score>0?'+':''}${r.answer.score}点</span><div class="result-mark ${markClass(r.mark)}">${r.mark}</div></div></div>`).join('')}</div>
   <div class="actions"><button class="primary" id="detailsBtn">7場面をくわしく振り返る</button><button class="secondary" id="finalBtn">最後のメッセージへ</button></div>
  </div>`);
  document.getElementById('detailsBtn').onclick=renderDetails;document.getElementById('finalBtn').onclick=renderClosing;
