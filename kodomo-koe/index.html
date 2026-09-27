@@ -237,6 +237,7 @@ feedback:[
 
 function c(text,score,feedback){return {text,score,feedback}}
 function shuffle(a){const b=[...a];for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]]}return b}
+// 内部値は画面には表示せず、◎○△の3段階に変換するためだけに使用
 function markFor(score){return score===2?'◎':score===-2?'△':'○'}
 function markClass(mark){return mark==='◎'?'good':mark==='△'?'try':'mid'}
 
@@ -272,7 +273,7 @@ function renderIntro(){setHTML(`
   <p class="emphasis">「どういうことなんだろう？」と想像し、本人と確かめていく。</p>
   <p>このコンテンツでは、まず言葉や態度の背景にあり得ることを考え、そのあと「あなたならどう返す？」を選びます。</p>
   <div class="actions"><button class="primary" id="playBtn">7つの場面を体験する</button><button class="secondary" id="backHome">戻る</button></div>
-  <p class="disclaimer">参考：こども家庭庁「第2版 こども・若者の意見の政策反映に向けたガイドライン」等。設問・選択肢・点数は公式のものではなく、資料を参考に「ここも」が啓発用に構成したものです。</p>
+  <p class="disclaimer">参考：こども家庭庁「第2版 こども・若者の意見の政策反映に向けたガイドライン」等。設問・選択肢・◎○△評価は公式のものではなく、資料を参考に「ここも」が啓発用に構成したものです。</p>
  </div>`);
  document.getElementById('playBtn').onclick=startGame;document.getElementById('backHome').onclick=renderHome;
 }
@@ -328,7 +329,6 @@ function chooseReply(text){
  <div class="card">
   <div class="scene-label">${item.theme.title}</div>
   <div class="mark ${markClass(mark)}">${mark}</div>
-  <div class="score">${ans.score>0?'+':''}${ans.score}点</div>
   <p><strong>あなたの返し：</strong><br>${ans.text}</p>
   <div class="insight"><strong>振り返り</strong><p>${ans.feedback}</p><strong>ポイント</strong><p>${item.q.point}</p></div>
   <div class="actions"><button class="primary" id="nextQ">${state.idx===6?'結果を見る':'次の場面へ'}</button></div>
@@ -337,13 +337,15 @@ function chooseReply(text){
 }
 
 function renderResults(){
- const total=state.results.reduce((s,r)=>s+r.answer.score,0);
  setHTML(`<div class="card">
   <div class="eyebrow">7つの場面を振り返る</div>
   <h2>今回の「聴き方」</h2>
-  <p>合計点：<strong>${total>0?'+':''}${total}点</strong> <span style="color:var(--muted);font-size:.9rem">（7場面・各 −2〜＋2点）</span></p>
-  <div class="note">この点数は「よい大人・悪い大人」を決めるものではありません。7場面で選んだ返し方の点数を、そのまま合計したものです。</div>
-  <div class="results-grid">${state.results.map(r=>`<div class="result-row"><div class="result-title">${r.theme.result}</div><div style="display:flex;align-items:center;gap:10px"><span style="color:var(--muted);font-size:.9rem">${r.answer.score>0?'+':''}${r.answer.score}点</span><div class="result-mark ${markClass(r.mark)}">${r.mark}</div></div></div>`).join('')}</div>
+  <div class="note">
+    <strong>◎</strong>　こどもまんなかの考え方に沿った関わり<br>
+    <strong>○</strong>　おおむね沿っている。もう少し本人に確かめたり、選べる余地を残せる関わり<br>
+    <strong>△</strong>　こども家庭庁が示す「こどもまんなか」の考え方から、少しズレのある関わり
+  </div>
+  <div class="results-grid">${state.results.map(r=>`<div class="result-row"><div class="result-title">${r.theme.result}</div><div class="result-mark ${markClass(r.mark)}">${r.mark}</div></div>`).join('')}</div>
   <div class="actions"><button class="primary" id="detailsBtn">7場面をくわしく振り返る</button><button class="secondary" id="finalBtn">最後のメッセージへ</button></div>
  </div>`);
  document.getElementById('detailsBtn').onclick=renderDetails;document.getElementById('finalBtn').onclick=renderClosing;
@@ -355,7 +357,7 @@ function renderDetails(){
   <p><strong>場面</strong><br>${r.q.scene}</p>
   <p><strong>あなたが「あり得る」と考えた背景</strong><br>${r.selectedBg.length?r.selectedBg.map(x=>`<span class="tag">${x}</span>`).join(''):'<span class="tag">選択なし</span>'}</p>
   <p><strong>ほかにもあり得た背景</strong><br>${r.q.backgrounds.map(x=>`<span class="tag">${x}</span>`).join('')}</p>
-  <p><strong>あなたの返し</strong><br>${r.answer.text}（${r.answer.score>0?'+':''}${r.answer.score}点）</p>
+  <p><strong>あなたの返し</strong><br>${r.answer.text}</p>
   <p><strong>振り返り</strong><br>${r.answer.feedback}</p>
   <p><strong>ポイント</strong><br>${r.q.point}</p>
  </div></details>`).join('')}
@@ -383,7 +385,7 @@ function renderReferences(){setHTML(`<div class="card"><div class="eyebrow">参�
   <p>意見形成支援、意見表明支援、こども中心、守秘、本人への確認、表明方法の選択、フィードバックなどの考え方を参考にしています。</p>
   <p><a href="https://www.cfa.go.jp/policies/jidougyakutai/Revised-Child-Welfare-Act" target="_blank" rel="noopener">こども家庭庁 関連資料ページ</a></p>
  </div>
- <div class="note"><strong>大切な注記</strong><br>本アプリの設問・選択肢・点数・◎○△評価は、こども家庭庁の公式設問や公式評価ではありません。公式資料の内容を参考に、任意団体「ここも」が普及啓発用に構成したものです。</div>
+ <div class="note"><strong>大切な注記</strong><br>本アプリの設問・選択肢・◎○△評価は、こども家庭庁の公式設問や公式評価ではありません。公式資料の内容を参考に、任意団体「ここも」が普及啓発用に構成したものです。</div>
  <div class="actions"><button class="primary" id="refBack">トップへ戻る</button></div></div>`);document.getElementById('refBack').onclick=renderHome;}
 
 function escapeAttr(s){return String(s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
