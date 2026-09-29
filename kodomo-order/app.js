@@ -88,8 +88,8 @@ function renderProducts(){
   const products=state.products.filter(p=>p.active!==false).sort((a,b)=>(a.sort_order||0)-(b.sort_order||0));
   const grid=document.getElementById('productGrid');
   grid.innerHTML=products.map(p=>{const q=cart[p.id]||0;return`<article class="product"><div class="product-emoji">${escapeHtml(p.emoji||'🍽️')}</div><div class="product-title">${escapeHtml(p.name)}</div><div class="product-bottom"><div class="price">${yen(p.price)}</div><div class="qty"><button class="icon-btn" data-dec="${escapeHtml(p.id)}" aria-label="減らす">−</button><b>${q}</b><button class="icon-btn" data-inc="${escapeHtml(p.id)}" aria-label="増やす">＋</button></div></div></article>`}).join('')||'<div class="empty">商品がありません。設定から商品を追加できます。</div>';
-  grid.querySelectorAll('[data-inc]').forEach(b=>b.onclick=()=>{cart[b.dataset.inc]=(cart[b.dataset.inc]||0)+1;render()});
-  grid.querySelectorAll('[data-dec]').forEach(b=>b.onclick=()=>{cart[b.dataset.dec]=Math.max(0,(cart[b.dataset.dec]||0)-1);render()});
+  grid.querySelectorAll('[data-inc]').forEach(b=>b.onclick=()=>{cart[b.dataset.inc]=(cart[b.dataset.inc]||0)+1;renderProducts();cartSummary()});
+  grid.querySelectorAll('[data-dec]').forEach(b=>b.onclick=()=>{cart[b.dataset.dec]=Math.max(0,(cart[b.dataset.dec]||0)-1);renderProducts();cartSummary()});
 }
 function cartSummary(){let count=0,total=0;for(const p of state.products){const q=cart[p.id]||0;count+=q;total+=q*Number(p.price||0)}document.getElementById('cartCount').textContent=count;document.getElementById('cartTotal').textContent=yen(total);const btn=document.getElementById('orderBtn');btn.disabled=count===0;btn.style.opacity=count===0?'.5':'1'}
 async function placeOrder(){
@@ -134,7 +134,7 @@ async function addProduct(){const temp={id:'local-'+(crypto.randomUUID?.()||Stri
 async function removeProduct(id){if(!confirm('この商品を削除しますか？'))return;try{if(cloudEnabled()){await cloudRpc('delete_product',{p_secret:cloudConfig.secret,p_product_id:id});await cloudLoad({silent:true});await broadcastRefresh()}else{state.products=state.products.filter(p=>p.id!==id);delete cart[id];saveLocal()}renderSettings();render();toast('商品を削除しました')}catch(e){toast('削除できません：'+friendlyError(e))}}
 async function saveShopName(){const name=document.getElementById('shopNameInput').value.trim()||'こどものお店';try{if(cloudEnabled()){await cloudRpc('update_shop_name',{p_secret:cloudConfig.secret,p_name:name});await cloudLoad({silent:true});await broadcastRefresh()}else{state.shopName=name;saveLocal()}renderSettings();toast('お店の名前を保存しました')}catch(e){toast('保存できません：'+friendlyError(e))}}
 function render(){document.getElementById('shopName').textContent=state.shopName;renderProducts();cartSummary();renderStatus();renderStaff();renderSales();if(document.getElementById('settingsDialog').open)renderSettings();if(!cloudEnabled())setSyncBadge('local');applyModeUI()}
-function switchView(v){currentView=v;['order','status','staff','sales'].forEach(x=>document.getElementById('view-'+x).classList.toggle('hidden',x!==v));document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('active',t.dataset.view===v));window.scrollTo({top:0,behavior:'smooth'})}
+function switchView(v,{scroll=true}={}){const changed=currentView!==v;currentView=v;['order','status','staff','sales'].forEach(x=>document.getElementById('view-'+x).classList.toggle('hidden',x!==v));document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('active',t.dataset.view===v));if(scroll&&changed)window.scrollTo({top:0,behavior:'smooth'})}
 
 async function saveCloudConnectionFields(){stopRealtime();await waitCloudIdle();captureCloudFields();toast('接続情報を保存しました');renderSettings();if(cloudEnabled()){await cloudLoad({silent:true});await startRealtime()}}
 async function createCloudShop(){
