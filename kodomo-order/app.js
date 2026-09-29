@@ -15,6 +15,7 @@ const STATUS = {
 const KEY='kodomo-order-v2';
 const CONFIG_KEY='kodomo-order-cloud-v1';
 const CLIENT_KEY='kodomo-order-client-v1';
+const ALERT_KEY='kodomo-order-alert-v1';
 const APP_MODE=new URLSearchParams(location.search).get('mode')||'all';
 const localChannel='BroadcastChannel' in window?new BroadcastChannel('kodomo-order-v2'):null;
 const clientId=getClientId();
@@ -26,6 +27,9 @@ let supabaseClient=null;
 let realtimeChannel=null;
 let pollTimer=null;
 let cloudBusy=false;
+let alertsEnabled=localStorage.getItem(ALERT_KEY)==='1';
+let audioCtx=null;
+let alertSnapshot=null;
 
 function initialState(){return{shopName:'ここもカフェ',nextNo:1,products:structuredClone(DEFAULT_PRODUCTS),orders:[]}}
 function normalizeState(s){
@@ -84,6 +88,28 @@ function stopRealtime(){if(pollTimer)clearInterval(pollTimer);pollTimer=null;if(
 async function waitCloudIdle(){while(cloudBusy)await new Promise(r=>setTimeout(r,50))}
 function captureCloudFields(){cloudConfig.url=document.getElementById('supabaseUrlInput').value.trim().replace(/\/$/,'');cloudConfig.key=document.getElementById('supabaseKeyInput').value.trim();saveCloudConfig();supabaseClient=null}
 
+function ensureAudio(){try{audioCtx=audioCtx||new (window.AudioContext||window.webkitAudioContext)();if(audioCtx.state==='suspended')audioCtx.resume()}catch{}}
+function tone(freq=660,duration=.12,delay=0){if(!alertsEnabled)return;ensureAudio();if(!audioCtx)return;const o=audioCtx.createOscillator(),g=audioCtx.createGain(),t=audioCtx.currentTime+delay;o.frequency.value=freq;o.type='sine';g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(.12,t+.015);g.gain.exponentialRampToValueAtTime(.0001,t+duration);o.connect(g);g.connect(audioCtx.destination);o.start(t);o.stop(t+duration+.03)}
+function playAlert(kind){if(!alertsEnabled)return;if(kind==='new'){tone(620,.11,0);tone(820,.14,.14);navigator.vibrate?.([80,60,80])}else{tone(760,.10,0);tone(980,.12,.12);tone(1180,.16,.25);navigator.vibrate?.([100,50,100,50,180])}}
+function updateAlertButtons(){document.querySelectorAll('[data-alert-toggle]').forEach(b=>{b.textContent=alertsEnabled?'🔔 通知ON':'🔕 通知をON';b.classList.toggle('active-alert',alertsEnabled)})}
+function toggleAlerts(){alertsEnabled=!alertsEnabled;localStorage.setItem(ALERT_KEY,alertsEnabled?'1':'0');if(alertsEnabled){ensureAudio();tone(880,.12);navigator.vibrate?.(60);toast('音と振動の通知をONにしました')}else toast('通知をOFFにしました');updateAlertButtons()}
+function processAlerts(){
+  const orders=state.orders.map(normalizedOrder);
+  const next=new Map(orders.map(o=>[o.id,{status:o.status,client_id:o.client_id,order_no:o.order_no}]));
+  if(alertSnapshot){
+    if(APP_MODE==='staff'||currentView==='staff'){
+      const added=orders.filter(o=>!alertSnapshot.has(o.id)&&o.status==='received');
+      if(added.length){playAlert('new');toast(added.length===1?'新しい注文 '+added[0].order_no+'番です':'新しい注文が'+added.length+'件あります')}
+    }
+    if(APP_MODE==='order'||currentView==='status'){
+      const ready=orders.filter(o=>o.client_id===clientId&&o.status==='ready'&&alertSnapshot.get(o.id)?.status!=='ready');
+      if(ready.length){playAlert('ready');toast('注文番号 '+ready[0].order_no+' ができました！')}
+    }
+  }
+  alertSnapshot=next;
+  updateAlertButtons();
+}
+
 function renderProducts(){
   const products=state.products.filter(p=>p.active!==false).sort((a,b)=>(a.sort_order||0)-(b.sort_order||0));
   const grid=document.getElementById('productGrid');
@@ -133,7 +159,7 @@ function isUuid(v){return/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-
 async function addProduct(){const temp={id:'local-'+(crypto.randomUUID?.()||String(Date.now())),name:'新しい商品',price:100,emoji:'🍽️',active:true,sort_order:(Math.max(0,...state.products.map(p=>p.sort_order||0))+1)};try{if(cloudEnabled()){await cloudRpc('upsert_product',{p_secret:cloudConfig.secret,p_product_id:null,p_name:temp.name,p_price:temp.price,p_emoji:temp.emoji,p_sort_order:temp.sort_order,p_active:true});await cloudLoad({silent:true});await broadcastRefresh()}else{state.products.push(temp);saveLocal()}renderSettings();render();toast('商品を追加しました')}catch(e){toast('追加できません：'+friendlyError(e))}}
 async function removeProduct(id){if(!confirm('この商品を削除しますか？'))return;try{if(cloudEnabled()){await cloudRpc('delete_product',{p_secret:cloudConfig.secret,p_product_id:id});await cloudLoad({silent:true});await broadcastRefresh()}else{state.products=state.products.filter(p=>p.id!==id);delete cart[id];saveLocal()}renderSettings();render();toast('商品を削除しました')}catch(e){toast('削除できません：'+friendlyError(e))}}
 async function saveShopName(){const name=document.getElementById('shopNameInput').value.trim()||'こどものお店';try{if(cloudEnabled()){await cloudRpc('update_shop_name',{p_secret:cloudConfig.secret,p_name:name});await cloudLoad({silent:true});await broadcastRefresh()}else{state.shopName=name;saveLocal()}renderSettings();toast('お店の名前を保存しました')}catch(e){toast('保存できません：'+friendlyError(e))}}
-function render(){document.getElementById('shopName').textContent=state.shopName;renderProducts();cartSummary();renderStatus();renderStaff();renderSales();if(document.getElementById('settingsDialog').open)renderSettings();if(!cloudEnabled())setSyncBadge('local');applyModeUI()}
+function render(){document.getElementById('shopName').textContent=state.shopName;renderProducts();cartSummary();renderStatus();renderStaff();renderSales();if(document.getElementById('settingsDialog').open)renderSettings();if(!cloudEnabled())setSyncBadge('local');applyModeUI();processAlerts()}
 function switchView(v,{scroll=true}={}){const changed=currentView!==v;currentView=v;['order','status','staff','sales'].forEach(x=>document.getElementById('view-'+x).classList.toggle('hidden',x!==v));document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('active',t.dataset.view===v));if(scroll&&changed)window.scrollTo({top:0,behavior:'smooth'})}
 
 async function saveCloudConnectionFields(){stopRealtime();await waitCloudIdle();captureCloudFields();toast('接続情報を保存しました');renderSettings();if(cloudEnabled()){await cloudLoad({silent:true});await startRealtime()}}
@@ -149,10 +175,10 @@ async function joinCloudShop(){
 }
 async function clearCloud(){if(!confirm('この端末のクラウド接続設定を解除しますか？クラウド上の注文は削除されません。'))return;stopRealtime();cloudConfig={};saveCloudConfig();supabaseClient=null;state=loadLocal();setSyncBadge('local');renderSettings();render();toast('クラウド設定を解除しました')}
 function exportSalesCsv(){const today=todayKey(new Date());const served=state.orders.map(normalizedOrder).filter(o=>o.status==='served'&&todayKey(o.createdAt)===today);const rows=[['注文番号','時刻','商品','数量','単価','小計']];served.slice().reverse().forEach(o=>(o.items||[]).forEach(i=>rows.push([o.order_no,fmtTime(o.createdAt),i.name,i.qty,i.price,Number(i.qty)*Number(i.price)])));const csv='\ufeff'+rows.map(r=>r.map(v=>'"'+String(v??'').replace(/"/g,'""')+'"').join(',')).join('\n');const blob=new Blob([csv],{type:'text/csv;charset=utf-8'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='kodomo-order-'+new Date().toISOString().slice(0,10)+'.csv';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000);toast('売上CSVを書き出しました')}
-async function resetData(){if(!confirm('注文・売上データをすべて消しますか？商品は残ります。'))return;try{if(cloudEnabled()){await cloudRpc('reset_shop_orders',{p_secret:cloudConfig.secret});await cloudLoad({silent:true});await broadcastRefresh()}else{state.orders=[];state.nextNo=1;saveLocal()}renderSettings();render();toast('注文と売上をリセットしました')}catch(e){toast('リセットできません：'+friendlyError(e))}}
+async function resetData(){if(!confirm('注文・売上データをすべて消しますか？商品は残ります。'))return;const word=prompt('誤操作防止のため「リセット」と入力してください');if(word!=='リセット'){toast('リセットを中止しました');return}try{if(cloudEnabled()){await cloudRpc('reset_shop_orders',{p_secret:cloudConfig.secret});await cloudLoad({silent:true});await broadcastRefresh()}else{state.orders=[];state.nextNo=1;saveLocal()}renderSettings();render();toast('注文と売上をリセットしました')}catch(e){toast('リセットできません：'+friendlyError(e))}}
 
 window.addEventListener('storage',e=>{if(e.key===KEY&&!cloudEnabled()){state=loadLocal();render()}});localChannel?.addEventListener('message',()=>{if(!cloudEnabled()){state=loadLocal();render()}});
-applyInviteFromHash();document.querySelectorAll('.tab').forEach(t=>t.onclick=()=>switchView(t.dataset.view));document.getElementById('orderBtn').onclick=placeOrder;document.getElementById('exportSalesBtn').onclick=exportSalesCsv;
+applyInviteFromHash();document.querySelectorAll('.tab').forEach(t=>t.onclick=()=>switchView(t.dataset.view));document.querySelectorAll('[data-alert-toggle]').forEach(b=>b.onclick=toggleAlerts);document.getElementById('orderBtn').onclick=placeOrder;document.getElementById('exportSalesBtn').onclick=exportSalesCsv;
 const dialog=document.getElementById('settingsDialog');document.getElementById('settingsBtn').onclick=()=>{renderSettings();dialog.showModal()};document.getElementById('saveShopNameBtn').onclick=saveShopName;document.getElementById('addProductBtn').onclick=addProduct;document.getElementById('saveCloudConfigBtn').onclick=saveCloudConnectionFields;document.getElementById('createCloudShopBtn').onclick=createCloudShop;document.getElementById('joinCloudShopBtn').onclick=joinCloudShop;document.getElementById('clearCloudConfigBtn').onclick=clearCloud;document.getElementById('resetBtn').onclick=resetData;document.getElementById('fullscreenBtn').onclick=async()=>{try{if(document.fullscreenElement)await document.exitFullscreen();else await document.documentElement.requestFullscreen()}catch{toast('このブラウザでは全画面表示できません')}};
 if('serviceWorker'in navigator)navigator.serviceWorker.register('./sw.js').catch(()=>{});
 render();if(cloudEnabled()){cloudLoad({silent:true}).then(startRealtime)}
