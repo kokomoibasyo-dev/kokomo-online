@@ -1,0 +1,13 @@
+{
+  "name":"こどもオーダー",
+  "short_name":"こども注文",
+  "start_url":"./",
+  "scope":"./",
+  "display":"standalone",
+  "background_color":"#fff8ee",
+  "theme_color":"#fff8ee",
+  "description":"ままごとやこども店長で使える、簡易POS・注文アプリ",
+  "icons":[
+    {"src":"icon.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}
+  ]
+}
