@@ -107,7 +107,7 @@ begin
   from jsonb_to_recordset(coalesce(p_items,'[]'::jsonb)) as x(id text, qty integer)
   join public.ko_products p on p.id::text=x.id and p.shop_id=v_shop_id and p.active=true
   where x.qty > 0 and x.qty <= 99;
-  if v_total <= 0 then raise exception '商品が選ばれていません'; end if;
+  if jsonb_array_length(v_items) = 0 then raise exception '商品が選ばれていません'; end if;
   update public.ko_shops set next_order_no=next_order_no+1 where id=v_shop_id returning next_order_no-1 into v_no;
   insert into public.ko_orders(shop_id,order_no,client_id,status,total,items) values(v_shop_id,v_no,coalesce(p_client_id,''),'received',v_total,v_items);
   return jsonb_build_object('order_no',v_no,'total',v_total);
