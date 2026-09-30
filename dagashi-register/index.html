@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#fff8ee">
+  <title>ここも駄菓子屋レジ</title>
+  <link rel="stylesheet" href="styles.css?v=1.0">
+</head>
+<body>
+<div class="app">
+  <header>
+    <div>
+      <div class="eyebrow">駄菓子屋運営</div>
+      <div class="brand">ここも駄菓子屋レジ</div>
+    </div>
+    <div class="header-right">
+      <span id="syncBadge" class="sync-badge">接続中…</span>
+      <span class="version">v1.0</span>
+    </div>
+  </header>
+
+  <div id="connectPanel" class="connect-panel hidden">
+    <b>店舗に接続</b>
+    <span class="muted small">店舗コードを入力してください。</span>
+    <div class="row">
+      <input id="storeCodeInput" autocomplete="off" placeholder="DAGASHI-...">
+      <button id="connectBtn">接続</button>
+    </div>
+    <div id="connectError" class="error-text hidden"></div>
+  </div>
+
+  <main>
+    <section id="view-register">
+      <div class="section-head">
+        <div>
+          <div class="eyebrow">レジ</div>
+          <h1>商品を選ぶ</h1>
+        </div>
+        <button id="clearCartBtn" class="secondary small">カートを空にする</button>
+      </div>
+      <div id="productGrid" class="product-grid"></div>
+      <div class="checkout-panel">
+        <div>
+          <div class="muted small">点数</div>
+          <b id="cartCount">0点</b>
+        </div>
+        <div>
+          <div class="muted small">合計</div>
+          <b id="cartTotal" class="big-money">¥0</b>
+        </div>
+        <div class="received-box">
+          <label for="receivedInput">預かり金 <span class="muted small">（任意）</span></label>
+          <input id="receivedInput" inputmode="numeric" type="number" min="0" step="10" placeholder="例：500">
+          <div id="changePreview" class="muted small">おつり：—</div>
+        </div>
+        <button id="checkoutBtn" class="primary checkout-btn">会計する</button>
+      </div>
+    </section>
+
+    <section id="view-stock" class="hidden">
+      <div class="section-head">
+        <div><div class="eyebrow">在庫</div><h1>現在庫</h1></div>
+      </div>
+      <div id="stockSummary" class="metrics"></div>
+      <div id="stockList" class="list-stack"></div>
+    </section>
+
+    <section id="view-adjust" class="hidden">
+      <div class="section-head">
+        <div><div class="eyebrow">入荷・棚卸</div><h1>在庫を動かす</h1></div>
+      </div>
+      <div class="panel">
+        <label>商品
+          <select id="adjustProduct"></select>
+        </label>
+        <div class="two-col">
+          <label>操作
+            <select id="adjustMode">
+              <option value="receive">入荷する（加算）</option>
+              <option value="set">棚卸して在庫数を合わせる</option>
+            </select>
+          </label>
+          <label>数量
+            <input id="adjustQty" type="number" min="0" step="1" inputmode="numeric" placeholder="例：20">
+          </label>
+        </div>
+        <label>メモ <span class="muted small">（任意）</span>
+          <input id="adjustNote" maxlength="80" placeholder="例：9/30仕入れ、棚卸修正">
+        </label>
+        <button id="adjustBtn" class="primary">反映する</button>
+      </div>
+      <h2>最近の在庫履歴</h2>
+      <div id="moveList" class="list-stack"></div>
+    </section>
+
+    <section id="view-sales" class="hidden">
+      <div class="section-head">
+        <div><div class="eyebrow">経営</div><h1>売上・粗利益</h1></div>
+        <button id="exportBtn" class="secondary small">CSV</button>
+      </div>
+      <div id="salesMetrics" class="metrics"></div>
+      <div class="panel">
+        <div class="row between">
+          <h2>商品別</h2>
+          <span class="muted small">今日の販売</span>
+        </div>
+        <div id="productPerformance"></div>
+      </div>
+      <h2>最近の会計</h2>
+      <div id="salesList" class="list-stack"></div>
+    </section>
+
+    <section id="view-products" class="hidden">
+      <div class="section-head">
+        <div><div class="eyebrow">商品管理</div><h1>商品マスタ</h1></div>
+        <button id="newProductBtn" class="primary small">＋ 商品</button>
+      </div>
+      <div class="notice">仕入れ値を変更しても、過去の販売時に保存された原価・粗利益は変わりません。</div>
+      <div id="productAdminList" class="list-stack"></div>
+    </section>
+  </main>
+
+  <nav class="tabs">
+    <button class="tab active" data-view="register">🧺<span>レジ</span></button>
+    <button class="tab" data-view="stock">📦<span>在庫</span></button>
+    <button class="tab" data-view="adjust">➕<span>入荷</span></button>
+    <button class="tab" data-view="sales">📊<span>利益</span></button>
+    <button class="tab" data-view="products">⚙️<span>商品</span></button>
+  </nav>
+
+  <div id="toast" class="toast"></div>
+</div>
+
+<dialog id="productDialog">
+  <form method="dialog" class="dialog-card" id="productForm">
+    <div class="dialog-head">
+      <div><div class="eyebrow">商品管理</div><h2 id="productDialogTitle">商品を追加</h2></div>
+      <button value="cancel" class="icon-btn" aria-label="閉じる">×</button>
+    </div>
+    <input type="hidden" id="productId">
+    <label>商品名<input id="productName" maxlength="40" required></label>
+    <label>カテゴリ<input id="productCategory" maxlength="30" value="その他"></label>
+    <div class="two-col">
+      <label>仕入れ値<input id="productCost" type="number" min="0" step="1" value="0"></label>
+      <label>売値<input id="productSale" type="number" min="0" step="1" value="0"></label>
+    </div>
+    <div class="two-col">
+      <label>在庫警告ライン<input id="productLow" type="number" min="0" step="1" value="5"></label>
+      <label id="initialStockLabel">初期在庫<input id="productInitialStock" type="number" min="0" step="1" value="0"></label>
+    </div>
+    <label class="check"><input id="productActive" type="checkbox" checked> 販売中</label>
+    <div class="actions">
+      <button value="cancel" class="secondary">キャンセル</button>
+      <button type="button" id="saveProductBtn" class="primary">保存</button>
+    </div>
+  </form>
+</dialog>
+
+<script src="app.js?v=1.0"></script>
+</body>
+</html>
