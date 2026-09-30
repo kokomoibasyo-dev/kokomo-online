@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <meta name="theme-color" content="#fff8ee">
   <title>ここも駄菓子屋レジ</title>
-  <link rel="stylesheet" href="styles.css?v=1.0">
+  <link rel="stylesheet" href="styles.css?v=1.1">
 </head>
 <body>
 <div class="app">
@@ -136,11 +136,29 @@
   <form method="dialog" class="dialog-card" id="productForm">
     <div class="dialog-head">
       <div><div class="eyebrow">商品管理</div><h2 id="productDialogTitle">商品を追加</h2></div>
-      <button value="cancel" class="icon-btn" aria-label="閉じる">×</button>
+      <button type="button" id="closeProductDialogBtn" class="icon-btn" aria-label="閉じる">×</button>
     </div>
     <input type="hidden" id="productId">
     <label>商品名<input id="productName" maxlength="40" required></label>
-    <label>カテゴリ<input id="productCategory" maxlength="30" value="その他"></label>
+    <label>カテゴリ
+      <select id="productCategory">
+        <option value="スナック">スナック</option>
+        <option value="グミ・キャンディ">グミ・キャンディ</option>
+        <option value="チョコ">チョコ</option>
+        <option value="ガム">ガム</option>
+        <option value="ラムネ">ラムネ・タブレット</option>
+        <option value="せんべい・米菓">せんべい・米菓</option>
+        <option value="珍味">珍味・するめ</option>
+        <option value="ゼリー">ゼリー</option>
+        <option value="飲み物">飲み物</option>
+        <option value="アイス">アイス</option>
+        <option value="駄菓子（その他）">駄菓子（その他）</option>
+        <option value="雑貨">雑貨</option>
+        <option value="おもちゃ">おもちゃ</option>
+        <option value="くじ">くじ</option>
+        <option value="その他">その他</option>
+      </select>
+    </label>
     <div class="two-col">
       <label>仕入れ値<input id="productCost" type="number" min="0" step="1" value="0"></label>
       <label>売値<input id="productSale" type="number" min="0" step="1" value="0"></label>
@@ -151,12 +169,12 @@
     </div>
     <label class="check"><input id="productActive" type="checkbox" checked> 販売中</label>
     <div class="actions">
-      <button value="cancel" class="secondary">キャンセル</button>
+      <button type="button" id="cancelProductDialogBtn" class="secondary">キャンセル</button>
       <button type="button" id="saveProductBtn" class="primary">保存</button>
     </div>
   </form>
 </dialog>
 
-<script src="app.js?v=1.0"></script>
+<script src="app.js?v=1.1"></script>
 </body>
 </html>
