@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#fff8ee" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <title>こどもオーダー</title>
+  <link rel="manifest" href="../kodomo-order/manifest.webmanifest" />
+  <link rel="icon" href="../kodomo-order/icon.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="../kodomo-order/styles.css?v=ios-fresh-1" />
+</head>
+<body>
+<div class="app">
+  <header>
+    <div class="brand">
+      <div class="brand-mark" aria-hidden="true"><span class="awning"></span><span class="door"></span></div>
+      <div><div>こどもオーダー</div><div class="shop-name" id="shopName">ここもカフェ</div></div>
+    </div>
+    <div class="header-actions">
+      <span class="app-version">v4.3-iOS</span>
+      <span class="sync-badge" id="syncBadge">この端末</span>
+      <button class="secondary small" id="settingsBtn">⚙️ 設定</button>
+    </div>
+  </header>
+
+  <div class="fatal-error hidden" id="fatalError" role="alert">
+    <b>アプリの読み込みでエラーが起きました。</b>
+    <span>商品が表示されない場合は、復旧ページを開いてください。</span>
+    <a href="../kodomo-order-fix/">復旧ページを開く</a>
+  </div>
+
+  <main class="wrap">
+    <section id="view-order">
+      <div class="muted">お客さん・店員さん用</div>
+      <h1>注文を入力</h1>
+      <p class="muted">商品を選んで「注文する」を押してください。</p>
+      <div class="grid" id="productGrid"></div>
+      <div class="cart" id="cartBar">
+        <div><div class="small">カート <span id="cartCount">0</span>点</div><strong id="cartTotal">¥0</strong></div>
+        <button id="orderBtn">注文する</button>
+      </div>
+    </section>
+
+    <section id="view-status" class="hidden">
+      <div class="muted">お客さん用</div>
+      <h1>注文のようす</h1>
+      <p class="muted">この端末から注文した内容を表示します。スタッフの更新が反映されます。</p>
+      <div class="notify-tools"><button type="button" class="secondary small alert-toggle" data-alert-toggle>🔕 通知をON</button><span class="muted small">「できました」を音・振動でお知らせ</span></div>
+      <div id="statusList"></div>
+    </section>
+
+    <section id="view-staff" class="hidden">
+      <div class="muted">スタッフ用</div>
+      <h1>注文管理</h1>
+      <div class="notify-tools"><button type="button" class="secondary small alert-toggle" data-alert-toggle>🔕 通知をON</button><span class="muted small">新しい注文を音・振動でお知らせ</span></div>
+      <div class="notice">新しい注文 → 調理中 → できました → 提供済み、の順に更新します。</div>
+      <div class="ready-board hidden" id="readyBoard">
+        <div class="muted small">できました・受け取り待ち</div>
+        <div class="ready-numbers" id="readyNumbers"></div>
+      </div>
+      <div class="spacer"></div>
+      <div id="staffList"></div>
+    </section>
+
+    <section id="view-sales" class="hidden">
+      <div class="muted">店長用</div>
+      <h1>今日の売上</h1>
+      <div class="metrics">
+        <div class="metric"><span class="muted small">売上</span><b id="salesTotal">¥0</b></div>
+        <div class="metric"><span class="muted small">提供済み注文</span><b id="servedCount">0件</b></div>
+        <div class="metric"><span class="muted small">販売点数</span><b id="itemsSold">0点</b></div>
+      </div>
+      <div class="row sales-tools"><h2>商品別</h2><button class="secondary small" id="exportSalesBtn">CSVを書き出す</button></div>
+      <div id="productSales"></div>
+    </section>
+  </main>
+
+  <nav class="tabs" aria-label="メインメニュー">
+    <button class="tab active" data-view="order"><span class="ticon">🛒</span>注文</button>
+    <button class="tab" data-view="status"><span class="ticon">📣</span>注文状況</button>
+    <button class="tab" data-view="staff"><span class="ticon">👩‍🍳</span>スタッフ <span class="tab-count" id="staffCount"></span></button>
+    <button class="tab" data-view="sales"><span class="ticon">📊</span>売上</button>
+  </nav>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+</div>
+
+<dialog id="settingsDialog">
+  <form method="dialog" class="dialog-shell">
+    <div class="dialog-head">
+      <div><div class="muted small">店長・運営者用</div><h2>設定</h2></div>
+      <button class="icon-btn" value="cancel" aria-label="閉じる">×</button>
+    </div>
+
+    <section class="settings-section">
+      <h3>お店</h3>
+      <label>お店の名前<input id="shopNameInput" maxlength="40" placeholder="ここもカフェ" /></label>
+      <button type="button" class="secondary" id="saveShopNameBtn">名前を保存</button>
+    </section>
+
+    <section class="settings-section">
+      <div class="row"><h3>商品</h3><button type="button" class="secondary" id="addProductBtn">＋ 商品を追加</button></div>
+      <div id="productEditor"></div>
+      <p class="muted small">絵文字・商品名・価格を変更できます。注文済みデータの内容は変わりません。</p>
+    </section>
+
+    <section class="settings-section">
+      <h3>端末ごとの画面</h3>
+      <p class="muted">クラウド接続後は、下のリンクを別のタブレットで開くだけで同じお店に参加できます。</p>
+      <div class="invite-grid">
+        <button type="button" class="secondary" data-copy-mode="order">🛒 注文端末リンクをコピー</button>
+        <button type="button" class="secondary" data-copy-mode="staff">👩‍🍳 スタッフ端末リンクをコピー</button>
+        <button type="button" class="secondary" data-copy-mode="manager">📊 店長端末リンクをコピー</button>
+        <button type="button" class="secondary" id="fullscreenBtn">⛶ 全画面表示</button>
+      </div>
+      <p class="muted small">注文端末では「注文・注文状況」、スタッフ端末では「注文入力・注文管理」、店長端末では「売上」を表示します。</p>
+    </section>
+
+    <section class="settings-section">
+      <h3>複数端末で使う</h3>
+      <p class="muted">初期状態は「この端末だけ」です。Supabaseを接続すると、注文用タブレットとスタッフ用タブレットをリアルタイム同期できます。</p>
+      <div class="mode-card" id="connectionSummary"></div>
+      <details>
+        <summary>クラウド接続を設定する</summary>
+        <div class="details-body">
+          <label>Supabase Project URL<input id="supabaseUrlInput" inputmode="url" placeholder="https://xxxx.supabase.co" /></label>
+          <label>Supabase anon key<textarea id="supabaseKeyInput" rows="3" placeholder="eyJ..."></textarea></label>
+          <div class="actions">
+            <button type="button" class="secondary" id="saveCloudConfigBtn">接続情報を保存</button>
+            <button type="button" class="danger-outline" id="clearCloudConfigBtn">クラウド設定を解除</button>
+          </div>
+          <div class="divider"></div>
+          <label>共有コード<input id="shopSecretInput" autocomplete="off" placeholder="例：K4X8-..." /></label>
+          <div class="actions">
+            <button type="button" class="primary" id="createCloudShopBtn">この店をクラウド化</button>
+            <button type="button" class="secondary" id="joinCloudShopBtn">共有コードで参加</button>
+          </div>
+          <p class="muted small">共有コードを知っている端末だけが同じ店に参加する想定です。決済情報・個人情報は扱いません。</p>
+        </div>
+      </details>
+    </section>
+
+    <section class="settings-section danger-zone">
+      <h3>データ</h3>
+      <button type="button" class="danger-outline" id="resetBtn">注文・売上をリセット</button>
+    </section>
+  </form>
+</dialog>
+
+<script>
+(function(){
+  function showFatal(){
+    var el=document.getElementById('fatalError');
+    if(el)el.classList.remove('hidden');
+  }
+  window.addEventListener('error',showFatal);
+  window.addEventListener('unhandledrejection',showFatal);
+})();
+</script>
+<script>window.__KO_DISABLE_SW__=true;</script>
+<script src="../kodomo-order/app.js?v=ios-fresh-1"></script>
+</body>
+</html>
