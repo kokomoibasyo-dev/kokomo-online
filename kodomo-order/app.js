@@ -141,6 +141,8 @@ function orderCard(raw,staff=false){
 function renderStatus(){const el=document.getElementById('statusList');const mine=state.orders.map(normalizedOrder).filter(o=>o.client_id===clientId).slice(0,12);el.innerHTML=mine.length?mine.map(o=>orderCard(o,false)).join(''):'<div class="empty">この端末からの注文はまだありません。</div>'}
 function renderStaff(){
   const el=document.getElementById('staffList'),orders=state.orders.map(normalizedOrder),active=orders.filter(o=>!['served','cancelled'].includes(o.status)).sort((a,b)=>new Date(a.createdAt)-new Date(b.createdAt)),done=orders.filter(o=>['served','cancelled'].includes(o.status)).slice(0,6);document.getElementById('staffCount').textContent=active.length?String(active.length):'';
+  const ready=active.filter(o=>o.status==='ready'),board=document.getElementById('readyBoard'),nums=document.getElementById('readyNumbers');
+  if(ready.length){board.classList.remove('hidden');nums.innerHTML=ready.map(o=>'<span class="ready-no">'+escapeHtml(o.order_no)+'</span>').join('')}else{board.classList.add('hidden');nums.innerHTML=''}
   el.innerHTML=(active.length?active.map(o=>orderCard(o,true)).join(''):'<div class="empty">対応中の注文はありません。</div>')+(done.length?`<h2>完了・取消</h2>${done.map(o=>orderCard(o,true)).join('')}`:'');
   el.querySelectorAll('[data-status]').forEach(b=>b.onclick=()=>updateStatusFromButton(b))
 }
