@@ -34,3 +34,11 @@ input,textarea{width:100%;border:1px solid #d9cec4;border-radius:12px;padding:11
 
 .product.soldout{opacity:.58;position:relative}
 .soldout-label{display:inline-flex;align-self:flex-start;margin-top:6px;padding:4px 9px;border-radius:999px;background:#5d5751;color:#fff;font-size:12px;font-weight:900;letter-spacing:.04em}
+
+.staff-order-meta{margin:14px 0 18px;padding:14px 16px;border:1px solid #d7cfc5;background:#fff;border-radius:16px}
+.staff-order-meta label{display:block;margin-bottom:7px}
+.staff-order-meta input{width:100%;box-sizing:border-box;padding:11px 12px;border:1px solid #c9c1b8;border-radius:12px;font-size:16px}
+.customer-label{display:inline-flex;margin:5px 0 3px;padding:5px 9px;border-radius:999px;background:#fff1c9;color:#6c5416;font-size:13px;font-weight:800}
+.ready-no{height:auto!important;min-height:64px;flex-direction:column;gap:2px}
+.ready-no b{font-size:30px}
+.ready-no small{max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:12px;color:#5f584f}
