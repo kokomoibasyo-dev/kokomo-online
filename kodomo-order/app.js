@@ -17,7 +17,7 @@ const KEY='kodomo-order-v2';
 const CONFIG_KEY='kodomo-order-cloud-v1';
 const CLIENT_KEY='kodomo-order-client-v1';
 const ALERT_KEY='kodomo-order-alert-v1';
-const CLOUD_DEFAULTS={url:'https://gxbgqajehfutdudjofno.supabase.co',key:'sb_publishable_xe1KWvEfHyOraozbge449A_UBEaAx4w'};
+const CLOUD_DEFAULTS={url:'https://gxbgqajehfutdudjofno.supabase.co',key:'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd4YmdxYWplaGZ1dGR1ZGpvZm5vIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA3MTQzMDMsImV4cCI6MjEwNjI5MDMwM30.NGzny52SesudiM2D4-1xy74I0bj1DuCKcLBEQB50pQk'};
 const APP_MODE=new URLSearchParams(location.search).get('mode')||'all';
 const localChannel='BroadcastChannel' in window?new BroadcastChannel('kodomo-order-v2'):null;
 const clientId=getClientId();
@@ -29,6 +29,7 @@ let supabaseClient=null;
 let realtimeChannel=null;
 let pollTimer=null;
 let cloudBusy=false;
+let cloudVerified=false;
 let alertsEnabled=localStorage.getItem(ALERT_KEY)==='1';
 let audioCtx=null;
 let alertSnapshot=null;
@@ -40,7 +41,7 @@ function normalizeState(s){
 }
 function loadLocal(){try{return normalizeState(JSON.parse(localStorage.getItem(KEY)))}catch{return initialState()}}
 function saveLocal({broadcast=true}={}){localStorage.setItem(KEY,JSON.stringify(state));if(broadcast)localChannel?.postMessage({type:'sync'});render()}
-function loadCloudConfig(){try{return {...CLOUD_DEFAULTS,...(JSON.parse(localStorage.getItem(CONFIG_KEY))||{})}}catch{return {...CLOUD_DEFAULTS}}}
+function loadCloudConfig(){try{const saved=JSON.parse(localStorage.getItem(CONFIG_KEY))||{};const merged={...CLOUD_DEFAULTS,...saved};if(!merged.key||merged.key.startsWith('sb_publishable_'))merged.key=CLOUD_DEFAULTS.key;return merged}catch{return {...CLOUD_DEFAULTS}}}
 function saveCloudConfig(){localStorage.setItem(CONFIG_KEY,JSON.stringify(cloudConfig))}
 function getClientId(){let id=localStorage.getItem(CLIENT_KEY);if(!id){id=crypto.randomUUID?.()||('client-'+Date.now()+'-'+Math.random().toString(36).slice(2));localStorage.setItem(CLIENT_KEY,id)}return id}
 function cloudEnabled(){return Boolean(cloudConfig.url&&cloudConfig.key&&cloudConfig.secret)}
@@ -69,6 +70,7 @@ async function cloudRpc(name,args={}){
       cache:'no-store',
       headers:{
         'apikey':cloudConfig.key,
+        'Authorization':'Bearer '+cloudConfig.key,
         'Content-Type':'application/json',
         'Accept':'application/json'
       },
@@ -93,12 +95,14 @@ async function cloudLoad({silent=false,throwOnError=false}={}){
     const data=await cloudRpc('get_shop_state',{p_secret:cloudConfig.secret});
     if(!data)throw new Error('共有コードに対応する店が見つかりません');
     state=normalizeState({shopName:data.shop_name,nextNo:data.next_order_no,products:data.products||[],orders:data.orders||[]});
+    cloudVerified=true;
     saveLocal({broadcast:false});
     setSyncBadge('cloud');
     if(!silent)toast('クラウドと同期しました');
     return true;
   }catch(e){
     console.error(e);
+    cloudVerified=false;
     setSyncBadge('error');
     if(!silent)toast('同期できません：'+friendlyError(e));
     if(throwOnError)throw e;
@@ -108,9 +112,9 @@ async function cloudLoad({silent=false,throwOnError=false}={}){
 function setSyncBadge(mode){
   const el=document.getElementById('syncBadge');
   el.classList.remove('cloud','error');
-  if(mode==='cloud'){el.textContent='クラウド接続済み';el.classList.add('cloud')}
+  if(mode==='cloud'){el.textContent='クラウド接続済み';el.title='Supabaseとの通信確認済み';el.classList.add('cloud')}
   else if(mode==='syncing'){el.textContent='クラウド接続中…'}
-  else if(mode==='error'){el.textContent='クラウド未接続';el.classList.add('error')}
+  else if(mode==='error'){el.textContent='クラウド未接続';el.title='Supabaseへ接続できていません';el.classList.add('error')}
   else{el.textContent='この端末のみ'}
 }
 function friendlyError(e){return e?.message?.replace('Failed to fetch','通信に失敗しました')||'エラーが発生しました'}
@@ -119,8 +123,9 @@ async function startRealtime(){
   stopRealtime();
   if(!cloudEnabled()){setSyncBadge('local');return}
   const ok=await cloudLoad({silent:true});
+  render();
   if(!ok)return;
-  pollTimer=setInterval(()=>cloudLoad({silent:true}),2000);
+  pollTimer=setInterval(async()=>{await cloudLoad({silent:true});render()},2000);
 }
 function stopRealtime(){
   if(pollTimer)clearInterval(pollTimer);
@@ -160,12 +165,13 @@ function renderProducts(){
   grid.querySelectorAll('[data-inc]').forEach(b=>b.onclick=()=>{cart[b.dataset.inc]=(cart[b.dataset.inc]||0)+1;renderProducts();cartSummary()});
   grid.querySelectorAll('[data-dec]').forEach(b=>b.onclick=()=>{cart[b.dataset.dec]=Math.max(0,(cart[b.dataset.dec]||0)-1);renderProducts();cartSummary()});
 }
-function cartSummary(){let count=0,total=0;for(const p of state.products){const q=cart[p.id]||0;count+=q;total+=q*Number(p.price||0)}document.getElementById('cartCount').textContent=count;document.getElementById('cartTotal').textContent=yen(total);const btn=document.getElementById('orderBtn');btn.disabled=count===0;btn.style.opacity=count===0?'.5':'1'}
+function cartSummary(){let count=0,total=0;for(const p of state.products){const q=cart[p.id]||0;count+=q;total+=q*Number(p.price||0)}document.getElementById('cartCount').textContent=count;document.getElementById('cartTotal').textContent=yen(total);const btn=document.getElementById('orderBtn');const blocked=cloudEnabled()&&!cloudVerified;btn.disabled=count===0||blocked;btn.style.opacity=(count===0||blocked)?'.5':'1';btn.textContent=blocked?'クラウド接続待ち':'注文する'}
 async function placeOrder(){
   const items=state.products.map(p=>({id:p.id,name:p.name,price:Number(p.price),emoji:p.emoji,qty:cart[p.id]||0})).filter(x=>x.qty>0);if(!items.length)return;
   const total=items.reduce((s,x)=>s+x.price*x.qty,0);document.getElementById('orderBtn').disabled=true;
   try{
     if(cloudEnabled()){
+      if(!cloudVerified){toast('クラウドに接続できていません');return}
       const reqItems=items.map(i=>({id:i.id,qty:i.qty}));const order=await cloudRpc('create_order',{p_secret:cloudConfig.secret,p_client_id:clientId,p_items:reqItems});cart={};await cloudLoad({silent:true});await broadcastRefresh();toast(`注文番号 ${order.order_no} を受け付けました`);
     }else{
       const order={id:crypto.randomUUID?.()||String(Date.now()),no:state.nextNo++,order_no:state.nextNo-1,client_id:clientId,createdAt:new Date().toISOString(),created_at:new Date().toISOString(),status:'received',items,total};state.orders.unshift(order);cart={};saveLocal();toast(`注文番号 ${order.order_no} を受け付けました`)
