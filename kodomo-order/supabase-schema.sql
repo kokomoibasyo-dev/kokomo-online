@@ -46,9 +46,9 @@ revoke all on public.ko_products from anon, authenticated;
 revoke all on public.ko_orders from anon, authenticated;
 
 create or replace function public.ko_secret_hash(p_secret text)
-returns text language sql immutable as $
+returns text language sql immutable as $func$
   select encode(sha256(convert_to(coalesce(p_secret,''), 'UTF8')), 'hex');
-$;
+$func$;
 
 drop function if exists public.create_shop(text,text);
 
