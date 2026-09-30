@@ -44,7 +44,8 @@ function saveCloudConfig(){localStorage.setItem(CONFIG_KEY,JSON.stringify(cloudC
 function getClientId(){let id=localStorage.getItem(CLIENT_KEY);if(!id){id=crypto.randomUUID?.()||('client-'+Date.now()+'-'+Math.random().toString(36).slice(2));localStorage.setItem(CLIENT_KEY,id)}return id}
 function cloudEnabled(){return Boolean(cloudConfig.url&&cloudConfig.key&&cloudConfig.secret)}
 function yen(n){return'¥'+Number(n||0).toLocaleString('ja-JP')}
-function fmtTime(iso){return new Date(iso).toLocaleTimeString('ja-JP',{hour:'2-digit',minute:'2-digit'})}\nfunction elapsedText(iso){const m=Math.max(0,Math.floor((Date.now()-new Date(iso).getTime())/60000));return m<1?'1分未満':m+'分'}
+function fmtTime(iso){return new Date(iso).toLocaleTimeString('ja-JP',{hour:'2-digit',minute:'2-digit'})}
+function elapsedText(iso){const m=Math.max(0,Math.floor((Date.now()-new Date(iso).getTime())/60000));return m<1?'1分未満':m+'分'}
 function todayKey(d){return new Date(d).toLocaleDateString('ja-JP',{year:'numeric',month:'2-digit',day:'2-digit'})}
 function toast(msg){const el=document.getElementById('toast');el.textContent=msg;el.classList.add('show');clearTimeout(toast._t);toast._t=setTimeout(()=>el.classList.remove('show'),2000)}
 function escapeHtml(v=''){return String(v).replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]))}
