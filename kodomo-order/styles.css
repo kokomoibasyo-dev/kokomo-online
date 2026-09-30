@@ -31,3 +31,6 @@ input,textarea{width:100%;border:1px solid #d9cec4;border-radius:12px;padding:11
 .ready-board{margin:14px 0 2px;padding:16px;border-radius:18px;background:#eff8ef;border:1px solid #b9d8b9}
 .ready-numbers{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px}
 .ready-no{display:inline-flex;min-width:64px;height:64px;align-items:center;justify-content:center;padding:0 14px;border-radius:16px;background:#fff;font-size:30px;font-weight:900;box-shadow:0 3px 12px rgba(0,0,0,.08)}
+
+.product.soldout{opacity:.58;position:relative}
+.soldout-label{display:inline-flex;align-self:flex-start;margin-top:6px;padding:4px 9px;border-radius:999px;background:#5d5751;color:#fff;font-size:12px;font-weight:900;letter-spacing:.04em}
