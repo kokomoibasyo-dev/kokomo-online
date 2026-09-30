@@ -22,3 +22,4 @@ input,textarea{width:100%;border:1px solid #d9cec4;border-radius:12px;padding:11
 .notify-tools{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:10px 0 14px}
 .alert-toggle.active-alert{font-weight:800;box-shadow:0 0 0 2px rgba(23,50,77,.12) inset}
 @media (max-width:520px){.notify-tools{align-items:flex-start}.notify-tools .muted{flex:1;min-width:160px}}
+\n.tab-count{display:inline-flex;min-width:20px;height:20px;padding:0 6px;align-items:center;justify-content:center;border-radius:999px;font-size:12px;font-weight:800;background:rgba(23,50,77,.10)}\n.tab-count:empty{display:none}\n
