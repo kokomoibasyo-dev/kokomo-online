@@ -138,6 +138,16 @@
   </form>
 </dialog>
 
+<script>
+(async()=>{
+  try{
+    const regs=await navigator.serviceWorker?.getRegistrations?.()||[];
+    await Promise.all(regs.filter(r=>r.scope.includes('/kodomo-order/')).map(r=>r.unregister()));
+    const keys=await caches.keys();
+    await Promise.all(keys.filter(k=>k.startsWith('kodomo-order-')).map(k=>caches.delete(k)));
+  }catch(e){console.warn('cache cleanup skipped',e)}
+})();
+</script>
 <script src="../kodomo-order/app.js?v=3.6"></script>
 </body>
 </html>
