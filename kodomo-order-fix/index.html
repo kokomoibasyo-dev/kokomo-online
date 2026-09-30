@@ -9,7 +9,7 @@
   <title>こどもオーダー</title>
   <link rel="manifest" href="../kodomo-order/manifest.webmanifest" />
   <link rel="icon" href="../kodomo-order/icon.svg" type="image/svg+xml" />
-  <link rel="stylesheet" href="../kodomo-order/styles.css?v=3.6" />
+  <link rel="stylesheet" href="../kodomo-order/styles.css?v=3.8" />
 </head>
 <body>
 <div class="app">
@@ -19,10 +19,17 @@
       <div><div>こどもオーダー</div><div class="shop-name" id="shopName">ここもカフェ</div></div>
     </div>
     <div class="header-actions">
+      <span class="app-version">v3.8</span>
       <span class="sync-badge" id="syncBadge">この端末</span>
       <button class="secondary small" id="settingsBtn">⚙️ 設定</button>
     </div>
   </header>
+
+  <div class="fatal-error hidden" id="fatalError" role="alert">
+    <b>アプリの読み込みでエラーが起きました。</b>
+    <span>商品が表示されない場合は、復旧ページを開いてください。</span>
+    <a href="../kodomo-order/">復旧ページを開く</a>
+  </div>
 
   <main class="wrap">
     <section id="view-order">
@@ -49,6 +56,10 @@
       <h1>注文管理</h1>
       <div class="notify-tools"><button type="button" class="secondary small alert-toggle" data-alert-toggle>🔕 通知をON</button><span class="muted small">新しい注文を音・振動でお知らせ</span></div>
       <div class="notice">新しい注文 → 調理中 → できました → 提供済み、の順に更新します。</div>
+      <div class="ready-board hidden" id="readyBoard">
+        <div class="muted small">できました・受け取り待ち</div>
+        <div class="ready-numbers" id="readyNumbers"></div>
+      </div>
       <div class="spacer"></div>
       <div id="staffList"></div>
     </section>
@@ -139,6 +150,16 @@
 </dialog>
 
 <script>
+(function(){
+  function showFatal(){
+    var el=document.getElementById('fatalError');
+    if(el)el.classList.remove('hidden');
+  }
+  window.addEventListener('error',showFatal);
+  window.addEventListener('unhandledrejection',showFatal);
+})();
+</script>
+<script>
 (async()=>{
   try{
     const regs=await navigator.serviceWorker?.getRegistrations?.()||[];
@@ -148,6 +169,6 @@
   }catch(e){console.warn('cache cleanup skipped',e)}
 })();
 </script>
-<script src="../kodomo-order/app.js?v=3.6"></script>
+<script src="../kodomo-order/app.js?v=3.8"></script>
 </body>
 </html>
