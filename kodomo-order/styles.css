@@ -24,3 +24,10 @@ input,textarea{width:100%;border:1px solid #d9cec4;border-radius:12px;padding:11
 @media (max-width:520px){.notify-tools{align-items:flex-start}.notify-tools .muted{flex:1;min-width:160px}}
 \n.tab-count{display:inline-flex;min-width:20px;height:20px;padding:0 6px;align-items:center;justify-content:center;border-radius:999px;font-size:12px;font-weight:800;background:rgba(23,50,77,.10)}\n.tab-count:empty{display:none}\n
 .status[data-s="cancelled"]{background:#eee;color:#666}
+
+.app-version{font-size:11px;font-weight:800;color:#8b8177}
+.fatal-error{margin:12px auto 0;max-width:1100px;padding:14px 16px;border:1px solid #d98a7a;background:#fff1ed;border-radius:16px;display:flex;gap:8px 14px;align-items:center;flex-wrap:wrap}
+.fatal-error a{font-weight:800;color:#9b3c2e}
+.ready-board{margin:14px 0 2px;padding:16px;border-radius:18px;background:#eff8ef;border:1px solid #b9d8b9}
+.ready-numbers{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px}
+.ready-no{display:inline-flex;min-width:64px;height:64px;align-items:center;justify-content:center;padding:0 14px;border-radius:16px;background:#fff;font-size:30px;font-weight:900;box-shadow:0 3px 12px rgba(0,0,0,.08)}
