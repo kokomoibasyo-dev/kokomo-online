@@ -1,5 +1,5 @@
-const CACHE='kodomo-order-v3-7';
-const ASSETS=['./styles.css?v=3.7','./app.js?v=3.7','./manifest.webmanifest','./icon.svg'];
+const CACHE='kodomo-order-v3-8';
+const ASSETS=['./styles.css?v=3.8','./app.js?v=3.8','./manifest.webmanifest','./icon.svg'];
 
 self.addEventListener('install',e=>{
   self.skipWaiting();
