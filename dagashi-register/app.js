@@ -1,6 +1,7 @@
 const SUPABASE_URL='https://gxbgqajehfutdudjofno.supabase.co';
-const SUPABASE_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJIUzI1NiIsInJlZiI6Imd4YmdxYWplaGZ1dGR1ZGpvZm5vIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA3MTQzMDMsImV4cCI6MjEwNjI5MDMwM30.NGzny52SesudiM2D4-1xy74I0bj1DuCKcLBEQB50pQk';
+const SUPABASE_KEY='sb_publishable_xe1KWvEfHyOraozbge449A_UBEaAx4w';
 const CONFIG_KEY='dagashi-register-store-v1';
+const DEFAULT_STORE='DAGASHI-BA773AD386E74015A658A9FB';
 let storeSecret='';
 let state={store_name:'ここも駄菓子屋',products:[],sales:[],stock_moves:[]};
 let cart={};
@@ -16,9 +17,9 @@ const fmtTime=v=>new Date(v).toLocaleString('ja-JP',{month:'numeric',day:'numeri
 function toast(msg){const e=$('toast');e.textContent=msg;e.classList.add('show');clearTimeout(toast.t);toast.t=setTimeout(()=>e.classList.remove('show'),2200)}
 function setBadge(mode,msg=''){const e=$('syncBadge');e.className='sync-badge '+(mode==='ok'?'ok':mode==='err'?'err':'');e.textContent=msg||(mode==='ok'?'クラウド接続済み':mode==='err'?'クラウド未接続':'接続中…')}
 function saveSecret(){localStorage.setItem(CONFIG_KEY,storeSecret)}
-function loadSecret(){const q=new URLSearchParams(location.search);const s=q.get('store');if(s){storeSecret=s.trim().toUpperCase();saveSecret();return}storeSecret=(localStorage.getItem(CONFIG_KEY)||'').trim().toUpperCase()}
-async function rpc(name,args={}){let res;try{res=await fetch(SUPABASE_URL+'/rest/v1/rpc/'+encodeURIComponent(name),{method:'POST',cache:'no-store',headers:{apikey:SUPABASE_KEY,Authorization:'Bearer '+SUPABASE_KEY,'Content-Type':'application/json',Accept:'application/json'},body:JSON.stringify(args)})}catch{throw new Error('クラウドへ接続できません')}const txt=await res.text();let data=null;if(txt){try{data=JSON.parse(txt)}catch{data=txt}}if(!res.ok)throw new Error((data&&typeof data==='object'&&(data.message||data.details||data.hint))||('HTTP '+res.status));return data}
-async function loadState(silent=false){if(!storeSecret){setBadge('err','店舗未接続');$('connectPanel').classList.remove('hidden');return false}try{const data=await rpc('dr_get_state',{p_secret:storeSecret});if(!data)throw new Error('店舗コードが違います');state=data;$('connectPanel').classList.add('hidden');setBadge('ok');renderAll();return true}catch(e){setBadge('err');$('connectPanel').classList.remove('hidden');$('connectError').textContent=e.message;$('connectError').classList.remove('hidden');if(!silent)toast(e.message);return false}}
+function loadSecret(){const q=new URLSearchParams(location.search);const s=q.get('store');if(s){storeSecret=s.trim().toUpperCase();saveSecret();return}storeSecret=(localStorage.getItem(CONFIG_KEY)||DEFAULT_STORE).trim().toUpperCase();if(storeSecret)saveSecret()}
+async function rpc(name,args={}){let res;try{const url=SUPABASE_URL+'/rest/v1/rpc/'+encodeURIComponent(name)+'?apikey='+encodeURIComponent(SUPABASE_KEY);res=await fetch(url,{method:'POST',mode:'cors',cache:'no-store',headers:{apikey:SUPABASE_KEY,'Content-Type':'application/json',Accept:'application/json'},body:JSON.stringify(args)})}catch(e){console.error(e);throw new Error('クラウドへ接続できません')}const txt=await res.text();let data=null;if(txt){try{data=JSON.parse(txt)}catch{data=txt}}if(!res.ok)throw new Error((data&&typeof data==='object'&&(data.message||data.details||data.hint))||('HTTP '+res.status));return data}
+async function loadState(silent=false){if(!storeSecret){setBadge('err','店舗未接続');$('connectPanel').classList.remove('hidden');return false}try{const data=await rpc('dr_get_state',{p_secret:storeSecret});if(!data)throw new Error('店舗コードが違います');state=data;$('connectPanel').classList.add('hidden');$('connectError').classList.add('hidden');setBadge('ok');renderAll();return true}catch(e){setBadge('err','クラウド未接続');$('syncBadge').title=e.message;$('connectPanel').classList.remove('hidden');$('connectError').textContent=e.message;$('connectError').classList.remove('hidden');if(!silent)toast(e.message);return false}}
 
 function switchView(v){currentView=v;['register','stock','adjust','sales','products'].forEach(x=>$('view-'+x).classList.toggle('hidden',x!==v));document.querySelectorAll('.tab').forEach(b=>b.classList.toggle('active',b.dataset.view===v));renderAll();window.scrollTo({top:0,behavior:'smooth'})}
 function productById(id){return state.products.find(p=>p.id===id)}
