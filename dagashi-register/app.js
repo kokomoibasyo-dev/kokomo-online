@@ -1,6 +1,7 @@
 const SUPABASE_URL='https://gxbgqajehfutdudjofno.supabase.co';
-const SUPABASE_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJIUzI1NiIsInJlZiI6Imd4YmdxYWplaGZ1dGR1ZGpvZm5vIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA3MTQzMDMsImV4cCI6MjEwNjI5MDMwM30.NGzny52SesudiM2D4-1xy74I0bj1DuCKcLBEQB50pQk';
+let SUPABASE_KEY='';
 const CONFIG_KEY='dagashi-register-store-v1';
+const API_KEY_STORAGE='dagashi-register-publishable-key-v1';
 const DEFAULT_STORE='DAGASHI-BA773AD386E74015A658A9FB';
 let storeSecret='';
 let state={store_name:'ここも駄菓子屋',products:[],sales:[],stock_moves:[]};
@@ -16,9 +17,22 @@ const fmtTime=v=>new Date(v).toLocaleString('ja-JP',{month:'numeric',day:'numeri
 
 function toast(msg){const e=$('toast');e.textContent=msg;e.classList.add('show');clearTimeout(toast.t);toast.t=setTimeout(()=>e.classList.remove('show'),2200)}
 function setBadge(mode,msg=''){const e=$('syncBadge');e.className='sync-badge '+(mode==='ok'?'ok':mode==='err'?'err':'');e.textContent=msg||(mode==='ok'?'クラウド接続済み':mode==='err'?'クラウド未接続':'接続中…')}
+function loadApiKey(){
+  const q=new URLSearchParams(location.search);
+  const pk=(q.get('pk')||'').trim();
+  if(pk){
+    SUPABASE_KEY=pk;
+    localStorage.setItem(API_KEY_STORAGE,pk);
+    q.delete('pk');
+    history.replaceState(null,'',location.pathname+(q.toString()?'?'+q.toString():''));
+    return;
+  }
+  SUPABASE_KEY=(localStorage.getItem(API_KEY_STORAGE)||'').trim();
+}
 function saveSecret(){localStorage.setItem(CONFIG_KEY,storeSecret)}
 function loadSecret(){const q=new URLSearchParams(location.search);const s=q.get('store');if(s){storeSecret=s.trim().toUpperCase();saveSecret();return}storeSecret=(localStorage.getItem(CONFIG_KEY)||DEFAULT_STORE).trim().toUpperCase();if(storeSecret)saveSecret()}
 async function rpc(name,args={}){
+  if(!SUPABASE_KEY) throw new Error('クラウド接続情報がありません');
   let res;
   try{
     res=await fetch(SUPABASE_URL+'/rest/v1/rpc/'+encodeURIComponent(name),{
@@ -27,7 +41,6 @@ async function rpc(name,args={}){
       cache:'no-store',
       headers:{
         'apikey':SUPABASE_KEY,
-        'Authorization':'Bearer '+SUPABASE_KEY,
         'Content-Type':'application/json',
         'Accept':'application/json'
       },
@@ -69,6 +82,7 @@ async function saveProduct(){const id=$('productId').value||null;const name=$('p
 function renderAll(){if(currentView==='register')renderRegister();if(currentView==='stock')renderStock();if(currentView==='adjust')renderAdjust();if(currentView==='sales')renderSales();if(currentView==='products')renderProductsAdmin()}
 function startPolling(){clearInterval(pollTimer);pollTimer=setInterval(()=>loadState(true),3000)}
 
+loadApiKey();
 loadSecret();
 document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>switchView(b.dataset.view));
 $('receivedInput').addEventListener('input',updateChangePreview);
