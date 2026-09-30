@@ -43,7 +43,7 @@ function saveCloudConfig(){localStorage.setItem(CONFIG_KEY,JSON.stringify(cloudC
 function getClientId(){let id=localStorage.getItem(CLIENT_KEY);if(!id){id=crypto.randomUUID?.()||('client-'+Date.now()+'-'+Math.random().toString(36).slice(2));localStorage.setItem(CLIENT_KEY,id)}return id}
 function cloudEnabled(){return Boolean(cloudConfig.url&&cloudConfig.key&&cloudConfig.secret)}
 function yen(n){return'¥'+Number(n||0).toLocaleString('ja-JP')}
-function fmtTime(iso){return new Date(iso).toLocaleTimeString('ja-JP',{hour:'2-digit',minute:'2-digit'})}
+function fmtTime(iso){return new Date(iso).toLocaleTimeString('ja-JP',{hour:'2-digit',minute:'2-digit'})}\nfunction elapsedText(iso){const m=Math.max(0,Math.floor((Date.now()-new Date(iso).getTime())/60000));return m<1?'1分未満':m+'分'}
 function todayKey(d){return new Date(d).toLocaleDateString('ja-JP',{year:'numeric',month:'2-digit',day:'2-digit'})}
 function toast(msg){const el=document.getElementById('toast');el.textContent=msg;el.classList.add('show');clearTimeout(toast._t);toast._t=setTimeout(()=>el.classList.remove('show'),2000)}
 function escapeHtml(v=''){return String(v).replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]))}
@@ -132,13 +132,13 @@ async function placeOrder(){
 }
 function normalizedOrder(o){return{...o,no:o.order_no??o.no,order_no:o.order_no??o.no,createdAt:o.created_at||o.createdAt,client_id:o.client_id||''}}
 function orderCard(raw,staff=false){
-  const o=normalizedOrder(raw),st=STATUS[o.status]||STATUS.received;const items=(o.items||[]).map(i=>`<li><span>${escapeHtml(i.emoji||'')} ${escapeHtml(i.name)} × ${Number(i.qty)}</span><span>${yen(Number(i.price)*Number(i.qty))}</span></li>`).join('');
+  const o=normalizedOrder(raw),st=STATUS[o.status]||STATUS.received,wait=staff&&o.status!=='served'?' ・ 待ち '+elapsedText(o.createdAt):'';const items=(o.items||[]).map(i=>`<li><span>${escapeHtml(i.emoji||'')} ${escapeHtml(i.name)} × ${Number(i.qty)}</span><span>${yen(Number(i.price)*Number(i.qty))}</span></li>`).join('');
   const buttons=staff?`<div class="actions">${o.status==='received'?`<button class="primary" data-status="${o.id}:cooking">調理中にする</button>`:''}${o.status==='cooking'?`<button class="success" data-status="${o.id}:ready">できました</button>`:''}${o.status==='ready'?`<button class="primary" data-status="${o.id}:served">提供済みにする</button>`:''}${o.status!=='received'?`<button class="secondary" data-status="${o.id}:${prevStatus(o.status)}">ひとつ戻す</button>`:''}</div>`:`<p><b>${escapeHtml(st.message)}</b></p>`;
-  return`<article class="panel"><div class="order-head"><div><div class="order-no">注文番号 ${o.order_no}</div><div class="muted small">${fmtTime(o.createdAt)}</div></div><span class="status" data-s="${escapeHtml(o.status)}">${escapeHtml(st.label)}</span></div><ul class="order-items">${items}</ul><div class="row"><b>合計 ${yen(o.total)}</b></div><div class="spacer"></div>${buttons}</article>`
+  return`<article class="panel"><div class="order-head"><div><div class="order-no">注文番号 ${o.order_no}</div><div class="muted small">${fmtTime(o.createdAt)}${wait}</div></div><span class="status" data-s="${escapeHtml(o.status)}">${escapeHtml(st.label)}</span></div><ul class="order-items">${items}</ul><div class="row"><b>合計 ${yen(o.total)}</b></div><div class="spacer"></div>${buttons}</article>`
 }
 function renderStatus(){const el=document.getElementById('statusList');const mine=state.orders.map(normalizedOrder).filter(o=>o.client_id===clientId).slice(0,12);el.innerHTML=mine.length?mine.map(o=>orderCard(o,false)).join(''):'<div class="empty">この端末からの注文はまだありません。</div>'}
 function renderStaff(){
-  const el=document.getElementById('staffList'),orders=state.orders.map(normalizedOrder),active=orders.filter(o=>o.status!=='served'),served=orders.filter(o=>o.status==='served').slice(0,6);
+  const el=document.getElementById('staffList'),orders=state.orders.map(normalizedOrder),active=orders.filter(o=>o.status!=='served').sort((a,b)=>new Date(a.createdAt)-new Date(b.createdAt)),served=orders.filter(o=>o.status==='served').slice(0,6);document.getElementById('staffCount').textContent=active.length?String(active.length):'';
   el.innerHTML=(active.length?active.map(o=>orderCard(o,true)).join(''):'<div class="empty">対応中の注文はありません。</div>')+(served.length?`<h2>提供済み</h2>${served.map(o=>orderCard(o,true)).join('')}`:'');
   el.querySelectorAll('[data-status]').forEach(b=>b.onclick=()=>updateStatusFromButton(b))
 }
@@ -181,4 +181,4 @@ window.addEventListener('storage',e=>{if(e.key===KEY&&!cloudEnabled()){state=loa
 applyInviteFromHash();document.querySelectorAll('.tab').forEach(t=>t.onclick=()=>switchView(t.dataset.view));document.querySelectorAll('[data-alert-toggle]').forEach(b=>b.onclick=toggleAlerts);document.getElementById('orderBtn').onclick=placeOrder;document.getElementById('exportSalesBtn').onclick=exportSalesCsv;
 const dialog=document.getElementById('settingsDialog');document.getElementById('settingsBtn').onclick=()=>{renderSettings();dialog.showModal()};document.getElementById('saveShopNameBtn').onclick=saveShopName;document.getElementById('addProductBtn').onclick=addProduct;document.getElementById('saveCloudConfigBtn').onclick=saveCloudConnectionFields;document.getElementById('createCloudShopBtn').onclick=createCloudShop;document.getElementById('joinCloudShopBtn').onclick=joinCloudShop;document.getElementById('clearCloudConfigBtn').onclick=clearCloud;document.getElementById('resetBtn').onclick=resetData;document.getElementById('fullscreenBtn').onclick=async()=>{try{if(document.fullscreenElement)await document.exitFullscreen();else await document.documentElement.requestFullscreen()}catch{toast('このブラウザでは全画面表示できません')}};
 if('serviceWorker'in navigator)navigator.serviceWorker.register('./sw.js').catch(()=>{});
-render();if(cloudEnabled()){cloudLoad({silent:true}).then(startRealtime)}
+render();setInterval(()=>{if(currentView==='staff')renderStaff()},30000);if(cloudEnabled()){cloudLoad({silent:true}).then(startRealtime)}
