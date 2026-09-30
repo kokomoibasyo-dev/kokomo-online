@@ -113,9 +113,10 @@ function processAlerts(){
 }
 
 function renderProducts(){
-  const products=state.products.filter(p=>p.active!==false).sort((a,b)=>(a.sort_order||0)-(b.sort_order||0));
+  const products=state.products.slice().sort((a,b)=>(a.sort_order||0)-(b.sort_order||0));
+  for(const p of products)if(p.active===false&&cart[p.id])cart[p.id]=0;
   const grid=document.getElementById('productGrid');
-  grid.innerHTML=products.map(p=>{const q=cart[p.id]||0;return`<article class="product"><div class="product-emoji">${escapeHtml(p.emoji||'🍽️')}</div><div class="product-title">${escapeHtml(p.name)}</div><div class="product-bottom"><div class="price">${yen(p.price)}</div><div class="qty"><button class="icon-btn" data-dec="${escapeHtml(p.id)}" aria-label="減らす">−</button><b>${q}</b><button class="icon-btn" data-inc="${escapeHtml(p.id)}" aria-label="増やす">＋</button></div></div></article>`}).join('')||'<div class="empty">商品がありません。設定から商品を追加できます。</div>';
+  grid.innerHTML=products.map(p=>{const q=cart[p.id]||0,sold=p.active===false;return`<article class="product ${sold?'soldout':''}"><div class="product-emoji">${escapeHtml(p.emoji||'🍽️')}</div><div class="product-title">${escapeHtml(p.name)}</div>${sold?'<div class="soldout-label">売り切れ</div>':''}<div class="product-bottom"><div class="price">${yen(p.price)}</div>${sold?'<div class="muted small">販売停止中</div>':`<div class="qty"><button class="icon-btn" data-dec="${escapeHtml(p.id)}" aria-label="減らす">−</button><b>${q}</b><button class="icon-btn" data-inc="${escapeHtml(p.id)}" aria-label="増やす">＋</button></div>`}</div></article>`}).join('')||'<div class="empty">商品がありません。設定から商品を追加できます。</div>';
   grid.querySelectorAll('[data-inc]').forEach(b=>b.onclick=()=>{cart[b.dataset.inc]=(cart[b.dataset.inc]||0)+1;renderProducts();cartSummary()});
   grid.querySelectorAll('[data-dec]').forEach(b=>b.onclick=()=>{cart[b.dataset.dec]=Math.max(0,(cart[b.dataset.dec]||0)-1);renderProducts();cartSummary()});
 }
