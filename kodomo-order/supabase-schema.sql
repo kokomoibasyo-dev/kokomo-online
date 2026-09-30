@@ -2,8 +2,6 @@
 -- Supabase SQL Editor に、このファイル全体を貼り付けて実行してください。
 -- 決済情報・個人情報は扱わない想定です。
 
-create extension if not exists pgcrypto;
-
 create table if not exists public.ko_shops (
   id uuid primary key default gen_random_uuid(),
   name text not null,
@@ -48,9 +46,9 @@ revoke all on public.ko_products from anon, authenticated;
 revoke all on public.ko_orders from anon, authenticated;
 
 create or replace function public.ko_secret_hash(p_secret text)
-returns text language sql immutable as $$
-  select encode(digest(coalesce(p_secret,''), 'sha256'), 'hex');
-$$;
+returns text language sql immutable as $
+  select encode(sha256(convert_to(coalesce(p_secret,''), 'UTF8')), 'hex');
+$;
 
 drop function if exists public.create_shop(text,text);
 
@@ -158,6 +156,16 @@ as $$ declare v_shop_id uuid; begin v_shop_id:=public.ko_shop_id(p_secret); if v
 
 revoke all on function public.ko_secret_hash(text) from public;
 revoke all on function public.ko_shop_id(text) from public;
+
+revoke all on function public.create_shop(text,text,jsonb) from public;
+revoke all on function public.get_shop_state(text) from public;
+revoke all on function public.create_order(text,text,jsonb) from public;
+revoke all on function public.update_order_status(text,uuid,text) from public;
+revoke all on function public.update_shop_name(text,text) from public;
+revoke all on function public.upsert_product(text,uuid,text,integer,text,integer,boolean) from public;
+revoke all on function public.delete_product(text,uuid) from public;
+revoke all on function public.reset_shop_orders(text) from public;
+
 grant execute on function public.create_shop(text,text,jsonb) to anon, authenticated;
 grant execute on function public.get_shop_state(text) to anon, authenticated;
 grant execute on function public.create_order(text,text,jsonb) to anon, authenticated;
