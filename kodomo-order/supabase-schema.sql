@@ -28,12 +28,15 @@ create table if not exists public.ko_orders (
   shop_id uuid not null references public.ko_shops(id) on delete cascade,
   order_no integer not null,
   client_id text not null default '',
-  status text not null check (status in ('received','cooking','ready','served')),
+  status text not null check (status in ('received','cooking','ready','served','cancelled')),
   total integer not null default 0,
   items jsonb not null default '[]'::jsonb,
   created_at timestamptz not null default now(),
   unique(shop_id, order_no)
 );
+alter table public.ko_orders drop constraint if exists ko_orders_status_check;
+alter table public.ko_orders add constraint ko_orders_status_check check (status in ('received','cooking','ready','served','cancelled'));
+
 create index if not exists ko_orders_shop_created_idx on public.ko_orders(shop_id, created_at desc);
 
 -- テーブル直接アクセスは不可。以下のRPC関数だけをanonから呼べるようにします。
@@ -119,7 +122,7 @@ language plpgsql security definer set search_path = public
 as $$
 declare v_shop_id uuid;
 begin
-  if p_status not in ('received','cooking','ready','served') then raise exception '不正な状態です'; end if;
+  if p_status not in ('received','cooking','ready','served','cancelled') then raise exception '不正な状態です'; end if;
   v_shop_id:=public.ko_shop_id(p_secret); if v_shop_id is null then raise exception 'お店が見つかりません'; end if;
   update public.ko_orders set status=p_status where id=p_order_id and shop_id=v_shop_id;
   return found;
