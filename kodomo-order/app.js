@@ -17,6 +17,7 @@ const KEY='kodomo-order-v2';
 const CONFIG_KEY='kodomo-order-cloud-v1';
 const CLIENT_KEY='kodomo-order-client-v1';
 const ALERT_KEY='kodomo-order-alert-v1';
+const CLOUD_DEFAULTS={url:'https://gxbgqajehfutdudjofno.supabase.co',key:'sb_publishable_xe1KWvEfHyOraozbge449A_UBEaAx4w'};
 const APP_MODE=new URLSearchParams(location.search).get('mode')||'all';
 const localChannel='BroadcastChannel' in window?new BroadcastChannel('kodomo-order-v2'):null;
 const clientId=getClientId();
@@ -39,7 +40,7 @@ function normalizeState(s){
 }
 function loadLocal(){try{return normalizeState(JSON.parse(localStorage.getItem(KEY)))}catch{return initialState()}}
 function saveLocal({broadcast=true}={}){localStorage.setItem(KEY,JSON.stringify(state));if(broadcast)localChannel?.postMessage({type:'sync'});render()}
-function loadCloudConfig(){try{return JSON.parse(localStorage.getItem(CONFIG_KEY))||{}}catch{return{}}}
+function loadCloudConfig(){try{return {...CLOUD_DEFAULTS,...(JSON.parse(localStorage.getItem(CONFIG_KEY))||{})}}catch{return {...CLOUD_DEFAULTS}}}
 function saveCloudConfig(){localStorage.setItem(CONFIG_KEY,JSON.stringify(cloudConfig))}
 function getClientId(){let id=localStorage.getItem(CLIENT_KEY);if(!id){id=crypto.randomUUID?.()||('client-'+Date.now()+'-'+Math.random().toString(36).slice(2));localStorage.setItem(CLIENT_KEY,id)}return id}
 function cloudEnabled(){return Boolean(cloudConfig.url&&cloudConfig.key&&cloudConfig.secret)}
@@ -178,7 +179,7 @@ async function joinCloudShop(){
   try{await cloudLoad({silent:true,throwOnError:true});await startRealtime();renderSettings();toast('お店に参加しました')}
   catch(e){cloudConfig.secret='';saveCloudConfig();setSyncBadge('local');renderSettings();toast('参加できません：'+friendlyError(e))}
 }
-async function clearCloud(){if(!confirm('この端末のクラウド接続設定を解除しますか？クラウド上の注文は削除されません。'))return;stopRealtime();cloudConfig={};saveCloudConfig();supabaseClient=null;state=loadLocal();setSyncBadge('local');renderSettings();render();toast('クラウド設定を解除しました')}
+async function clearCloud(){if(!confirm('この端末のクラウド接続設定を解除しますか？クラウド上の注文は削除されません。'))return;stopRealtime();cloudConfig={...CLOUD_DEFAULTS};saveCloudConfig();supabaseClient=null;state=loadLocal();setSyncBadge('local');renderSettings();render();toast('クラウド設定を解除しました')}
 function exportSalesCsv(){const today=todayKey(new Date());const served=state.orders.map(normalizedOrder).filter(o=>o.status==='served'&&todayKey(o.createdAt)===today);const rows=[['注文番号','時刻','商品','数量','単価','小計']];served.slice().reverse().forEach(o=>(o.items||[]).forEach(i=>rows.push([o.order_no,fmtTime(o.createdAt),i.name,i.qty,i.price,Number(i.qty)*Number(i.price)])));const csv='\ufeff'+rows.map(r=>r.map(v=>'"'+String(v??'').replace(/"/g,'""')+'"').join(',')).join('\n');const blob=new Blob([csv],{type:'text/csv;charset=utf-8'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='kodomo-order-'+new Date().toISOString().slice(0,10)+'.csv';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000);toast('売上CSVを書き出しました')}
 async function resetData(){if(!confirm('注文・売上データをすべて消しますか？商品は残ります。'))return;const word=prompt('誤操作防止のため「リセット」と入力してください');if(word!=='リセット'){toast('リセットを中止しました');return}try{if(cloudEnabled()){await cloudRpc('reset_shop_orders',{p_secret:cloudConfig.secret});await cloudLoad({silent:true});await broadcastRefresh()}else{state.orders=[];state.nextNo=1;saveLocal()}renderSettings();render();toast('注文と売上をリセットしました')}catch(e){toast('リセットできません：'+friendlyError(e))}}
 
