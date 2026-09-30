@@ -9,7 +9,7 @@
   <title>こどもオーダー</title>
   <link rel="manifest" href="../kodomo-order/manifest.webmanifest" />
   <link rel="icon" href="../kodomo-order/icon.svg" type="image/svg+xml" />
-  <link rel="stylesheet" href="../kodomo-order/styles.css?v=4.3" />
+  <link rel="stylesheet" href="../kodomo-order/styles.css?v=4.5" />
 </head>
 <body>
 <div class="app">
@@ -19,7 +19,7 @@
       <div><div>こどもオーダー</div><div class="shop-name" id="shopName">ここもカフェ</div></div>
     </div>
     <div class="header-actions">
-      <span class="app-version">v4.3</span>
+      <span class="app-version">v4.5</span>
       <span class="sync-badge" id="syncBadge">この端末</span>
       <button class="secondary small" id="settingsBtn">⚙️ 設定</button>
     </div>
@@ -28,7 +28,7 @@
   <div class="fatal-error hidden" id="fatalError" role="alert">
     <b>アプリの読み込みでエラーが起きました。</b>
     <span>商品が表示されない場合は、復旧ページを開いてください。</span>
-    <a href="../kodomo-order-live/">復旧ページを開く</a>
+    <a href="../kodomo-order-fix/">復旧ページを開く</a>
   </div>
 
   <main class="wrap">
@@ -36,6 +36,10 @@
       <div class="muted">お客さん・店員さん用</div>
       <h1>注文を入力</h1>
       <p class="muted">商品を選んで「注文する」を押してください。</p>
+      <div class="staff-order-meta hidden" id="staffOrderMeta">
+        <label for="customerLabelInput"><b>席番号／お名前</b> <span class="muted small">（任意）</span></label>
+        <input id="customerLabelInput" maxlength="40" autocomplete="off" placeholder="例：テーブル3、たまさん、窓側" />
+      </div>
       <div class="grid" id="productGrid"></div>
       <div class="cart" id="cartBar">
         <div><div class="small">カート <span id="cartCount">0</span>点</div><strong id="cartTotal">¥0</strong></div>
@@ -160,6 +164,6 @@
 })();
 </script>
 <script>window.__KO_DISABLE_SW__=true;</script>
-<script src="../kodomo-order/app.js?v=4.3"></script>
+<script src="../kodomo-order/app.js?v=4.5"></script>
 </body>
 </html>
