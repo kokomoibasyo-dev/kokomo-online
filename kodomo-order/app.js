@@ -59,35 +59,74 @@ function buildInviteURL(mode){const u=new URL(location.href);u.search='';u.hash=
 async function copyInvite(mode){const url=buildInviteURL(mode);try{await navigator.clipboard.writeText(url);toast('端末用リンクをコピーしました')}catch{prompt('このURLをコピーしてください',url)}}
 function applyModeUI(){const allowed={order:['order','status'],staff:['order','staff'],manager:['sales'],all:['order','status','staff','sales']}[APP_MODE]||['order','status','staff','sales'];document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('hidden',!allowed.includes(t.dataset.view)));const visible=[...document.querySelectorAll('.tab:not(.hidden)')];document.querySelector('.tabs').dataset.count=String(visible.length);document.getElementById('settingsBtn').classList.toggle('hidden',APP_MODE==='order'||APP_MODE==='staff');const desired=allowed.includes(currentView)?currentView:allowed[0];switchView(desired)}
 
-async function loadSupabase(){
-  if(window.supabase?.createClient)return window.supabase;
-  await new Promise((resolve,reject)=>{const old=document.querySelector('script[data-supabase]');if(old){old.addEventListener('load',resolve,{once:true});old.addEventListener('error',reject,{once:true});return}const s=document.createElement('script');s.src='https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js';s.dataset.supabase='1';s.onload=resolve;s.onerror=()=>reject(new Error('Supabaseライブラリを読み込めませんでした'));document.head.appendChild(s)});
-  return window.supabase;
+async function cloudRpc(name,args={}){
+  if(!cloudConfig.url||!cloudConfig.key)throw new Error('SupabaseのURLと公開キーを設定してください');
+  let res;
+  try{
+    res=await fetch(cloudConfig.url+'/rest/v1/rpc/'+encodeURIComponent(name),{
+      method:'POST',
+      mode:'cors',
+      cache:'no-store',
+      headers:{
+        'apikey':cloudConfig.key,
+        'Content-Type':'application/json',
+        'Accept':'application/json'
+      },
+      body:JSON.stringify(args)
+    });
+  }catch(e){
+    throw new Error('クラウドへ接続できません');
+  }
+  const text=await res.text();
+  let data=null;
+  if(text){try{data=JSON.parse(text)}catch{data=text}}
+  if(!res.ok){
+    const msg=(data&&typeof data==='object'&&(data.message||data.details||data.hint))||('HTTP '+res.status);
+    throw new Error(String(msg));
+  }
+  return data;
 }
-async function ensureCloudClient(){
-  if(!cloudConfig.url||!cloudConfig.key)throw new Error('SupabaseのURLとanon keyを設定してください');
-  if(supabaseClient)return supabaseClient;
-  const lib=await loadSupabase();
-  supabaseClient=lib.createClient(cloudConfig.url,cloudConfig.key,{auth:{persistSession:false,autoRefreshToken:false,detectSessionInUrl:false}});
-  return supabaseClient;
-}
-async function cloudRpc(name,args={}){const c=await ensureCloudClient();const{data,error}=await c.rpc(name,args);if(error)throw error;return data}
 async function cloudLoad({silent=false,throwOnError=false}={}){
   if(!cloudEnabled()||cloudBusy)return false;
   cloudBusy=true;setSyncBadge('syncing');
-  try{const data=await cloudRpc('get_shop_state',{p_secret:cloudConfig.secret});if(!data)throw new Error('共有コードに対応する店が見つかりません');state=normalizeState({shopName:data.shop_name,nextNo:data.next_order_no,products:data.products||[],orders:data.orders||[]});saveLocal({broadcast:false});setSyncBadge('cloud');if(!silent)toast('クラウドと同期しました');return true}
-  catch(e){console.error(e);setSyncBadge('error');if(!silent)toast('同期できません：'+friendlyError(e));if(throwOnError)throw e;return false}
-  finally{cloudBusy=false}
+  try{
+    const data=await cloudRpc('get_shop_state',{p_secret:cloudConfig.secret});
+    if(!data)throw new Error('共有コードに対応する店が見つかりません');
+    state=normalizeState({shopName:data.shop_name,nextNo:data.next_order_no,products:data.products||[],orders:data.orders||[]});
+    saveLocal({broadcast:false});
+    setSyncBadge('cloud');
+    if(!silent)toast('クラウドと同期しました');
+    return true;
+  }catch(e){
+    console.error(e);
+    setSyncBadge('error');
+    if(!silent)toast('同期できません：'+friendlyError(e));
+    if(throwOnError)throw e;
+    return false;
+  }finally{cloudBusy=false}
 }
-function setSyncBadge(mode){const el=document.getElementById('syncBadge');el.classList.remove('cloud','error');if(mode==='cloud'){el.textContent='クラウド同期';el.classList.add('cloud')}else if(mode==='syncing'){el.textContent='同期中…'}else if(mode==='error'){el.textContent='同期エラー';el.classList.add('error')}else{el.textContent='この端末'}}
+function setSyncBadge(mode){
+  const el=document.getElementById('syncBadge');
+  el.classList.remove('cloud','error');
+  if(mode==='cloud'){el.textContent='クラウド接続済み';el.classList.add('cloud')}
+  else if(mode==='syncing'){el.textContent='クラウド接続中…'}
+  else if(mode==='error'){el.textContent='クラウド未接続';el.classList.add('error')}
+  else{el.textContent='この端末のみ'}
+}
 function friendlyError(e){return e?.message?.replace('Failed to fetch','通信に失敗しました')||'エラーが発生しました'}
-async function broadcastRefresh(){if(!realtimeChannel)return;try{await realtimeChannel.send({type:'broadcast',event:'refresh',payload:{at:Date.now()}})}catch{}}
+async function broadcastRefresh(){return true}
 async function startRealtime(){
-  stopRealtime();if(!cloudEnabled())return;
-  try{const c=await ensureCloudClient();realtimeChannel=c.channel('kodomo-order:'+cloudConfig.secret,{config:{broadcast:{self:false}}}).on('broadcast',{event:'refresh'},()=>cloudLoad({silent:true})).subscribe();pollTimer=setInterval(()=>cloudLoad({silent:true}),5000);setSyncBadge('cloud')}
-  catch(e){console.error(e);setSyncBadge('error')}
+  stopRealtime();
+  if(!cloudEnabled()){setSyncBadge('local');return}
+  const ok=await cloudLoad({silent:true});
+  if(!ok)return;
+  pollTimer=setInterval(()=>cloudLoad({silent:true}),2000);
 }
-function stopRealtime(){if(pollTimer)clearInterval(pollTimer);pollTimer=null;if(realtimeChannel&&supabaseClient){supabaseClient.removeChannel(realtimeChannel).catch(()=>{})}realtimeChannel=null}
+function stopRealtime(){
+  if(pollTimer)clearInterval(pollTimer);
+  pollTimer=null;
+  realtimeChannel=null;
+}
 async function waitCloudIdle(){while(cloudBusy)await new Promise(r=>setTimeout(r,50))}
 function captureCloudFields(){cloudConfig.url=document.getElementById('supabaseUrlInput').value.trim().replace(/\/$/,'');cloudConfig.key=document.getElementById('supabaseKeyInput').value.trim();saveCloudConfig();supabaseClient=null}
 
@@ -154,7 +193,7 @@ function renderSales(){
 }
 function renderSettings(){
   document.getElementById('shopNameInput').value=state.shopName||'';document.getElementById('supabaseUrlInput').value=cloudConfig.url||'';document.getElementById('supabaseKeyInput').value=cloudConfig.key||'';document.getElementById('shopSecretInput').value=cloudConfig.secret||'';
-  const summary=document.getElementById('connectionSummary');summary.innerHTML=cloudEnabled()?`<b>☁️ クラウド同期中</b><span class="muted small">同じSupabase接続情報と共有コードを設定した端末で同期します。</span><div class="code">共有コード：${escapeHtml(cloudConfig.secret)}</div><button type="button" class="secondary small" id="copySecretBtn" style="margin-top:8px">共有コードをコピー</button>`:`<b>📱 この端末だけで使用中</b><span class="muted small">まずはままごとで試せます。複数端末利用は下の「クラウド接続を設定する」から。</span>`;
+  const summary=document.getElementById('connectionSummary');summary.innerHTML=cloudEnabled()?`<b>☁️ クラウド接続設定あり</b><span class="muted small">2秒ごとにSupabaseから注文・状態を取得します。</span><div class="code">共有コード：${escapeHtml(cloudConfig.secret)}</div><button type="button" class="secondary small" id="copySecretBtn" style="margin-top:8px">共有コードをコピー</button>`:`<b>📱 この端末だけで使用中</b><span class="muted small">まずはままごとで試せます。複数端末利用は下の「クラウド接続を設定する」から。</span>`;
   document.getElementById('copySecretBtn')?.addEventListener('click',async()=>{await navigator.clipboard?.writeText(cloudConfig.secret);toast('共有コードをコピーしました')});
   const ed=document.getElementById('productEditor');ed.innerHTML=state.products.sort((a,b)=>(a.sort_order||0)-(b.sort_order||0)).map((p,idx)=>`<div class="product-edit" data-product="${escapeHtml(p.id)}"><label>絵文字<input class="emoji-input" data-field="emoji" maxlength="4" value="${escapeHtml(p.emoji||'')}" /></label><label>商品名<input data-field="name" maxlength="30" value="${escapeHtml(p.name)}" /></label><label>価格<input data-field="price" type="number" min="0" step="10" value="${Number(p.price||0)}" /></label><label class="active-check">販売中 <input data-field="active" type="checkbox" ${p.active!==false?'checked':''} /></label><button type="button" class="danger-outline remove-product" data-remove="${escapeHtml(p.id)}">削除</button></div>`).join('')||'<div class="empty">商品がありません。</div>';
   ed.querySelectorAll('[data-field]').forEach(inp=>inp.addEventListener('change',()=>saveProductEditorRow(inp.closest('[data-product]'))));ed.querySelectorAll('[data-remove]').forEach(btn=>btn.onclick=()=>removeProduct(btn.dataset.remove));
@@ -187,4 +226,4 @@ window.addEventListener('storage',e=>{if(e.key===KEY&&!cloudEnabled()){state=loa
 applyInviteFromHash();document.querySelectorAll('.tab').forEach(t=>t.onclick=()=>switchView(t.dataset.view));document.querySelectorAll('[data-alert-toggle]').forEach(b=>b.onclick=toggleAlerts);document.getElementById('orderBtn').onclick=placeOrder;document.getElementById('exportSalesBtn').onclick=exportSalesCsv;
 const dialog=document.getElementById('settingsDialog');document.getElementById('settingsBtn').onclick=()=>{renderSettings();dialog.showModal()};document.getElementById('saveShopNameBtn').onclick=saveShopName;document.getElementById('addProductBtn').onclick=addProduct;document.getElementById('saveCloudConfigBtn').onclick=saveCloudConnectionFields;document.getElementById('createCloudShopBtn').onclick=createCloudShop;document.getElementById('joinCloudShopBtn').onclick=joinCloudShop;document.getElementById('clearCloudConfigBtn').onclick=clearCloud;document.getElementById('resetBtn').onclick=resetData;document.getElementById('fullscreenBtn').onclick=async()=>{try{if(document.fullscreenElement)await document.exitFullscreen();else await document.documentElement.requestFullscreen()}catch{toast('このブラウザでは全画面表示できません')}};
 if('serviceWorker'in navigator&&!window.__KO_DISABLE_SW__)navigator.serviceWorker.register('./sw.js').catch(()=>{});
-render();setInterval(()=>{if(currentView==='staff')renderStaff()},30000);if(cloudEnabled()){cloudLoad({silent:true}).then(startRealtime)}
+render();setInterval(()=>{if(currentView==='staff')renderStaff()},30000);if(cloudEnabled())startRealtime()
